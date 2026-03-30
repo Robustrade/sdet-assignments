@@ -1,0 +1,10 @@
+[tool.pytest.ini_options]
+markers = ["reliability: marks tests as reliability and concurrency tests"]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.black]
+line-length = 88
