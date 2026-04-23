@@ -1,0 +1,29 @@
+{
+  "name": "wallet-transfer-tests",
+  "version": "1.0.0",
+  "description": "Automated tests for Wallet Transfer Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:reliability": "jest --testNamePattern=reliability",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": ["sdet", "testing", "wallet"],
+  "author": "Candidate",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "supertest": "^6.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.0.0",
+    "pg": "^8.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/**/*.test.js"]
+  }
+}

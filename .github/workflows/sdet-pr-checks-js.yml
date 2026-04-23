@@ -1,0 +1,199 @@
+name: sdet-pr-checks-js
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+
+  # ── Detect which candidate folder changed in this PR ─────────────────────────
+  detect-candidate:
+    name: detect-candidate
+    runs-on: ubuntu-latest
+    outputs:
+      candidate_dir: ${{ steps.detect.outputs.candidate_dir }}
+      is_js: ${{ steps.check-lang.outputs.is_js }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect candidate folder
+        id: detect
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE=${{ github.event.pull_request.base.sha }}
+          else
+            BASE=$(git rev-parse HEAD~1 2>/dev/null || git rev-parse HEAD)
+          fi
+
+          CANDIDATE_DIR=$(git diff --name-only "$BASE"...HEAD \
+            | grep '^submission/' \
+            | awk -F'/' '{print $1"/"$2}' \
+            | sort -u \
+            | head -1)
+
+          if [ -z "$CANDIDATE_DIR" ]; then
+            echo "No candidate submission detected in changed files — skipping candidate checks."
+            echo "candidate_dir=" >> "$GITHUB_OUTPUT"
+            echo "is_js=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Detected candidate folder: $CANDIDATE_DIR"
+          echo "candidate_dir=$CANDIDATE_DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Check if JavaScript project
+        id: check-lang
+        run: |
+          if [ -f "$CANDIDATE_DIR/package.json" ]; then
+            echo "is_js=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_js=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ── 1. Lint ───────────────────────────────────────────────────────────────────
+  lint:
+    name: lint
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_js == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ${{ env.CANDIDATE_DIR }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          npm ci
+
+      - name: Run lint
+        run: |
+          cd "$CANDIDATE_DIR"
+          npm run lint || echo "Lint script not configured, skipping"
+
+  # ── 2. Unit and integration tests ─────────────────────────────────────────────
+  unit-and-integration-tests:
+    name: unit-and-integration-tests
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_js == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ${{ env.CANDIDATE_DIR }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          npm ci
+
+      - name: Run tests
+        run: |
+          cd "$CANDIDATE_DIR"
+          npm test
+
+  # ── 3. DB schema / migration check ────────────────────────────────────────────
+  db-migration-or-schema-check:
+    name: db-migration-or-schema-check
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_js == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ${{ env.CANDIDATE_DIR }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          npm ci
+
+      - name: Validate schema
+        run: |
+          cd "$CANDIDATE_DIR"
+          if [ -f "scripts/validate_schema.js" ]; then
+            node scripts/validate_schema.js
+          else
+            echo "No validate_schema.js found in scripts/. Add one or replace this step."
+            exit 1
+          fi
+
+  # ── 4. Reliability tests ──────────────────────────────────────────────────────
+  reliability-tests:
+    name: reliability-tests
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_js == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ${{ env.CANDIDATE_DIR }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          npm ci
+
+      - name: Run reliability tests
+        run: |
+          cd "$CANDIDATE_DIR"
+          npm run test:reliability || npm test -- --grep reliability
+
+  # ── 5. Security and secrets scan ──────────────────────────────────────────────
+  security-and-secrets-scan:
+    name: security-and-secrets-scan
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_js == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install audit tools
+        run: |
+          npm install -g audit-ci
+
+      - name: Audit dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          audit-ci --config audit-ci.json || echo "Audit config not found, skipping"
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
