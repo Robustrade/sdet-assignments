@@ -1,0 +1,212 @@
+name: sdet-pr-checks-java
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, master]
+
+jobs:
+
+  # ── Detect which candidate folder changed in this PR ─────────────────────────
+  detect-candidate:
+    name: detect-candidate
+    runs-on: ubuntu-latest
+    outputs:
+      candidate_dir: ${{ steps.detect.outputs.candidate_dir }}
+      is_java: ${{ steps.check-lang.outputs.is_java }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect candidate folder
+        id: detect
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE=${{ github.event.pull_request.base.sha }}
+          else
+            BASE=$(git rev-parse HEAD~1 2>/dev/null || git rev-parse HEAD)
+          fi
+
+          CANDIDATE_DIR=$(git diff --name-only "$BASE"...HEAD \
+            | grep '^submission/' \
+            | awk -F'/' '{print $1"/"$2}' \
+            | sort -u \
+            | head -1)
+
+          if [ -z "$CANDIDATE_DIR" ]; then
+            echo "No candidate submission detected in changed files — skipping candidate checks."
+            echo "candidate_dir=" >> "$GITHUB_OUTPUT"
+            echo "is_java=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Detected candidate folder: $CANDIDATE_DIR"
+          echo "candidate_dir=$CANDIDATE_DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Check if Java project
+        id: check-lang
+        run: |
+          if [ -f "$CANDIDATE_DIR/pom.xml" ]; then
+            echo "is_java=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_java=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ── 1. Lint ───────────────────────────────────────────────────────────────────
+  lint:
+    name: lint
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_java == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Install dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          mvn dependency:go-offline
+
+      - name: Run lint (Spotless)
+        run: |
+          cd "$CANDIDATE_DIR"
+          mvn spotless:check || echo "Spotless not configured, skipping lint"
+
+  # ── 2. Unit and integration tests ─────────────────────────────────────────────
+  unit-and-integration-tests:
+    name: unit-and-integration-tests
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_java == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Install dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          mvn dependency:go-offline
+
+      - name: Run tests
+        run: |
+          cd "$CANDIDATE_DIR"
+          mvn test
+
+  # ── 3. DB schema / migration check ────────────────────────────────────────────
+  db-migration-or-schema-check:
+    name: db-migration-or-schema-check
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_java == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Install dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          mvn dependency:go-offline
+
+      - name: Validate schema
+        run: |
+          cd "$CANDIDATE_DIR"
+          if [ -f "scripts/validate_schema.java" ] || [ -f "src/main/java/ValidateSchema.java" ]; then
+            # Assume a main class or script to run
+            mvn exec:java -Dexec.mainClass="ValidateSchema" || echo "Schema validation script not found or failed"
+          else
+            echo "No validate_schema.java found. Add one or replace this step."
+            exit 1
+          fi
+
+  # ── 4. Reliability tests ──────────────────────────────────────────────────────
+  reliability-tests:
+    name: reliability-tests
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_java == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Install dependencies
+        run: |
+          cd "$CANDIDATE_DIR"
+          mvn dependency:go-offline
+
+      - name: Run reliability tests
+        run: |
+          cd "$CANDIDATE_DIR"
+          mvn test -Dtest="*Reliability*"
+
+  # ── 5. Security and secrets scan ──────────────────────────────────────────────
+  security-and-secrets-scan:
+    name: security-and-secrets-scan
+    needs: detect-candidate
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_java == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}

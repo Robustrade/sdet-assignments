@@ -2,7 +2,15 @@
 
 This repository contains the take-home infrastructure assignment for SDET engineering candidates at Kulu.
 
-For full assignment details, see [SDET_ASSIGNMENT.md](./SDET_ASSIGNMENT.md).
+## Supported Languages
+
+Candidates may submit solutions in any programming language. The repository includes CI workflows for:
+
+- **Python** (using pytest, ruff, black)
+- **Java** (using Maven, JUnit, RestAssured, Spotless)
+- **JavaScript/Node.js** (using Jest, ESLint, npm audit)
+
+See the sample submissions in `submission/sample-candidate*` for examples. The appropriate CI workflow will automatically run based on your project structure (presence of `requirements.txt`/`pyproject.toml` for Python, `pom.xml` for Java, `package.json` for JavaScript).
 
 ## How to Submit
 

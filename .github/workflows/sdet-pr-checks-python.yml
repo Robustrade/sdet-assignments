@@ -1,7 +1,8 @@
-name: sdet-pr-checks
+name: sdet-pr-checks-python
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
   push:
     branches: [main, master]
 
@@ -13,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       candidate_dir: ${{ steps.detect.outputs.candidate_dir }}
+      is_python: ${{ steps.check-lang.outputs.is_python }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,17 +38,27 @@ jobs:
           if [ -z "$CANDIDATE_DIR" ]; then
             echo "No candidate submission detected in changed files — skipping candidate checks."
             echo "candidate_dir=" >> "$GITHUB_OUTPUT"
+            echo "is_python=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           echo "Detected candidate folder: $CANDIDATE_DIR"
           echo "candidate_dir=$CANDIDATE_DIR" >> "$GITHUB_OUTPUT"
 
+      - name: Check if Python project
+        id: check-lang
+        run: |
+          if [ -f "$CANDIDATE_DIR/requirements.txt" ] || [ -f "$CANDIDATE_DIR/pyproject.toml" ]; then
+            echo "is_python=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_python=false" >> "$GITHUB_OUTPUT"
+          fi
+
   # ── 1. Lint ───────────────────────────────────────────────────────────────────
   lint:
     name: lint
     needs: detect-candidate
-    if: needs.detect-candidate.outputs.candidate_dir != ''
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_python == 'true'
     runs-on: ubuntu-latest
     env:
       CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
@@ -72,7 +84,7 @@ jobs:
   unit-and-integration-tests:
     name: unit-and-integration-tests
     needs: detect-candidate
-    if: needs.detect-candidate.outputs.candidate_dir != ''
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_python == 'true'
     runs-on: ubuntu-latest
     env:
       CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
@@ -100,7 +112,7 @@ jobs:
   db-migration-or-schema-check:
     name: db-migration-or-schema-check
     needs: detect-candidate
-    if: needs.detect-candidate.outputs.candidate_dir != ''
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_python == 'true'
     runs-on: ubuntu-latest
     env:
       CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
@@ -132,7 +144,7 @@ jobs:
   reliability-tests:
     name: reliability-tests
     needs: detect-candidate
-    if: needs.detect-candidate.outputs.candidate_dir != ''
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_python == 'true'
     runs-on: ubuntu-latest
     env:
       CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
@@ -160,7 +172,7 @@ jobs:
   security-and-secrets-scan:
     name: security-and-secrets-scan
     needs: detect-candidate
-    if: needs.detect-candidate.outputs.candidate_dir != ''
+    if: needs.detect-candidate.outputs.candidate_dir != '' && needs.detect-candidate.outputs.is_python == 'true'
     runs-on: ubuntu-latest
     env:
       CANDIDATE_DIR: ${{ needs.detect-candidate.outputs.candidate_dir }}
