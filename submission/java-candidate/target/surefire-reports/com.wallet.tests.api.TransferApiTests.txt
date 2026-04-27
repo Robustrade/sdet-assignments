@@ -1,0 +1,198 @@
+-------------------------------------------------------------------------------
+Test set: com.wallet.tests.api.TransferApiTests
+-------------------------------------------------------------------------------
+Tests run: 14, Failures: 0, Errors: 14, Skipped: 0, Time elapsed: 11.14 s <<< FAILURE! -- in com.wallet.tests.api.TransferApiTests
+com.wallet.tests.api.TransferApiTests.createTransfer_returns201WithExpectedShape -- Time elapsed: 10.95 s <<< ERROR!
+java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+
+com.wallet.tests.api.TransferApiTests.getTransfer_existingId_returns200 -- Time elapsed: 0.012 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.getTransfer_unknownId_returns404 -- Time elapsed: 0.006 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.getWallet_existingId_returns200 -- Time elapsed: 0.010 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.getWallet_unknownId_returns404 -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_missingSourceWalletId_returns400 -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_missingDestinationWalletId_returns400 -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_zeroAmount_returns400 -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_negativeAmount_returns400 -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_selfTransfer_returns400 -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_unsupportedCurrency_returns400 -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_missingCurrency_returns400 -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_insufficientBalance_returns422 -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+
+com.wallet.tests.api.TransferApiTests.createTransfer_amountExceedsBalance_returns422 -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.ExceptionInInitializerError: Testcontainers failed to start. Tip: Run 'docker ps' or set TESTCONTAINERS_RYUK_DISABLED=true. Original error: Container startup failed for image testcontainers/ryuk:0.6.0 [in thread "main"]
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:51)
+	... 5 more
+

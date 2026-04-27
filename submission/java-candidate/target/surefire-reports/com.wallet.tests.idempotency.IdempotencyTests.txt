@@ -1,0 +1,224 @@
+-------------------------------------------------------------------------------
+Test set: com.wallet.tests.idempotency.IdempotencyTests
+-------------------------------------------------------------------------------
+Tests run: 10, Failures: 0, Errors: 10, Skipped: 0, Time elapsed: 1.768 s <<< FAILURE! -- in com.wallet.tests.idempotency.IdempotencyTests
+com.wallet.tests.idempotency.IdempotencyTests.replay_samekeyAndPayload_returnsOriginalTransferId -- Time elapsed: 1.634 s <<< ERROR!
+java.lang.ExceptionInInitializerError
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.replay_doesNotDoubleDebit -- Time elapsed: 0.008 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.replay_doesNotDoubleCredit -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.replay_onlyOneTransferRowInDB -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.afterFirstSubmission_idempotencyKeyStoredInDB -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.replay_onlyOneOutboxEvent -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.sameKeyDifferentAmount_returns409 -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.sameKeyDifferentDestination_returns409 -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.concurrentDuplicateSubmissions_exactlyOneTransferCreated -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
+com.wallet.tests.idempotency.IdempotencyTests.noIdempotencyKey_eachRequestIsIndependent -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class com.wallet.config.TestContainersConfig
+	at com.wallet.db.DbClient.<init>(DbClient.java:30)
+	at com.wallet.tests.BaseIntegrationTest.baseSetUp(BaseIntegrationTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	Suppressed: java.lang.NullPointerException: Cannot invoke "com.wallet.fixtures.TestCleanup.rollback()" because "this.cleanup" is null
+		at com.wallet.tests.BaseIntegrationTest.baseTearDown(BaseIntegrationTest.java:75)
+		... 3 more
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:277)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:268)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:152)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:194)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:106)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:109)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:329)
+	at com.wallet.config.TestContainersConfig.<clinit>(TestContainersConfig.java:35)
+	... 5 more
+
