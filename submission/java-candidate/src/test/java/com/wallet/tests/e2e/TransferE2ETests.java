@@ -31,9 +31,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class TransferE2ETests extends BaseIntegrationTest {
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Happy Path — full debit/credit/persist verification
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[E2E-01] Successful transfer — balances updated correctly in DB")
@@ -119,9 +119,9 @@ class TransferE2ETests extends BaseIntegrationTest {
                 .isEqualByComparingTo(bobStart.add(total));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Insufficient Balance — no side effects
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[E2E-04] Insufficient balance — no wallet mutation, no spurious DB rows")
@@ -155,9 +155,9 @@ class TransferE2ETests extends BaseIntegrationTest {
         rows.forEach(r -> assertThat(r.get("status")).isNotEqualTo("COMPLETED"));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Dynamic wallet creation (using WalletBuilder)
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     void transferBetweenDynamicWallets_fullCycleVerified() {
@@ -184,9 +184,9 @@ class TransferE2ETests extends BaseIntegrationTest {
         cleanup.trackIdempotencyKey(key);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Exact amount — boundary transfers
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     void transferExactBalance_sourceDrainedToZero() {

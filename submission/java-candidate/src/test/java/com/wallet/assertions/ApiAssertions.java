@@ -20,7 +20,7 @@ public class ApiAssertions {
         return new ApiAssertions(response);
     }
 
-    // ── Status codes ─────────────────────────────────────
+    // -- Status codes -------------------------------------
 
     public ApiAssertions isCreated() {
         // 201 means the resource was created successfully
@@ -70,7 +70,7 @@ public class ApiAssertions {
         return this;
     }
 
-    // ── Response body fields ─────────────────────────────
+    // -- Response body fields -----------------------------
 
     public ApiAssertions hasTransferId() {
         // make sure there's actually an id in the response, not null or empty

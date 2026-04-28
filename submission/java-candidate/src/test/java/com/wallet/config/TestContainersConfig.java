@@ -62,9 +62,9 @@ public final class TestContainersConfig {
     public static String getUser()     { return POSTGRES.getUsername(); }
     public static String getPassword() { return POSTGRES.getPassword(); }
 
-    // ──────────────────────────────────────
+    // --------------------------------------
     //  Schema bootstrap
-    // ──────────────────────────────────────
+    // --------------------------------------
 
     private static void applySchema() {
         try (Connection conn = DriverManager.getConnection(

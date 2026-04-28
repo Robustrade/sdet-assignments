@@ -45,9 +45,9 @@ public class TransferClient {
         return baseSpec().get(baseUrl + "/transfers/" + transferId);
     }
 
-    // ─────────────────────────────────────────
+    // -----------------------------------------
     //  Private
-    // ─────────────────────────────────────────
+    // -----------------------------------------
 
     private RequestSpecification baseSpec() {
         return given()

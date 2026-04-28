@@ -20,9 +20,9 @@ import static com.wallet.fixtures.TestDataSeeder.*;
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class TransferApiTests extends BaseIntegrationTest {
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Happy path — shape of successful response
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[API-01] POST /transfers — 201 Created with correct response shape")
@@ -92,9 +92,9 @@ class TransferApiTests extends BaseIntegrationTest {
                 .isNotFound();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Validation failures — 400 Bad Request
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[API-06] POST /transfers — 400 when source_wallet_id is missing")
@@ -172,9 +172,9 @@ class TransferApiTests extends BaseIntegrationTest {
                 .isBadRequest();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Insufficient balance — 422 Unprocessable Entity
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[API-13] POST /transfers — 422 when source has insufficient balance")

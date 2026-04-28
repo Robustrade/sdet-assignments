@@ -32,21 +32,21 @@ import static com.wallet.assertions.ApiAssertions.assertThatResponse;
  */
 public abstract class BaseIntegrationTest {
 
-    // ── Infrastructure ──────────────────────────────────
+    // -- Infrastructure ----------------------------------
     protected DbClient               db;
     protected WalletRepository       walletRepo;
     protected TransferRepository     transferRepo;
     protected IdempotencyRepository  idempotencyRepo;
 
-    // ── Clients ─────────────────────────────────────────
+    // -- Clients -----------------------------------------
     protected TransferClient  transferClient;
     protected WalletClient    walletClient;
 
-    // ── Assertion helpers ────────────────────────────────
+    // -- Assertion helpers --------------------------------
     protected DatabaseAssertions dbAssert;
     protected BusinessAssertions businessAssert;
 
-    // ── Fixtures ─────────────────────────────────────────
+    // -- Fixtures -----------------------------------
     protected TestDataSeeder seeder;
     protected TestCleanup    cleanup;
 
@@ -75,7 +75,7 @@ public abstract class BaseIntegrationTest {
         cleanup.rollback();
     }
 
-    // ── Helpers available to subclasses ──────────────────
+    // -- Helpers available to subclasses ------------------
 
     protected static String newIdempotencyKey() {
         return UUID.randomUUID().toString();

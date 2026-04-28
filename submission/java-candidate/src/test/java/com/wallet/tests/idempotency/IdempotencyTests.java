@@ -25,9 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class IdempotencyTests extends BaseIntegrationTest {
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Same key + same payload → replay
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[IDEM-01] Replaying same key + same payload returns the original transfer id")
@@ -160,9 +160,9 @@ class IdempotencyTests extends BaseIntegrationTest {
         dbAssert.transferHasExactlyOneOutboxEvent(transferId);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Same key + different payload → Conflict
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[IDEM-07] Same key + different amount → 409 Conflict")
@@ -197,9 +197,9 @@ class IdempotencyTests extends BaseIntegrationTest {
                 .isConflict();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Concurrent duplicate submission (race condition safety)
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[IDEM-09] Concurrent duplicate submissions — exactly one transfer created")
@@ -231,9 +231,9 @@ class IdempotencyTests extends BaseIntegrationTest {
                 .isEqualByComparingTo(ALICE_BALANCE.subtract(amount));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  No idempotency key provided — treated as unique request
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[IDEM-10] Requests without idempotency key are treated as independent")

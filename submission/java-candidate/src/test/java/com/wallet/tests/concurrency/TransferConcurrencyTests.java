@@ -21,9 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class TransferConcurrencyTests extends BaseIntegrationTest {
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Competing transfers — limited balance
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[CONC-01] 10 concurrent transfers competing for only 1-slot balance — exactly 1 succeeds")
@@ -121,9 +121,9 @@ class TransferConcurrencyTests extends BaseIntegrationTest {
                 .isEqualByComparingTo(totalDebited);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Concurrent transfers between different wallet pairs — no cross-interference
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[CONC-04] Concurrent independent transfers on different wallet pairs — all succeed")
@@ -155,9 +155,9 @@ class TransferConcurrencyTests extends BaseIntegrationTest {
         assertThat(successes).as("All independent transfers must succeed").isEqualTo(pairs);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Read-after-write consistency
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[CONC-05] GET /wallets after concurrent transfers reflects final consistent state")
@@ -192,9 +192,9 @@ class TransferConcurrencyTests extends BaseIntegrationTest {
                 .isEqualByComparingTo(expectedDest);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Concurrent idempotent duplicate submission
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     @Test
     @DisplayName("[CONC-06] Concurrent idempotent submissions — exactly one debit, all return 201")

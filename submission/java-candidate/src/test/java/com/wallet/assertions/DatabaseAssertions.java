@@ -29,7 +29,7 @@ public class DatabaseAssertions {
         this.idempotency = idempotency;
     }
 
-    // ── Wallet balance invariants ─────────────────────────
+    // -- Wallet balance invariants -------------------------
 
     public DatabaseAssertions walletBalanceEquals(String walletId, BigDecimal expected) {
         BigDecimal actual = wallets.getBalance(walletId);
@@ -59,7 +59,7 @@ public class DatabaseAssertions {
         return walletBalanceEquals(walletId, before);
     }
 
-    // ── Transfer row invariants ───────────────────────────
+    // -- Transfer row invariants ---------------------------
 
     public DatabaseAssertions transferExistsWithStatus(String transferId, String status) {
         Optional<Map<String, Object>> row = transfers.findById(transferId);
@@ -95,7 +95,7 @@ public class DatabaseAssertions {
         return this;
     }
 
-    // ── Idempotency key invariants ────────────────────────
+    // -- Idempotency key invariants ------------------------
 
     public DatabaseAssertions idempotencyKeyExists(String key) {
         // after a successful transfer, the key must be stored so replays work
@@ -112,7 +112,7 @@ public class DatabaseAssertions {
         return this;
     }
 
-    // ── Audit / event invariants ──────────────────────────
+    // -- Audit / event invariants --------------------------
 
     public DatabaseAssertions transferHasEvent(String transferId, String eventType) {
         // look through all events for this transfer and find the one we care about
