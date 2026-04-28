@@ -9,7 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * DB-level assertions to check what actually got persisted.
+ * Because trusting the API response alone isn't enough — we need to see it in the DB.
+ */
 public class DatabaseAssertions {
 
     private final WalletRepository     wallets;
@@ -138,4 +143,3 @@ public class DatabaseAssertions {
         return this;
     }
 }
-

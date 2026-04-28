@@ -39,4 +39,3 @@ public final class TestConfig {
     /** Thread count for concurrency tests. */
     public static final int CONCURRENCY_THREADS = 10;
 }
-

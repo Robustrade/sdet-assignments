@@ -33,4 +33,3 @@ public class WalletClient {
                 .get(baseUrl + "/wallets/" + walletId);
     }
 }
-

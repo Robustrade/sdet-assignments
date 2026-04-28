@@ -9,7 +9,9 @@ import java.sql.*;
 import java.util.*;
 
 /**
-
+ * Bare-bones JDBC wrapper used by all the repository classes.
+ * Picks up credentials from Testcontainers when running locally,
+ * or from DB_URL env var when running in CI against a real database.
  */
 public class DbClient {
 
@@ -86,7 +88,9 @@ public class DbClient {
         }
     }
 
-
+    // ─────────────────────────────────────────────
+    //  Private helpers
+    // ─────────────────────────────────────────────
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);

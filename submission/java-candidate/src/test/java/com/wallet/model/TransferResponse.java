@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-/** What the service sends back after a POST /transfers or GET /transfers/{id}. */
-@JsonIgnoreProperties(ignoreUnknown = true)  // safe in case the service adds new fields down the road
+/** Mirrors the service's transfer response payload. */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TransferResponse {
 
     @JsonProperty("transferId")            private String transferId;
@@ -16,8 +16,8 @@ public class TransferResponse {
     @JsonProperty("amount")               private BigDecimal amount;
     @JsonProperty("currency")             private String currency;
     @JsonProperty("reference")            private String reference;
-    @JsonProperty("status")               private String status;         // COMPLETED, REJECTED, etc.
-    @JsonProperty("failureReason")        private String failureReason;  // only set when status != COMPLETED
+    @JsonProperty("status")               private String status;
+    @JsonProperty("failureReason")        private String failureReason;
     @JsonProperty("createdAt")            private Instant createdAt;
 
     public TransferResponse() {}

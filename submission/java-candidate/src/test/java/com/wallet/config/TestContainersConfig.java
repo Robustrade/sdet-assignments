@@ -10,35 +10,40 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Starts a Postgres container for the test suite and keeps it alive for the whole JVM.
+ * Manages a shared PostgreSQL Testcontainer used by the test suite for DB-level assertions.
  *
- * Started once via static init and reused across test classes — much faster than a fresh
- * container per class. Schema gets applied right after startup.
+ * NOTE: This container represents the *same* database that the service under test writes to.
+ * In a real environment you would point DB_URL at the service's actual database instead of
+ * starting a fresh container. In this test project the container is also used by the
+ * optional embedded-stub mode.
  *
- * If DB_URL is set in the environment, DbClient will skip this and connect externally instead.
+ * The container is started once for the entire JVM via a static initialiser and reused across
+ * test classes (Testcontainers "singleton" pattern).
  */
 public final class TestContainersConfig {
 
     private static final Logger log = LoggerFactory.getLogger(TestContainersConfig.class);
 
-    // using postgres 16 alpine to keep the image small
     private static final PostgreSQLContainer<?> POSTGRES =
             new PostgreSQLContainer<>("postgres:16-alpine")
                     .withDatabaseName("wallet_test")
                     .withUsername("wallet")
                     .withPassword("wallet")
                     .withReuse(true);   // reuse across Maven forks if TC_REUSE_ENABLE=true
+//
+//    static {
+//        POSTGRES.start();
+//        log.info("PostgreSQL container started at {}", POSTGRES.getJdbcUrl());
+//        applySchema();
+//    }
 
     static {
-        // point Docker at the right socket for macOS Docker Desktop
         System.setProperty("DOCKER_HOST", "unix:///Users/sweta/.docker/run/docker.sock");
-        // ryuk can cause problems in some setups — easier to just disable it
         System.setProperty("TESTCONTAINERS_RYUK_DISABLED", "true");
 
         try {
             log.info("Starting PostgreSQL container...");
             POSTGRES.start();
-            // apply schema right after startup so the DB is ready for tests
             applySchema();
         } catch (Exception e) {
             log.error("CRITICAL: Docker environment not ready! Check if Docker Desktop is running.");
@@ -53,7 +58,6 @@ public final class TestContainersConfig {
         return POSTGRES;
     }
 
-    // convenience accessors so callers don't need to touch the container directly
     public static String getJdbcUrl()  { return POSTGRES.getJdbcUrl(); }
     public static String getUser()     { return POSTGRES.getUsername(); }
     public static String getPassword() { return POSTGRES.getPassword(); }
@@ -67,7 +71,7 @@ public final class TestContainersConfig {
                 POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
              Statement stmt = conn.createStatement()) {
 
-            // schema.sql lives on the test classpath under /db/
+            // Read schema from classpath resource
             String schema = readResource("/db/schema.sql");
             stmt.execute(schema);
             log.info("Schema applied to test database");

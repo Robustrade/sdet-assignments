@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Queries against the wallets table.
- * Used by tests to read balances and seed/clean up wallet data.
+ * Repository for wallet table queries used in DB assertions.
  */
 public class WalletRepository {
 
@@ -24,15 +23,14 @@ public class WalletRepository {
         return rows.isEmpty() ? Optional.empty() : Optional.of(rows.get(0));
     }
 
-    /** Pulls the current balance — throws if the wallet doesn't exist. */
+    /** Return the current balance for the given wallet. Throws if wallet doesn't exist. */
     public BigDecimal getBalance(String walletId) {
         Map<String, Object> row = db.queryOne("SELECT balance FROM wallets WHERE id = ?", walletId);
         return (BigDecimal) row.get("balance");
     }
 
-    /** Creates or updates a wallet row — safe to call multiple times. */
+    /** Directly seed a wallet row (used by TestDataSeeder). */
     public void upsert(String id, String ownerName, BigDecimal balance, String currency) {
-        // ON CONFLICT means we can call this repeatedly without worrying about duplicates
         db.execute("""
                 INSERT INTO wallets (id, owner_name, balance, currency)
                 VALUES (?, ?, ?, ?)
@@ -43,15 +41,14 @@ public class WalletRepository {
                 """, id, ownerName, balance, currency);
     }
 
-    /** Directly sets a wallet balance — used to restore state after a test. */
+    /** Reset a wallet's balance directly (for test teardown). */
     public void resetBalance(String walletId, BigDecimal balance) {
         db.execute("UPDATE wallets SET balance = ?, updated_at = NOW() WHERE id = ?",
                 balance, walletId);
     }
 
-    /** Removes the wallet row. FK cascades will clean up transfers too. */
+    /** Delete a wallet row. Cascades to transfers (FK). */
     public void delete(String walletId) {
-        // cascade takes care of related transfer rows automatically
         db.execute("DELETE FROM wallets WHERE id = ?", walletId);
     }
 }

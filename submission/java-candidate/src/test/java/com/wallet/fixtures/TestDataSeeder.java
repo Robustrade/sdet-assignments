@@ -8,22 +8,23 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 
 /**
- * Sets up the four standard wallets (Alice, Bob, Charlie, Empty) that most tests rely on.
- * Can be called in @BeforeEach safely since upsert won't duplicate anything.
- * Tests that mutate balances should call resetBalances() after themselves,
- * or just create their own wallets via WalletBuilder if they need isolation.
+ * Seeds the database with the known wallet fixtures used across the test suite.
+ *
+ * All wallets are idempotently upserted — safe to call in @BeforeEach.
+ * Each test that mutates balances should record the pre-test balance and restore it
+ * via TestCleanup, or use wallet ids that are test-scoped (created dynamically via WalletBuilder).
  */
 public class TestDataSeeder {
 
     private static final Logger log = LoggerFactory.getLogger(TestDataSeeder.class);
 
-    // well-known wallet IDs — used by name in all tests
+    // Well-known wallet IDs that all tests may reference
     public static final String ALICE   = "wallet_alice";
     public static final String BOB     = "wallet_bob";
     public static final String CHARLIE = "wallet_charlie";
-    public static final String EMPTY   = "wallet_empty";  // always starts at 0
+    public static final String EMPTY   = "wallet_empty";
 
-    // canonical starting balances — reset before each test class
+    // Canonical starting balances (reset before each test class)
     public static final BigDecimal ALICE_BALANCE   = BigDecimal.valueOf(10_000);
     public static final BigDecimal BOB_BALANCE     = BigDecimal.valueOf(5_000);
     public static final BigDecimal CHARLIE_BALANCE = BigDecimal.valueOf(1_000);
@@ -38,11 +39,10 @@ public class TestDataSeeder {
     }
 
     /**
-     * Inserts (or updates) the four canonical wallets.
-     * Safe to call every @BeforeEach — idempotent.
+     * Seeds the four canonical wallets with their default balances.
+     * Call this in @BeforeEach / @BeforeAll to get a clean slate.
      */
     public void seedWallets() {
-        // upsert is safe to call multiple times — keeps things idempotent
         walletRepo.upsert(ALICE,   "Alice",   ALICE_BALANCE,   "AED");
         walletRepo.upsert(BOB,     "Bob",     BOB_BALANCE,     "AED");
         walletRepo.upsert(CHARLIE, "Charlie", CHARLIE_BALANCE, "AED");
@@ -51,11 +51,10 @@ public class TestDataSeeder {
     }
 
     /**
-     * Puts wallet balances back to their starting values.
-     * Doesn't touch transfer/event rows — call TestCleanup.rollback() for those.
+     * Resets canonical wallet balances back to defaults.
+     * Does NOT delete transfer/event rows — use TestCleanup for that.
      */
     public void resetBalances() {
-        // puts everything back to starting values so each test has a predictable state
         walletRepo.resetBalance(ALICE,   ALICE_BALANCE);
         walletRepo.resetBalance(BOB,     BOB_BALANCE);
         walletRepo.resetBalance(CHARLIE, CHARLIE_BALANCE);

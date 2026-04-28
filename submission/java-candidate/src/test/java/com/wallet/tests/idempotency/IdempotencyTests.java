@@ -16,7 +16,11 @@ import static com.wallet.fixtures.TestDataSeeder.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- *
+ * Idempotency tests — probably the most important ones in this whole suite.
+ * Makes sure that retrying the same request doesn't charge the user twice.
+ * Also verifies that different payloads with the same key get rejected as a conflict.
+ * Every test gets its own unique key so there's no shared state between them.
+ */
 @DisplayName("Idempotency — Exactly-Once Guarantee Tests")
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class IdempotencyTests extends BaseIntegrationTest {

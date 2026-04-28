@@ -1,3 +1,12 @@
+     * After N concurrent transfer attempts competing for insufficient total balance,
+     * verifies that the combined balance change does not exceed the expected debit.
+     * Asserts that a rejected / failed transfer left both wallets unchanged.
+     * Asserts that after a successful transfer:
+     *  - source was debited exactly once
+     *  - destination was credited exactly once
+     *  - no money was created or destroyed (conservation)
+ * High-level business invariant assertions.
+ * Expresses economic correctness — e.g. conservation of funds.
 package com.wallet.assertions;
 
 import com.wallet.db.WalletRepository;
@@ -7,8 +16,8 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * High-level business invariant assertions.
- * Expresses economic correctness — e.g. conservation of funds.
+ * Business-level assertions — checks that money moved correctly (or didn't move at all).
+ * Basically answers: "did the transfer do what it was supposed to financially?"
  */
 public class BusinessAssertions {
 
@@ -19,10 +28,8 @@ public class BusinessAssertions {
     }
 
     /**
-     * Asserts that after a successful transfer:
-     *  - source was debited exactly once
-     *  - destination was credited exactly once
-     *  - no money was created or destroyed (conservation)
+     * Checks that source got debited and dest got credited by exactly the right amount.
+     * Also verifies conservation — total money across both wallets must not change.
      */
     public BusinessAssertions verifySuccessfulTransfer(String sourceId,
                                                         String destId,
@@ -54,7 +61,10 @@ public class BusinessAssertions {
         return this;
     }
 
-
+    /**
+     * When a transfer fails, neither wallet should be touched.
+     * Use this after a 422 or 400 to confirm no side effects.
+     */
     public BusinessAssertions verifyNoBalanceMutation(String sourceId,
                                                        String destId,
                                                        BigDecimal sourceBalanceBefore,
@@ -74,7 +84,10 @@ public class BusinessAssertions {
         return this;
     }
 
-
+    /**
+     * Makes sure the wallet didn't go negative and didn't somehow end up with more than it started.
+     * Mainly used after concurrent tests where the locking could theoretically go wrong.
+     */
     public BusinessAssertions verifyNoOverdraft(String sourceId, BigDecimal initialBalance) {
         BigDecimal currentBalance = wallets.getBalance(sourceId);
 

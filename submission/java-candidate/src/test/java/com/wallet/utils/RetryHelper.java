@@ -5,14 +5,21 @@ import org.slf4j.LoggerFactory;
 
 import java.util.function.BooleanSupplier;
 
-
+/**
+ * Polling and retry utilities for cases where we can't assert immediately.
+ * Try not to use these too much — most DB checks should be synchronous right after the API call.
+ * These exist mainly for outbox/async scenarios where there's an inherent delay.
+ */
 public class RetryHelper {
 
     private static final Logger log = LoggerFactory.getLogger(RetryHelper.class);
 
     private RetryHelper() {}
 
-
+    /**
+     * Keeps checking the condition until it's true or time runs out.
+     * Throws AssertionError if we hit the timeout — that's a test failure, not an exception.
+     */
     public static void waitUntil(String description,
                                   long timeoutMs,
                                   long intervalMs,
@@ -35,8 +42,10 @@ public class RetryHelper {
         throw new AssertionError("Timeout waiting for: " + description);
     }
 
-
-
+    /**
+     * Retries an action up to maxAttempts times with a pause between each try.
+     * Gives up and rethrows after the last attempt fails.
+     */
     public static void retry(int maxAttempts, long delayMs, Runnable action) {
         Exception last = null;
         for (int i = 1; i <= maxAttempts; i++) {
