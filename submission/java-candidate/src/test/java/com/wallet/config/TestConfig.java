@@ -1,17 +1,13 @@
 package com.wallet.config;
 
 /**
- * Central test configuration.
- *
- * Values can be overridden via environment variables or system properties so the
- * same test suite can run against a locally-started server, a Docker compose stack,
- * or a CI environment without code changes.
- *
- * The Testcontainers setup populates SERVICE_BASE_URL automatically when the
- * suite manages its own database container.
+ * All the config the test suite needs in one place.
+ * Each value checks a system property first, then an env var, then falls back to a default.
+ * This way the same tests work locally and in CI without changing any code.
  */
 public final class TestConfig {
 
+    // not meant to be instantiated
     private TestConfig() {}
 
     /** Base URL of the Wallet Transfer Service under test. */
@@ -24,6 +20,7 @@ public final class TestConfig {
             System.getProperty("db.url",
                     System.getenv().getOrDefault("DB_URL", ""));
 
+    // blank DB_URL = use Testcontainers; set it to point at a real DB in CI
     public static final String DB_USER =
             System.getProperty("db.user",
                     System.getenv().getOrDefault("DB_USER", "postgres"));

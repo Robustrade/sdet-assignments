@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-/** Mirrors the GET /wallets/{id} response payload. */
+/** What comes back from GET /wallets/{id}. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WalletResponse {
 
     @JsonProperty("id")        private String id;
     @JsonProperty("ownerName") private String ownerName;
-    @JsonProperty("balance")   private BigDecimal balance;
+    @JsonProperty("balance")   private BigDecimal balance;  // current balance in the wallet
     @JsonProperty("currency")  private String currency;
-    @JsonProperty("updatedAt") private Instant updatedAt;
+    @JsonProperty("updatedAt") private Instant updatedAt;   // useful for debugging staleness issues
 
     public WalletResponse() {}
 

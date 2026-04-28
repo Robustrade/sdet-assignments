@@ -5,8 +5,8 @@ import io.restassured.response.Response;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Fluent API-level assertion helpers.
- * Captures intent clearly without mixing assertions with HTTP concerns inside tests.
+ * Wraps a RestAssured Response and gives us a fluent way to assert on it.
+ * Keeps the HTTP noise out of test methods so they stay readable.
  */
 public class ApiAssertions {
 
@@ -23,6 +23,7 @@ public class ApiAssertions {
     // ── Status codes ─────────────────────────────────────
 
     public ApiAssertions isCreated() {
+        // 201 means the resource was created successfully
         assertThat(response.statusCode())
                 .as("Expected 201 Created but got %d. Body: %s", response.statusCode(), response.body().asString())
                 .isEqualTo(201);
@@ -30,6 +31,7 @@ public class ApiAssertions {
     }
 
     public ApiAssertions isOk() {
+        // 200 for successful reads
         assertThat(response.statusCode())
                 .as("Expected 200 OK but got %d. Body: %s", response.statusCode(), response.body().asString())
                 .isEqualTo(200);
@@ -37,6 +39,7 @@ public class ApiAssertions {
     }
 
     public ApiAssertions isBadRequest() {
+        // 400 = validation failure on the client side
         assertThat(response.statusCode())
                 .as("Expected 400 Bad Request but got %d. Body: %s", response.statusCode(), response.body().asString())
                 .isEqualTo(400);
@@ -44,6 +47,7 @@ public class ApiAssertions {
     }
 
     public ApiAssertions isUnprocessableEntity() {
+        // 422 = request was valid but failed business logic (e.g. insufficient funds)
         assertThat(response.statusCode())
                 .as("Expected 422 Unprocessable Entity but got %d. Body: %s", response.statusCode(), response.body().asString())
                 .isEqualTo(422);
@@ -51,6 +55,7 @@ public class ApiAssertions {
     }
 
     public ApiAssertions isConflict() {
+        // 409 = idempotency conflict — same key, different payload
         assertThat(response.statusCode())
                 .as("Expected 409 Conflict but got %d. Body: %s", response.statusCode(), response.body().asString())
                 .isEqualTo(409);
@@ -58,6 +63,7 @@ public class ApiAssertions {
     }
 
     public ApiAssertions isNotFound() {
+        // 404 = resource doesn't exist
         assertThat(response.statusCode())
                 .as("Expected 404 Not Found but got %d. Body: %s", response.statusCode(), response.body().asString())
                 .isEqualTo(404);
@@ -67,6 +73,7 @@ public class ApiAssertions {
     // ── Response body fields ─────────────────────────────
 
     public ApiAssertions hasTransferId() {
+        // make sure there's actually an id in the response, not null or empty
         String id = response.jsonPath().getString("transferId");
         assertThat(id).as("transferId must not be blank").isNotBlank();
         return this;
@@ -81,6 +88,7 @@ public class ApiAssertions {
     }
 
     public ApiAssertions hasErrorMessageContaining(String fragment) {
+        // checked case-insensitively so "Insufficient" and "insufficient" both pass
         String msg = response.jsonPath().getString("message");
         assertThat(msg)
                 .as("error message should contain <%s> but was <%s>", fragment, msg)
@@ -102,11 +110,12 @@ public class ApiAssertions {
         return this;
     }
 
-    /** Returns the transfer id from the response for further use in tests. */
+    /** Grabs the transfer id out of the response — handy when you need it for a follow-up call. */
     public String extractTransferId() {
         return response.jsonPath().getString("transferId");
     }
 
+    // expose the raw response if someone really needs it
     public Response getResponse() {
         return response;
     }

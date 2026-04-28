@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Repository for transfers table queries used in DB assertions.
+ * Queries against the transfers table (and its related event/outbox tables).
+ * Mainly used to verify what the service actually wrote to the DB after an API call.
  */
 public class TransferRepository {
 
@@ -15,6 +16,7 @@ public class TransferRepository {
         this.db = db;
     }
 
+    // look up a transfer by its primary key
     public Optional<Map<String, Object>> findById(String transferId) {
         List<Map<String, Object>> rows =
                 db.query("SELECT * FROM transfers WHERE id = ?", transferId);
@@ -25,14 +27,14 @@ public class TransferRepository {
         return db.query("SELECT * FROM transfers WHERE idempotency_key = ?", key);
     }
 
-    /** Count transfer rows touching the given source wallet. */
+    /** How many transfers has this wallet sent? Used in some assertion helpers. */
     public int countBySourceWallet(String walletId) {
         Map<String, Object> row = db.queryOne(
                 "SELECT COUNT(*) AS cnt FROM transfers WHERE source_wallet_id = ?", walletId);
         return ((Number) row.get("cnt")).intValue();
     }
 
-    /** Count COMPLETED transfers between two wallets with a specific idempotency key. */
+    /** Count COMPLETED transfers for a given idempotency key — should always be 0 or 1. */
     public int countCompletedByIdempotencyKey(String key) {
         Map<String, Object> row = db.queryOne(
                 "SELECT COUNT(*) AS cnt FROM transfers WHERE idempotency_key = ? AND status = 'COMPLETED'",
@@ -40,18 +42,20 @@ public class TransferRepository {
         return ((Number) row.get("cnt")).intValue();
     }
 
-    /** Return all transfer_events for a transfer. */
+    /** Pulls all audit events for a transfer in order — used to check the event trail. */
     public List<Map<String, Object>> findEventsByTransferId(String transferId) {
+        // ordered by id so we get them in chronological order
         return db.query("SELECT * FROM transfer_events WHERE transfer_id = ? ORDER BY id", transferId);
     }
 
-    /** Return all outbox_events for a transfer. */
+    /** Outbox events for a transfer — downstream consumers read from here. */
     public List<Map<String, Object>> findOutboxByTransferId(String transferId) {
         return db.query("SELECT * FROM outbox_events WHERE transfer_id = ? ORDER BY id", transferId);
     }
 
-    /** Delete transfer + cascade for isolation teardown. */
+    /** Wipes a transfer and all its related rows — used in test teardown. */
     public void deleteByIdempotencyKey(String key) {
+        // clean up events first because of FK constraints, then the transfer row
         List<Map<String, Object>> rows = findByIdempotencyKey(key);
         rows.forEach(r -> {
             String id = (String) r.get("id");

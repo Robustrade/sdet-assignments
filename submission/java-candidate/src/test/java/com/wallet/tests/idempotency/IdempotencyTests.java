@@ -16,19 +16,7 @@ import static com.wallet.fixtures.TestDataSeeder.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * IDEMPOTENCY TESTS
  *
- * This is perhaps the most critical test category for a payment/transfer system.
- *
- * Validates:
- *  - same key + same payload → identical logical response (no duplicate debit)
- *  - same key + different payload → 409 Conflict
- *  - idempotency record is written to DB
- *  - no duplicate transfer rows regardless of retry count
- *  - concurrent duplicate submissions are safe (at-most-once side effects)
- *
- * Design note: each test generates a unique idempotency key so tests are fully isolated.
- */
 @DisplayName("Idempotency — Exactly-Once Guarantee Tests")
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class IdempotencyTests extends BaseIntegrationTest {
@@ -46,11 +34,11 @@ class IdempotencyTests extends BaseIntegrationTest {
 
         cleanup.trackIdempotencyKey(key);
 
-        // First call
+        // first call — this one actually does the work
         String firstTransferId = assertThatResponse(transferClient.createTransfer(req, key))
                 .isCreated().hasStatus("COMPLETED").extractTransferId();
 
-        // Second call — same key, same payload
+        // same key, same payload — should get back the exact same transfer id
         String replayTransferId = assertThatResponse(transferClient.createTransfer(req, key))
                 .isCreated().hasStatus("COMPLETED").extractTransferId();
 
@@ -64,6 +52,7 @@ class IdempotencyTests extends BaseIntegrationTest {
     void replay_doesNotDoubleDebit() {
         String key = newIdempotencyKey();
         BigDecimal amount     = BigDecimal.valueOf(1_000);
+        // snapshot Alice's balance before anything happens
         BigDecimal aliceBefore = walletRepo.getBalance(ALICE);
 
         TransferRequest req = aTransfer()
@@ -71,11 +60,11 @@ class IdempotencyTests extends BaseIntegrationTest {
 
         cleanup.trackIdempotencyKey(key);
 
-        // First call
+        // first call does the real debit
         transferClient.createTransfer(req, key);
         BigDecimal afterFirst = walletRepo.getBalance(ALICE);
 
-        // Replay — same key, same payload
+        // second call with same key — should NOT touch the balance
         transferClient.createTransfer(req, key);
         BigDecimal afterReplay = walletRepo.getBalance(ALICE);
 
@@ -83,6 +72,7 @@ class IdempotencyTests extends BaseIntegrationTest {
                 .as("First call should debit Alice by %s", amount)
                 .isEqualByComparingTo(aliceBefore.subtract(amount));
 
+        // this is the main check — replay must not debit again
         assertThat(afterReplay)
                 .as("Replay must NOT debit Alice again — balance must be unchanged from after-first")
                 .isEqualByComparingTo(afterFirst);
@@ -99,10 +89,11 @@ class IdempotencyTests extends BaseIntegrationTest {
                 .from(ALICE).to(BOB).amount(amount).reference("idem-03").build();
         cleanup.trackIdempotencyKey(key);
 
+        // do the real transfer
         transferClient.createTransfer(req, key);
         BigDecimal afterFirst = walletRepo.getBalance(BOB);
 
-        // Replay
+        // replay — Bob's balance must not go up again
         transferClient.createTransfer(req, key);
         BigDecimal afterReplay = walletRepo.getBalance(BOB);
 
@@ -123,11 +114,12 @@ class IdempotencyTests extends BaseIntegrationTest {
                 .from(ALICE).to(BOB).amount(200).reference("idem-04").build();
         cleanup.trackIdempotencyKey(key);
 
-        // Submit 5 times with the same key
+        // submit 5 times with the same key — should only create one row
         for (int i = 0; i < 5; i++) {
             transferClient.createTransfer(req, key);
         }
 
+        // one row no matter how many retries
         dbAssert.onlyOneTransferExistsForIdempotencyKey(key);
     }
 
@@ -141,6 +133,7 @@ class IdempotencyTests extends BaseIntegrationTest {
 
         transferClient.createTransfer(req, key);
 
+        // the key and its status should now be persisted
         dbAssert.idempotencyKeyExists(key);
         dbAssert.idempotencyKeyStatus(key, "COMPLETED");
     }
@@ -156,9 +149,10 @@ class IdempotencyTests extends BaseIntegrationTest {
         String transferId = assertThatResponse(transferClient.createTransfer(req, key))
                 .isCreated().extractTransferId();
 
-        // Replay
+        // replay — no extra outbox event should be written
         transferClient.createTransfer(req, key);
 
+        // still exactly one outbox event, not two
         dbAssert.transferHasExactlyOneOutboxEvent(transferId);
     }
 
@@ -174,10 +168,10 @@ class IdempotencyTests extends BaseIntegrationTest {
         TransferRequest different = aTransfer().from(ALICE).to(BOB).amount(999).build();
         cleanup.trackIdempotencyKey(key);
 
-        // First request succeeds
+        // first request locks in the payload for this key
         assertThatResponse(transferClient.createTransfer(original, key)).isCreated();
 
-        // Second request with same key but different amount → conflict
+        // second request with same key but different amount — must be rejected
         assertThatResponse(transferClient.createTransfer(different, key))
                 .isConflict()
                 .hasErrorMessageContaining("conflict");
@@ -191,8 +185,10 @@ class IdempotencyTests extends BaseIntegrationTest {
         TransferRequest different = aTransfer().from(ALICE).to(CHARLIE).amount(100).build();
         cleanup.trackIdempotencyKey(key);
 
+        // first call succeeds and binds this key to BOB as destination
         assertThatResponse(transferClient.createTransfer(original, key)).isCreated();
 
+        // trying to send to CHARLIE with the same key — should conflict
         assertThatResponse(transferClient.createTransfer(different, key))
                 .isConflict();
     }
@@ -211,20 +207,20 @@ class IdempotencyTests extends BaseIntegrationTest {
         TransferRequest req = aTransfer()
                 .from(ALICE).to(BOB).amount(amount).reference("idem-09").build();
 
-        // Fire 10 identical requests concurrently
+        // fire 10 identical requests at the same time — real-world network retry scenario
         List<Response> responses = ParallelExecutor.executeParallel(10,
                 () -> transferClient.createTransfer(req, key));
 
-        // All must be successful (either 201 or idempotent 201 replay)
+        // all should return 201 — whether they actually processed or just replayed
         long success = ParallelExecutor.countByStatus(responses, 201);
         assertThat(success)
                 .as("All concurrent identical requests must result in success (201)")
                 .isEqualTo(10);
 
-        // But only ONE transfer row must exist
+        // but the DB should only have one row — no duplicates
         dbAssert.onlyOneTransferExistsForIdempotencyKey(key);
 
-        // And alice must have been debited exactly once
+        // and alice should have been debited exactly once
         BigDecimal aliceNow = walletRepo.getBalance(ALICE);
         assertThat(aliceNow)
                 .as("Alice must be debited exactly once, not %d times", 10)
@@ -241,7 +237,7 @@ class IdempotencyTests extends BaseIntegrationTest {
         BigDecimal aliceBefore = walletRepo.getBalance(ALICE);
         BigDecimal amount      = BigDecimal.valueOf(100);
 
-        // Two identical payloads without idempotency key — should both succeed as separate transfers
+        // two identical payloads, but no idempotency key — treated as two separate transfers
         Response r1 = transferClient.createTransfer(
                 aTransfer().from(ALICE).to(BOB).amount(amount).build(), null);
         Response r2 = transferClient.createTransfer(
@@ -250,12 +246,13 @@ class IdempotencyTests extends BaseIntegrationTest {
         assertThatResponse(r1).isCreated();
         assertThatResponse(r2).isCreated();
 
+        // two different transfer ids — proves they're independent
         String id1 = r1.jsonPath().getString("transferId");
         String id2 = r2.jsonPath().getString("transferId");
         assertThat(id1).as("Two requests without key must produce two distinct transfer ids")
                 .isNotEqualTo(id2);
 
-        // Alice debited twice
+        // Alice should be debited twice since there's no idempotency protection here
         assertThat(walletRepo.getBalance(ALICE))
                 .isEqualByComparingTo(aliceBefore.subtract(amount.multiply(BigDecimal.valueOf(2))));
     }

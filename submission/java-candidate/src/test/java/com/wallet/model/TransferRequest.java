@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
-/** Mirrors the POST /transfers request body. */
-@JsonIgnoreProperties(ignoreUnknown = true)
+/** Request body for POST /transfers — field names match the API spec exactly. */
+@JsonIgnoreProperties(ignoreUnknown = true)  // ignore any extra fields the service might add later
 public class TransferRequest {
 
+    // snake_case to match what the API actually expects
     @JsonProperty("source_wallet_id")      private String sourceWalletId;
     @JsonProperty("destination_wallet_id") private String destinationWalletId;
     @JsonProperty("amount")                private BigDecimal amount;

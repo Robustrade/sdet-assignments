@@ -1,7 +1,6 @@
 # Wallet Transfer Service — Automated Test Suite
 
-A production-quality, black-box automated test suite for a **Wallet Transfer Service**.  
-The service under test is treated as an **existing external system** — no application code lives here.
+A automated test suite for a **Wallet Transfer Service**.
 
 ---
 
@@ -211,5 +210,5 @@ mvn test -Dtest=TransferE2ETests
 
 5. **WireMock** — dependency is included if downstream notification/webhook stubs are needed. Not used in the current suite.
 
-6. **Concurrency test flakiness** — `CONC-04` uses random index selection which can occasionally hit the same wallet twice. For strict isolation replace with indexed thread allocation. Documented as a known tradeoff.
+6. **Concurrency test flakiness** — `CONC-04` uses random index selection which can occasionally hit the same wallet twice. For strict isolation we can replace with indexed thread allocation. Documented as a known tradeoff.
 

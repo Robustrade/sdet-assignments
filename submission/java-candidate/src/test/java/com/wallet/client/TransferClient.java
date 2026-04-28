@@ -8,13 +8,14 @@ import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.given;
 
 /**
- * Thin wrapper around RestAssured for the /transfers endpoint.
- * Keeps all HTTP transport details out of test methods.
+ * HTTP client for the /transfers endpoint.
+ * Just wraps RestAssured calls so test methods don't have to deal with HTTP details directly.
  */
 public class TransferClient {
 
     private final String baseUrl;
 
+    // default constructor picks up the base URL from config (env var or system property)
     public TransferClient() {
         this(TestConfig.SERVICE_BASE_URL);
     }
@@ -24,14 +25,12 @@ public class TransferClient {
     }
 
     /**
-     * POST /transfers — create a new transfer.
-     *
-     * @param request        the transfer payload
-     * @param idempotencyKey optional Idempotency-Key header value; null to omit
-     * @return the raw RestAssured {@link Response} — callers assert on it
+     * POST /transfers
+     * Pass null for idempotencyKey if you don't want the header sent (e.g. IDEM-10).
      */
     public Response createTransfer(TransferRequest request, String idempotencyKey) {
         RequestSpecification spec = baseSpec().body(request);
+        // only attach the header if a key was actually provided
         if (idempotencyKey != null) {
             spec = spec.header("Idempotency-Key", idempotencyKey);
         }
@@ -50,6 +49,7 @@ public class TransferClient {
     // ─────────────────────────────────────────
 
     private RequestSpecification baseSpec() {
+        // log only on failure so normal runs stay quiet
         return given()
                 .contentType("application/json")
                 .accept("application/json")

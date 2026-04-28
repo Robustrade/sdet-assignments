@@ -6,12 +6,14 @@ import io.restassured.response.Response;
 import static io.restassured.RestAssured.given;
 
 /**
- * Thin wrapper around RestAssured for the /wallets endpoint.
+ * HTTP client for the /wallets endpoint.
+ * Nothing fancy — just GET by id for now.
  */
 public class WalletClient {
 
     private final String baseUrl;
 
+    // reads base URL from config — can be overridden via env for CI
     public WalletClient() {
         this(TestConfig.SERVICE_BASE_URL);
     }

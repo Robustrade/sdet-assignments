@@ -9,11 +9,7 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * Low-level JDBC helper shared across all repository classes.
- *
- * Connection source priority:
- *   1. Testcontainers-managed database  (when DB_URL env is blank = local test run)
- *   2. External DB_URL env / system property  (CI / staging)
+
  */
 public class DbClient {
 
@@ -26,11 +22,12 @@ public class DbClient {
     public DbClient() {
         String envUrl = TestConfig.DB_URL;
         if (envUrl == null || envUrl.isBlank()) {
-            // Use the Testcontainers-managed database
+            // no external DB configured — use the Testcontainers one
             this.url      = TestContainersConfig.getJdbcUrl();
             this.user     = TestContainersConfig.getUser();
             this.password = TestContainersConfig.getPassword();
         } else {
+            // CI/staging — use the provided URL
             this.url      = envUrl;
             this.user     = TestConfig.DB_USER;
             this.password = TestConfig.DB_PASSWORD;
@@ -38,7 +35,7 @@ public class DbClient {
         log.debug("DbClient connected to {}", this.url);
     }
 
-    /** Execute a SELECT and return all rows as a list of column→value maps. */
+    /** Runs a SELECT and hands back all rows as a list of maps. Good enough for test use. */
     public List<Map<String, Object>> query(String sql, Object... params) {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -51,14 +48,15 @@ public class DbClient {
         }
     }
 
-    /** Execute a SELECT that returns exactly one row; throws if not found. */
+    /** Like query() but expects exactly one row — throws if it gets zero. */
     public Map<String, Object> queryOne(String sql, Object... params) {
         List<Map<String, Object>> rows = query(sql, params);
+        // blow up fast if nothing came back — helps catch test data setup issues early
         if (rows.isEmpty()) throw new NoSuchElementException("No row found for: " + sql);
         return rows.get(0);
     }
 
-    /** Execute an INSERT / UPDATE / DELETE. */
+    /** For INSERT / UPDATE / DELETE statements. Returns affected row count. */
     public int execute(String sql, Object... params) {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -69,7 +67,7 @@ public class DbClient {
         }
     }
 
-    /** Execute multiple statements in a single transaction. */
+    /** Runs multiple statements in a single transaction — rolls back everything on failure. */
     public void executeInTransaction(List<String> statements) {
         try (Connection conn = getConnection()) {
             conn.setAutoCommit(false);
@@ -79,6 +77,7 @@ public class DbClient {
                 }
                 conn.commit();
             } catch (SQLException e) {
+                // roll back everything on any failure — all or nothing
                 conn.rollback();
                 throw e;
             }
@@ -87,15 +86,14 @@ public class DbClient {
         }
     }
 
-    // ─────────────────────────────────────────────
-    //  Private helpers
-    // ─────────────────────────────────────────────
+
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
     }
 
     private void setParams(PreparedStatement ps, Object[] params) throws SQLException {
+        // bind parameters positionally — simple and works for all types
         for (int i = 0; i < params.length; i++) {
             ps.setObject(i + 1, params[i]);
         }
@@ -106,6 +104,7 @@ public class DbClient {
         int cols = meta.getColumnCount();
         List<Map<String, Object>> rows = new ArrayList<>();
         while (rs.next()) {
+            // LinkedHashMap preserves column order which is nice for debugging
             Map<String, Object> row = new LinkedHashMap<>();
             for (int i = 1; i <= cols; i++) {
                 row.put(meta.getColumnName(i), rs.getObject(i));

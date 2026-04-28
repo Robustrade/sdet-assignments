@@ -29,6 +29,7 @@ public class BusinessAssertions {
                                                         BigDecimal transferAmount,
                                                         BigDecimal sourceBalanceBefore,
                                                         BigDecimal destBalanceBefore) {
+        // fetch current balances from DB
         BigDecimal sourceNow = wallets.getBalance(sourceId);
         BigDecimal destNow   = wallets.getBalance(destId);
 
@@ -43,7 +44,7 @@ public class BusinessAssertions {
                 .as("Destination wallet [%s] should be credited by %s", destId, transferAmount)
                 .isEqualByComparingTo(expectedDest);
 
-        // Conservation: total across both wallets must not change
+        // money should not appear from nowhere or vanish — total must be the same
         BigDecimal totalBefore = sourceBalanceBefore.add(destBalanceBefore);
         BigDecimal totalAfter  = sourceNow.add(destNow);
         assertThat(totalAfter)
@@ -53,9 +54,7 @@ public class BusinessAssertions {
         return this;
     }
 
-    /**
-     * Asserts that a rejected / failed transfer left both wallets unchanged.
-     */
+
     public BusinessAssertions verifyNoBalanceMutation(String sourceId,
                                                        String destId,
                                                        BigDecimal sourceBalanceBefore,
@@ -63,6 +62,7 @@ public class BusinessAssertions {
         BigDecimal sourceNow = wallets.getBalance(sourceId);
         BigDecimal destNow   = wallets.getBalance(destId);
 
+        // neither side should have changed — a failed transfer must be a no-op
         assertThat(sourceNow)
                 .as("Source wallet [%s] balance must be unchanged after rejection", sourceId)
                 .isEqualByComparingTo(sourceBalanceBefore);
@@ -74,15 +74,16 @@ public class BusinessAssertions {
         return this;
     }
 
-    /**
-     * After N concurrent transfer attempts competing for insufficient total balance,
-     * verifies that the combined balance change does not exceed the expected debit.
-     */
+
     public BusinessAssertions verifyNoOverdraft(String sourceId, BigDecimal initialBalance) {
         BigDecimal currentBalance = wallets.getBalance(sourceId);
+
+        // balance must always be >= 0 — never go into the red
         assertThat(currentBalance)
                 .as("Wallet [%s] must not have a negative balance (overdraft)", sourceId)
                 .isGreaterThanOrEqualTo(BigDecimal.ZERO);
+
+        // also sanity check it didn't somehow go above the starting balance
         assertThat(currentBalance)
                 .as("Wallet [%s] balance must not exceed initial balance %s", sourceId, initialBalance)
                 .isLessThanOrEqualTo(initialBalance);

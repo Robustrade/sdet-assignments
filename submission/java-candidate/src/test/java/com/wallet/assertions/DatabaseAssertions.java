@@ -9,12 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-/**
- * Fluent DB-level assertion helpers.
- * Validates persisted state — not just API responses.
- */
+import static org.assertj.core.api.Assertions.assertThat
 public class DatabaseAssertions {
 
     private final WalletRepository     wallets;
@@ -42,6 +37,7 @@ public class DatabaseAssertions {
     public DatabaseAssertions walletBalanceDecreasedBy(String walletId,
                                                         BigDecimal before,
                                                         BigDecimal amount) {
+        // just a convenience wrapper — calculates expected and delegates
         BigDecimal expected = before.subtract(amount);
         return walletBalanceEquals(walletId, expected);
     }
@@ -54,6 +50,7 @@ public class DatabaseAssertions {
     }
 
     public DatabaseAssertions walletBalanceUnchanged(String walletId, BigDecimal before) {
+        // balance must be exactly the same as before — no change at all
         return walletBalanceEquals(walletId, before);
     }
 
@@ -69,6 +66,7 @@ public class DatabaseAssertions {
     }
 
     public DatabaseAssertions transferDoesNotExist(String transferId) {
+        // useful for failed transfer checks — row should not have been written
         assertThat(transfers.findById(transferId))
                 .as("Transfer [%s] should NOT exist in DB", transferId)
                 .isEmpty();
@@ -76,6 +74,7 @@ public class DatabaseAssertions {
     }
 
     public DatabaseAssertions onlyOneTransferExistsForIdempotencyKey(String key) {
+        // idempotency guarantee: no matter how many retries, only one row
         List<Map<String, Object>> rows = transfers.findByIdempotencyKey(key);
         assertThat(rows)
                 .as("Exactly 1 transfer row must exist for idempotency key [%s]", key)
@@ -94,6 +93,7 @@ public class DatabaseAssertions {
     // ── Idempotency key invariants ────────────────────────
 
     public DatabaseAssertions idempotencyKeyExists(String key) {
+        // after a successful transfer, the key must be stored so replays work
         assertThat(idempotency.exists(key))
                 .as("Idempotency key [%s] should exist in DB", key)
                 .isTrue();
@@ -110,6 +110,7 @@ public class DatabaseAssertions {
     // ── Audit / event invariants ──────────────────────────
 
     public DatabaseAssertions transferHasEvent(String transferId, String eventType) {
+        // look through all events for this transfer and find the one we care about
         List<Map<String, Object>> events = transfers.findEventsByTransferId(transferId);
         boolean found = events.stream()
                 .anyMatch(e -> eventType.equals(e.get("event_type")));
@@ -120,6 +121,7 @@ public class DatabaseAssertions {
     }
 
     public DatabaseAssertions transferHasExactlyOneOutboxEvent(String transferId) {
+        // exactly one outbox event — not zero, not two
         List<Map<String, Object>> outbox = transfers.findOutboxByTransferId(transferId);
         assertThat(outbox)
                 .as("Transfer [%s] should have exactly 1 outbox event", transferId)
