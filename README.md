@@ -1,20 +1,40 @@
-# Kulu SDET Take-Home Assignment
+## System Guarantees Validated
 
-This repository contains the take-home infrastructure assignment for SDET engineering candidates at Kulu.
+This test suite validates critical financial system invariants:
 
-## Supported Languages
+- Money conservation across wallets
+- No double debit or credit
+- Exactly-once transfer creation under retries
+- Idempotent behavior under duplicate requests
 
-Candidates may submit solutions in any programming language. The repository includes CI workflows for:
+## Idempotency Strategy
 
-- **Python** (using pytest, ruff, black)
-- **Java** (using Maven, JUnit, RestAssured, Spotless)
-- **JavaScript/Node.js** (using Jest, ESLint, npm audit)
+- Same key + same payload → same response
+- Same key + different payload → rejected
+- Retry after failure → safe (no duplicate effects)
 
-See the sample submissions in `submission/sample-candidate*` for examples. The appropriate CI workflow will automatically run based on your project structure (presence of `requirements.txt`/`pyproject.toml` for Python, `pom.xml` for Java, `package.json` for JavaScript).
+## Concurrency Strategy
 
-## How to Submit
+- Parallel requests using ExecutorService
+- Validation ensures no over-debit or inconsistent state
 
-1. Fork this repository to your own GitHub account.
-2. Complete the assignment described in [SDET_ASSIGNMENT.md](./SDET_ASSIGNMENT.md).
-3. Raise a Pull Request back to this repository (`main` branch) with your full solution.
-4. Your PR branch should be named: `solution/<your-name>` (e.g., `solution/jane-doe`).
+## Cross-Component Validation
+
+- Audit/event table validated for transfer creation
+- Ensures side effects occur exactly once
+- 
+## System Invariants
+
+- Money conservation across wallets
+- No double debit or credit
+- Exactly-once transfer creation
+
+## Reliability Coverage
+
+- Retry after failure
+- Duplicate request handling
+- Concurrency safety
+
+## Cross-Component Validation
+
+- Audit/event table validated
