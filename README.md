@@ -22,3 +22,19 @@ This test suite validates critical financial system invariants:
 
 - Audit/event table validated for transfer creation
 - Ensures side effects occur exactly once
+- 
+## System Invariants
+
+- Money conservation across wallets
+- No double debit or credit
+- Exactly-once transfer creation
+
+## Reliability Coverage
+
+- Retry after failure
+- Duplicate request handling
+- Concurrency safety
+
+## Cross-Component Validation
+
+- Audit/event table validated

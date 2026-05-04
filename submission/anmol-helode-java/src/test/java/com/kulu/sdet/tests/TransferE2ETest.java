@@ -34,14 +34,11 @@ public class TransferE2ETest {
         int totalBefore = beforeSrc + beforeDest;
         int totalAfter = afterSrc + afterDest;
 
-        Assert.assertEquals(
-                totalBefore,
-                totalAfter,
-                "Money conservation violated"
-        );
-
+        // 🔥 Replace existing assertions with this
         TransferInvariants.assertMoneyConserved(beforeSrc, beforeDest, afterSrc, afterDest);
         TransferInvariants.assertSingleDebit(beforeSrc, afterSrc, amount);
         TransferInvariants.assertSingleCredit(beforeDest, afterDest, amount);
+
+        Assert.assertTrue(DbUtils.auditExists(reference));
     }
 }
