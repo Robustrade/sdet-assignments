@@ -1,25 +1,39 @@
-@Test
-public void concurrentTransfers_shouldNotOverDebit() throws Exception {
+package tests;
 
-    String wallet = "wallet_1";
+import api.TransferApiClient;
+import db.DbUtils;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import utils.TestDataBuilder;
 
-    int before = DbUtils.getBalance(wallet);
+import java.util.concurrent.*;
 
-    ExecutorService ex = Executors.newFixedThreadPool(2);
+public class ConcurrencyTest {
 
-    Callable<Void> task = () -> {
-        TransferApiClient.createTransfer(
-                TestDataBuilder.payload(wallet, "wallet_2", 500),
-                TestDataBuilder.key());
-        return null;
-    };
+    @Test
+    public void concurrentTransfers_shouldNotCorruptBalance() throws Exception {
 
-    ex.invokeAll(List.of(task, task));
+        String wallet = "wallet_1";
 
-    int after = DbUtils.getBalance(wallet);
+        int before = DbUtils.getBalance(wallet);
 
-    // 🔥 Key validation
-    Assert.assertTrue(
-            (before - after == 500) || (before - after == 1000)
-    );
+        ExecutorService ex = Executors.newFixedThreadPool(2);
+
+        Callable<Void> task = () -> {
+            TransferApiClient.createTransfer(
+                    TestDataBuilder.payload(wallet,"wallet_2",500),
+                    TestDataBuilder.key());
+            return null;
+        };
+
+        ex.invokeAll(List.of(task, task));
+
+        int after = DbUtils.getBalance(wallet);
+
+        // 🔥 Strong validation
+        Assert.assertTrue(
+                before - after == 500 || before - after == 1000,
+                "Balance should reflect valid transaction outcome only"
+        );
+    }
 }

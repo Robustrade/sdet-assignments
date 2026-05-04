@@ -1,10 +1,10 @@
 @Test
-public void retryAfterClientTimeout_shouldNotDuplicateTransfer() throws Exception {
+public void retryAfterResponseLoss_shouldBeSafe() throws Exception {
 
     String payload = TestDataBuilder.payload("wallet_1","wallet_2",100);
     String key = TestDataBuilder.key();
 
-    // First request (assume response lost)
+    // First attempt (assume response lost)
     TransferApiClient.createTransfer(payload, key);
 
     // Retry
@@ -12,7 +12,7 @@ public void retryAfterClientTimeout_shouldNotDuplicateTransfer() throws Exceptio
 
     retry.then().statusCode(200);
 
-    // Validate only ONE transfer exists
+    // 🔥 verify only one transfer persisted
     int count = DbUtils.transferCountByKey(key);
     Assert.assertEquals(count, 1);
 }

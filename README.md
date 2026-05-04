@@ -1,21 +1,22 @@
-## Invariants Validated
+## System Invariants Validated
 
-- No double debit or credit
-- Balance conservation across wallets
-- Exactly-once transfer creation
-- Idempotent request handling
+- Total money is conserved across wallets
+- No double debit or double credit occurs
+- Exactly-once transfer creation is ensured
+- Duplicate requests do not create duplicate side effects
 
 ## Idempotency Strategy
 
-- Same key → same response
+- Same key + same payload → same response
 - Same key + different payload → rejected
-- Retry after failure → safe
+- Retry after failure → safe (no duplicate transfer)
 
 ## Concurrency Strategy
 
 - Parallel execution using ExecutorService
-- Validation of race conditions on wallet balance
+- Validation ensures no over-debit or inconsistent state
 
 ## Cross-Component Validation
 
-- Outbox/event table validated for exactly-once emission
+- Audit/event table validated
+- Ensures exactly-once event emission
