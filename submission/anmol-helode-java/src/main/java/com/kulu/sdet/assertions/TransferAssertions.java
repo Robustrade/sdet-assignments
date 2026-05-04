@@ -1,23 +1,26 @@
-package assertions;
+public static void assertTransferInvariant(
+        int beforeSrc,
+        int beforeDest,
+        int afterSrc,
+        int afterDest,
+        int amount) {
 
-import org.testng.Assert;
+    // debit
+    Assert.assertEquals(afterSrc, beforeSrc - amount);
 
-public class TransferAssertions {
+    // credit
+    Assert.assertEquals(afterDest, beforeDest + amount);
+    Assert.assertEquals(
+            beforeSrc + beforeDest,
+            afterSrc + afterDest
+    );
 
-    public static void assertBalanceInvariant(
-            int beforeSource,
-            int beforeDest,
-            int afterSource,
-            int afterDest,
-            int amount) {
+    int before = DbUtils.getBalance("wallet_1");
 
-        Assert.assertEquals(beforeSource - amount, afterSource);
-        Assert.assertEquals(afterDest, beforeDest + amount);
+    TransferApiClient.createTransfer(payload, key)
+            .then().statusCode(400);
 
-        // 🔥 critical invariant
-        Assert.assertEquals(
-                beforeSource + beforeDest,
-                afterSource + afterDest
-        );
-    }
+    int after = DbUtils.getBalance("wallet_1");
+
+    Assert.assertEquals(before, after);
 }

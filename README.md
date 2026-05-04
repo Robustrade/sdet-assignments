@@ -1,19 +1,21 @@
-# Wallet Transfer Test Suite
+## Invariants Validated
 
-## Coverage
-
-- API validation
-- Idempotency validation
-- Concurrency testing
-- Database consistency
-- Invariant validation
-
-## Key Invariants
-
-- No double debit
-- Balance conservation
+- No double debit or credit
+- Balance conservation across wallets
 - Exactly-once transfer creation
+- Idempotent request handling
 
-## Run
+## Idempotency Strategy
 
-mvn clean test
+- Same key → same response
+- Same key + different payload → rejected
+- Retry after failure → safe
+
+## Concurrency Strategy
+
+- Parallel execution using ExecutorService
+- Validation of race conditions on wallet balance
+
+## Cross-Component Validation
+
+- Outbox/event table validated for exactly-once emission

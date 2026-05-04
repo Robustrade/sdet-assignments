@@ -5,8 +5,7 @@ import org.testng.annotations.BeforeMethod;
 public class TestSetup {
 
     @BeforeMethod
-    public void reset() {
-        // Optional: reset DB state
-        // call SQL or API if available
+    public void setup() throws Exception {
+        DbUtils.resetBalances();
     }
 }

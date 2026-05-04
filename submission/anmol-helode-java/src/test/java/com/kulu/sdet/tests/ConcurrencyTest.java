@@ -1,33 +1,25 @@
-package tests;
+@Test
+public void concurrentTransfers_shouldNotOverDebit() throws Exception {
 
-import api.TransferApiClient;
-import db.DbUtils;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-import utils.TestDataBuilder;
+    String wallet = "wallet_1";
 
-import java.util.concurrent.*;
+    int before = DbUtils.getBalance(wallet);
 
-public class ConcurrencyTest {
+    ExecutorService ex = Executors.newFixedThreadPool(2);
 
-    @Test
-    public void concurrentTransfer() throws Exception {
+    Callable<Void> task = () -> {
+        TransferApiClient.createTransfer(
+                TestDataBuilder.payload(wallet, "wallet_2", 500),
+                TestDataBuilder.key());
+        return null;
+    };
 
-        int before = DbUtils.getBalance("wallet_1");
+    ex.invokeAll(List.of(task, task));
 
-        ExecutorService ex = Executors.newFixedThreadPool(2);
+    int after = DbUtils.getBalance(wallet);
 
-        Callable<Void> task = () -> {
-            TransferApiClient.createTransfer(
-                    TestDataBuilder.payload("wallet_1","wallet_2",500),
-                    TestDataBuilder.key());
-            return null;
-        };
-
-        ex.invokeAll(java.util.List.of(task, task));
-
-        int after = DbUtils.getBalance("wallet_1");
-
-        Assert.assertTrue(before - after == 500 || before - after == 1000);
-    }
+    // 🔥 Key validation
+    Assert.assertTrue(
+            (before - after == 500) || (before - after == 1000)
+    );
 }

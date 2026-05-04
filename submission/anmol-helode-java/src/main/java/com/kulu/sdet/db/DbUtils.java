@@ -42,4 +42,14 @@ public class DbUtils {
         rs.next();
         return rs.getInt(1) == 1;
     }
+
+    public static boolean outboxEventExists(String reference) throws Exception {
+        PreparedStatement ps = conn().prepareStatement(
+                "SELECT COUNT(*) FROM outbox_events WHERE reference=?");
+        ps.setString(1, reference);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1) == 1;
+    }
 }

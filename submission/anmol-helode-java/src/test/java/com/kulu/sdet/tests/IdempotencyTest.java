@@ -1,24 +1,18 @@
-package tests;
+@Test
+public void retryAfterClientTimeout_shouldNotDuplicateTransfer() throws Exception {
 
-import api.TransferApiClient;
-import db.DbUtils;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-import io.restassured.response.Response;
-import utils.TestDataBuilder;
+    String payload = TestDataBuilder.payload("wallet_1","wallet_2",100);
+    String key = TestDataBuilder.key();
 
-public class IdempotencyTest {
+    // First request (assume response lost)
+    TransferApiClient.createTransfer(payload, key);
 
-    @Test
-    public void sameRequestSameKey() throws Exception {
+    // Retry
+    Response retry = TransferApiClient.createTransfer(payload, key);
 
-        String payload = TestDataBuilder.payload("wallet_1","wallet_2",100);
-        String key = TestDataBuilder.key();
+    retry.then().statusCode(200);
 
-        Response r1 = TransferApiClient.createTransfer(payload, key);
-        Response r2 = TransferApiClient.createTransfer(payload, key);
-
-        Assert.assertEquals(r1.asString(), r2.asString());
-        Assert.assertTrue(DbUtils.idempotencyExists(key));
-    }
+    // Validate only ONE transfer exists
+    int count = DbUtils.transferCountByKey(key);
+    Assert.assertEquals(count, 1);
 }
