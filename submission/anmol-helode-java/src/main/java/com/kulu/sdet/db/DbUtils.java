@@ -52,4 +52,27 @@ public class DbUtils {
         rs.next();
         return rs.getInt(1) == 1;
     }
+
+    public static int getTransferCountByKey(String key) throws Exception {
+
+        PreparedStatement ps = conn().prepareStatement(
+                "SELECT COUNT(*) FROM transfers WHERE idempotency_key=?"
+        );
+        ps.setString(1, key);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+    public static boolean auditExists(String reference) throws Exception {
+
+        PreparedStatement ps = conn().prepareStatement(
+                "SELECT COUNT(*) FROM transfer_events WHERE reference=?"
+        );
+        ps.setString(1, reference);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1) == 1;
+    }
 }

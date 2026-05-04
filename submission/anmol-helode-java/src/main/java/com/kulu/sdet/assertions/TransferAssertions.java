@@ -24,3 +24,7 @@ public static void assertTransferInvariant(
 
     Assert.assertEquals(before, after);
 }
+
+TransferInvariants.assertMoneyConserved(beforeSrc, beforeDest, afterSrc, afterDest);
+TransferInvariants.assertSingleDebit(beforeSrc, afterSrc, amount);
+TransferInvariants.assertSingleCredit(beforeDest, afterDest, amount);

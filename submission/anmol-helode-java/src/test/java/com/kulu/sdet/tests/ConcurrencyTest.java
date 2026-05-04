@@ -32,8 +32,8 @@ public class ConcurrencyTest {
 
         // 🔥 Strong validation
         Assert.assertTrue(
-                before - after == 500 || before - after == 1000,
-                "Balance should reflect valid transaction outcome only"
+                (before - after == 500 || before - after == 1000),
+                "Invalid balance change due to race condition"
         );
     }
 }

@@ -20,5 +20,15 @@ public class IdempotencyTest {
 
         Assert.assertEquals(r1.asString(), r2.asString());
         Assert.assertTrue(DbUtils.idempotencyExists(key));
+
+        int before = DbUtils.getBalance("wallet_1");
+
+        TransferApiClient.createTransfer(payload, key)
+                .then()
+                .statusCode(400);
+
+        int after = DbUtils.getBalance("wallet_1");
+
+        Assert.assertEquals(before, after, "Balance should not change on failure");
     }
 }

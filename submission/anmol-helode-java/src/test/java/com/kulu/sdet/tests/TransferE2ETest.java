@@ -29,5 +29,19 @@ public class TransferE2ETest {
 
         TransferAssertions.assertBalanceInvariant(
                 beforeSrc, beforeDest, afterSrc, afterDest, 100);
+
+        // 🔥 Add this block
+        int totalBefore = beforeSrc + beforeDest;
+        int totalAfter = afterSrc + afterDest;
+
+        Assert.assertEquals(
+                totalBefore,
+                totalAfter,
+                "Money conservation violated"
+        );
+
+        TransferInvariants.assertMoneyConserved(beforeSrc, beforeDest, afterSrc, afterDest);
+        TransferInvariants.assertSingleDebit(beforeSrc, afterSrc, amount);
+        TransferInvariants.assertSingleCredit(beforeDest, afterDest, amount);
     }
 }
