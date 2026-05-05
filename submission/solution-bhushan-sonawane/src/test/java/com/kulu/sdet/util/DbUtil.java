@@ -25,11 +25,21 @@ public class DbUtil {
       for (int i = 0; i < params.length; i++) {
         stmt.setObject(i + 1, params[i]);
       }
-      ResultSet rs = stmt.executeQuery();
-      rs.next();
-      return rs.getInt(1);
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          throw new IllegalStateException(
+              "Expected exactly one row but query returned none: " + sql);
+        }
+        int value = rs.getInt(1);
+        // Optional: guard against multiple rows
+        if (rs.next()) {
+          throw new IllegalStateException(
+              "Expected exactly one row but query returned multiple: " + sql);
+        }
+        return value;
+      }
     } catch (Exception e) {
-      throw new RuntimeException("DB query failed", e);
+      throw new RuntimeException("DB queryForInt failed", e);
     }
   }
 

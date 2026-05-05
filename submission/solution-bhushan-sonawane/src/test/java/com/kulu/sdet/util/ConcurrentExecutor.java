@@ -1,25 +1,37 @@
 package com.kulu.sdet.util;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class ConcurrentExecutor {
 
+  private static final long DEFAULT_TIMEOUT_SECONDS = 10;
+
   public static void run(Runnable... tasks) {
+    run(DEFAULT_TIMEOUT_SECONDS, tasks);
+  }
+
+  public static void run(long timeoutSeconds, Runnable... tasks) {
     ExecutorService executor = Executors.newFixedThreadPool(tasks.length);
+    List<Future<?>> futures = new ArrayList<>();
     try {
       for (Runnable task : tasks) {
-        executor.submit(task);
+        futures.add(executor.submit(task));
       }
       executor.shutdown();
-      boolean finished = executor.awaitTermination(10, TimeUnit.SECONDS);
-      if (!finished) {
-        throw new RuntimeException("Concurrent tasks did not finish in time");
+      if (!executor.awaitTermination(timeoutSeconds, TimeUnit.SECONDS)) {
+        throw new IllegalStateException(
+            "Concurrent execution did not finish within " + timeoutSeconds + " seconds");
       }
+      for (Future<?> future : futures) {
+        future.get();
+      }
+    } catch (ExecutionException e) {
+      throw new RuntimeException("Concurrent task execution failed", e.getCause());
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new RuntimeException("Concurrency execution interrupted", e);
+      throw new RuntimeException("Concurrent execution interrupted", e);
     } finally {
       executor.shutdownNow();
     }

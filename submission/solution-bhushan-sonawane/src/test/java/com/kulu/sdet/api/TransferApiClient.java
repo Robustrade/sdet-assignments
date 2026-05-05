@@ -2,33 +2,23 @@ package com.kulu.sdet.api;
 
 import static io.restassured.RestAssured.given;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TransferApiClient {
-  static {
-    RestAssured.baseURI = "http://localhost:8080";
-  }
+  public Response createTransfer(
+      String sourceWallet, String destinationWallet, int amount, String idempotencyKey) {
 
-  public Response createTransfer(String src, String dest, int amount, String key) {
-    String requestBody =
-        "{"
-            + "\"source_wallet_id\":\""
-            + src
-            + "\","
-            + "\"destination_wallet_id\":\""
-            + dest
-            + "\","
-            + "\"amount\":"
-            + amount
-            + ","
-            + "\"currency\":\"AED\""
-            + "}";
+    Map<String, Object> payload = new HashMap<>();
+    payload.put("sourceWallet", sourceWallet);
+    payload.put("destinationWallet", destinationWallet);
+    payload.put("amount", amount);
 
     return given()
-        .header("Idempotency-Key", key)
         .contentType("application/json")
-        .body(requestBody)
+        .header("Idempotency-Key", idempotencyKey)
+        .body(payload) // ✅ RestAssured handles JSON correctly
         .post("/transfers");
   }
 }
