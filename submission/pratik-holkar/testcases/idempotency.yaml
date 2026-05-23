@@ -1,0 +1,40 @@
+cases:
+  - id: replay_same_key_same_payload
+    tags: [idempotency, api, db]
+    description: Three replays of the same key+payload must return the original transfer and not debit twice.
+    request:
+      payload:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 100000
+        currency: USD
+      idem: idem-replay-1
+      replays: 3
+    expected:
+      first_status: 201
+      replay_status: 200
+      transfer_count: 1
+      src_balance: 4900000
+      ledger_rows: 2
+      outbox_rows: 1
+
+  - id: same_key_different_payload_is_conflict
+    tags: [idempotency, api, db]
+    description: Reusing a key with a different payload must be a 409, no second side effect.
+    request:
+      first:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 100000
+        currency: USD
+      second:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 200000
+        currency: USD
+      idem: idem-conflict-1
+    expected:
+      first_status: 201
+      second_status: 409
+      transfer_count: 1
+      src_balance: 4900000

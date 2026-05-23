@@ -1,0 +1,48 @@
+cases:
+  - id: competing_transfers_never_overspend
+    tags: [reliability, concurrency, db]
+    description: 5 parallel transfers of 15_000_00 from acc_alpha (start 50_000_00). At most 3 succeed; balance stays >= 0; final balance == start - successes*amount.
+    request:
+      payload:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 1500000
+        currency: USD
+      threads: 5
+    expected:
+      max_successes: 3
+      min_balance: 0
+
+  - id: same_idem_key_under_contention
+    tags: [reliability, concurrency, idempotency, db]
+    description: 10 concurrent requests sharing one key. Exactly one transfer row, debited once, one outbox row.
+    request:
+      payload:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 100000
+        currency: USD
+      idem: contention-1
+      threads: 10
+    expected:
+      transfer_count: 1
+      src_balance: 4900000
+      ledger_rows: 2
+      outbox_rows: 1
+
+  - id: retry_storm_no_double_debit
+    tags: [reliability, idempotency, db]
+    description: Sequential retries with one key settle to one debit and one outbox row.
+    request:
+      payload:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 250000
+        currency: USD
+      idem: retry-storm-1
+      replays: 5
+    expected:
+      transfer_count: 1
+      src_balance: 4750000
+      ledger_rows: 2
+      outbox_rows: 1

@@ -1,0 +1,54 @@
+# amounts here are minor units (USD cents). 500_00 = $5.00.
+cases:
+  - id: small_usd_transfer
+    tags: [happy, api, db]
+    request:
+      payload:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 50000
+        currency: USD
+        reference: inv-500
+      idem: hp-small-1
+    expected:
+      status: 201
+      transfer_status: completed
+      src_balance: 4950000
+      dst_balance: 2550000
+      ledger_rows: 2
+      outbox_rows: 1
+
+  - id: medium_usd_transfer
+    tags: [happy, api, db]
+    request:
+      payload:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 250000
+        currency: USD
+        reference: inv-2500
+      idem: hp-medium-1
+    expected:
+      status: 201
+      transfer_status: completed
+      src_balance: 4750000
+      dst_balance: 2750000
+      ledger_rows: 2
+      outbox_rows: 1
+
+  - id: drain_source_full_balance
+    tags: [happy, api, db, boundary]
+    request:
+      payload:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 5000000
+        currency: USD
+      idem: hp-drain-1
+    expected:
+      status: 201
+      transfer_status: completed
+      src_balance: 0
+      dst_balance: 7500000
+      ledger_rows: 2
+      outbox_rows: 1

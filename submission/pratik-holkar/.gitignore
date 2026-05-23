@@ -1,0 +1,20 @@
+# run artifacts
+output/
+reports/
+
+# venv
+.venv/
+venv/
+
+# python bytecode + caches
+__pycache__/
+*.pyc
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+.mypy_cache/
+
+# editor
+.idea/
+.vscode/
+*.swp
