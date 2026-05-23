@@ -1,4 +1,4 @@
-"""Cross-component validation: audit trail and outbox event verification.
+"""Tests for audit trail and outbox events (side effects).
 
 Validates:
 - exactly-once audit event emission

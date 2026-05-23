@@ -1,6 +1,9 @@
-"""Insufficient balance: transfers must be rejected without mutating any state.
+"""Tests for when wallet doesn't have enough money.
 
-Validates API rejection, balance immutability, and absence of all side-effects.
+Checks that:
+- Transfer is rejected (422)
+- Both wallet balances stay exactly the same
+- No records are created anywhere in the database
 """
 
 from tests.helpers.api_client import TransferAPIClient

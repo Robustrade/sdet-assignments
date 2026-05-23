@@ -1,4 +1,8 @@
-"""Shared fixtures: a fresh in-memory service and seeded wallets per test."""
+"""Setup file — creates a fresh app and database before each test.
+
+pytest automatically finds this file and uses the fixtures defined here.
+No need to import it anywhere — just use 'app' or 'client' as test parameters.
+"""
 
 import pytest
 

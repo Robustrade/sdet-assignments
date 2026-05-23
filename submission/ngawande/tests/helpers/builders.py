@@ -1,4 +1,4 @@
-"""Test data builders — reduce repetition in test setup."""
+"""Helper to create test data quickly without repeating the same dicts."""
 
 from __future__ import annotations
 

@@ -1,10 +1,9 @@
-"""Idempotency: duplicate submissions must be handled correctly.
+"""Tests for duplicate/retry handling (idempotency).
 
-Covers:
-- same key + same payload → replay original result (200)
-- same key + different payload → conflict (409)
-- no key → independent transfers
-- DB-level verification of single rows, single debits, single events
+Checks that:
+- Sending the same request twice (same key + same data) doesn't charge twice
+- Sending a different request with the same key is rejected (409)
+- Without a key, each request creates a separate transfer
 """
 
 import pytest

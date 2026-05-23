@@ -1,4 +1,4 @@
-"""Database query helpers — direct DB assertions separated from test logic."""
+"""Helper functions to query the database directly for test assertions."""
 
 from __future__ import annotations
 

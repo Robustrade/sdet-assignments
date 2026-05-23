@@ -1,7 +1,11 @@
-"""Happy path: successful transfers with multi-layer validation.
+"""Tests for successful transfers.
 
-Validates: API response, DB balances, transfer record, audit event,
-outbox event, and API-to-DB consistency.
+Checks that when a valid transfer is made:
+- API returns the right response
+- Source wallet balance goes down
+- Destination wallet balance goes up
+- Transfer record is saved in the database
+- Audit and outbox events are created
 """
 
 from tests.helpers.api_client import TransferAPIClient

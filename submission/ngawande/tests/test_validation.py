@@ -1,7 +1,10 @@
-"""Validation failures: bad input must be rejected with no DB side-effects.
+"""Tests for bad input — these should all be rejected.
 
-Each test verifies both the API rejection (422) and the absence of any
-persistence side-effects (no transfer rows, no balance changes, no events).
+Checks that when invalid data is sent:
+- API returns 422 with a helpful error message
+- No transfer record is created in the database
+- Wallet balances don't change
+- No audit or outbox events are written
 """
 
 from tests.helpers.api_client import TransferAPIClient

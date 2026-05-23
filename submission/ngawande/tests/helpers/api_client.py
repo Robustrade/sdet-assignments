@@ -1,4 +1,4 @@
-"""API client wrapper — keeps transport details out of test logic."""
+"""Helper to make API calls without repeating HTTP code in every test."""
 
 from __future__ import annotations
 
@@ -6,12 +6,10 @@ from flask.testing import FlaskClient
 
 
 class TransferAPIClient:
-    """Thin wrapper around FlaskClient for wallet-transfer endpoints."""
+    """Simple wrapper so tests can call API methods with clean syntax."""
 
     def __init__(self, client: FlaskClient) -> None:
         self._client = client
-
-    # -- Transfers ---------------------------------------------------------
 
     def create_transfer(
         self,
@@ -22,7 +20,7 @@ class TransferAPIClient:
         reference: str | None = None,
         idempotency_key: str | None = None,
     ):
-        """POST /transfers and return the raw Flask test response."""
+        """Send a POST /transfers request. Returns the response."""
         payload: dict = {
             "source_wallet_id": source,
             "destination_wallet_id": destination,
@@ -39,7 +37,7 @@ class TransferAPIClient:
         return self._client.post("/transfers", json=payload, headers=headers)
 
     def create_transfer_raw(self, payload: dict, idempotency_key: str | None = None):
-        """POST /transfers with an arbitrary payload dict (for validation tests)."""
+        """Send a POST /transfers with custom payload (for testing bad input)."""
         headers = {}
         if idempotency_key is not None:
             headers["Idempotency-Key"] = idempotency_key
@@ -48,10 +46,10 @@ class TransferAPIClient:
     # -- Read endpoints ----------------------------------------------------
 
     def get_transfer(self, transfer_id: str):
-        """GET /transfers/{transfer_id}."""
+        """GET /transfers/{id} — check a transfer's details."""
         return self._client.get(f"/transfers/{transfer_id}")
 
     def get_wallet(self, wallet_id: str):
-        """GET /wallets/{wallet_id}."""
+        """GET /wallets/{id} — check a wallet's balance."""
         return self._client.get(f"/wallets/{wallet_id}")
 

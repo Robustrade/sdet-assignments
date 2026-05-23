@@ -1,7 +1,10 @@
-"""Concurrency and reliability: threaded race condition and retry-safety tests.
+"""Tests for race conditions — what happens when multiple requests hit at once.
 
-All tests in this module carry the @pytest.mark.reliability marker so they
-can be run independently via: pytest -m reliability
+Uses Python threads to simulate multiple users making transfers simultaneously.
+Checks that the system stays correct even under concurrent load.
+
+All tests here are marked with @pytest.mark.reliability so they can be
+run separately with: pytest -m reliability
 """
 
 import threading

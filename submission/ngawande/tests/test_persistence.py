@@ -1,11 +1,10 @@
-"""Persistence and auditability: API-visible state must match DB state exactly.
+"""Tests that API responses match what's actually in the database.
 
-Validates that:
-- transfer fields returned by API match the database row
-- wallet balances from API match direct DB queries
-- audit event payload is internally consistent
-- timestamps are coherent
-- no orphan or contradictory records exist
+Checks that:
+- Fields returned by the API are the same as fields stored in DB
+- Wallet balance from API matches direct DB query
+- Audit event data is correct and consistent
+- No orphan records exist (events without matching transfers)
 """
 
 import json
