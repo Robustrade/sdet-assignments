@@ -11,7 +11,7 @@ let cachedEnv: TestEnv | null = null;
 
 function loadTestEnv(): TestEnv {
   if (!cachedEnv) {
-    const envFile = path.join(process.cwd(), '.test-env.json');
+    const envFile = path.join(__dirname, '../../.test-env.json');
     cachedEnv = JSON.parse(fs.readFileSync(envFile, 'utf-8')) as TestEnv;
   }
   return cachedEnv;
