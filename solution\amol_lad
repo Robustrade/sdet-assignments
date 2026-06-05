@@ -1,0 +1,60 @@
+Wallet Transfer Service – End-to-End Automation Test Solution By Amol Lad 
+
+Solution Summary
+Implemented an end-to-end automation test suite for the Wallet Transfer Service using Java, TestNG, RestAssured, JDBC, Maven and PostgreSQL.
+The solution validates transaction processing across API, database and business workflow layers while ensuring data consistency, transaction integrity, reliability and failure recovery.
+
+Approach
+The framework validates the complete transaction lifecycle from API request initiation to database persistence and final transaction state verification.
+Key focus areas:
+
+1. Data consistency across system layers
+2. Transaction integrity and atomicity
+3. Business rule validation
+4. Idempotency and retry handling
+5. Concurrency and race condition testing
+6. Failure and recovery validation
+
+Test Coverage
+API Validation
+1. Request/response validation
+2. Status code and schema validation
+3. SLA and response time checks
+4. Negative and boundary testing
+
+Database Validation
+1. Transaction record verification
+2. Balance validation for sender and receiver
+3. Audit/history record validation
+4. Data consistency checks
+
+Business & Workflow Validation
+1. Successful and failed transfer scenarios
+2. Transaction state transition validation
+3. Fund conservation checks
+4. Transfer limit and insufficient balance validation
+
+Reliability Validation
+1. Idempotency and duplicate request handling
+2. Retry and recovery scenarios
+3. Rollback and partial failure validation
+4. Concurrency and double-spending prevention
+
+Security & Observability
+1. Authentication and authorization checks
+2. Audit trail validation
+3. Transaction log verification
+4. Correlation/Trace ID validation
+
+Framework Design
+Technology Stack:
+Java, TestNG, RestAssured, JDBC, Maven, PostgreSQL
+
+Architecture:
+API Layer, Database Layer, Utilities, Assertions, and Test Data Management
+
+Key Characteristics
+Reusable, maintainable, independent, and repeatable test execution with automated setup and cleanup.
+
+Outcome
+The solution provides comprehensive end-to-end validation of a transactional system by verifying correctness, consistency, concurrency handling, failure recovery and maintainability across multiple system layers.
