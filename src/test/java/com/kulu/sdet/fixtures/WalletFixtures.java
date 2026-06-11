@@ -21,20 +21,12 @@ public final class WalletFixtures {
 
 
     public static TransferRequest.Builder validTransfer() {
-        return new TransferRequest.Builder()
-                .from(WALLET_ALPHA)
-                .to(WALLET_BETA)
-                .amount(SMALL_TRANSFER)
-                .currency("USD");
+        return new TransferRequest.Builder().from(WALLET_ALPHA).to(WALLET_BETA).amount(SMALL_TRANSFER).currency("USD");
     }
 
 
     public static TransferRequest.Builder transfer(String fromId, String toId, BigDecimal amount) {
-        return new TransferRequest.Builder()
-                .from(fromId)
-                .to(toId)
-                .amount(amount)
-                .currency("USD");
+        return new TransferRequest.Builder().from(fromId).to(toId).amount(amount).currency("USD");
     }
 
 
@@ -44,14 +36,12 @@ public final class WalletFixtures {
 
 
     public static String insertTransactionSql() {
-        return "INSERT INTO transactions (id, from_wallet_id, to_wallet_id, amount, currency, status) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO transactions (id, from_wallet_id, to_wallet_id, amount, currency, status) " + "VALUES (?, ?, ?, ?, ?, ?)";
     }
 
 
     public static String[] schemaDdl() {
-        return new String[]{
-                """
+        return new String[]{"""
             CREATE TABLE IF NOT EXISTS wallets (
                 id          VARCHAR(64)    PRIMARY KEY,
                 owner_id    VARCHAR(64)    NOT NULL,
@@ -102,7 +92,6 @@ public final class WalletFixtures {
                 payload       TEXT         NOT NULL,
                 published_at  TIMESTAMPTZ,
                 created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
-            )"""
-        };
+            )"""};
     }
 }

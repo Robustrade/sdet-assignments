@@ -9,7 +9,7 @@ public final class Wallet {
     private final BigDecimal balance;
     private final String currency;
 
-    Wallet(String id, String ownerId, BigDecimal balance, String currency) {
+    public Wallet(String id, String ownerId, BigDecimal balance, String currency) {
         this.id = id;
         this.ownerId = ownerId;
         this.balance = balance;
