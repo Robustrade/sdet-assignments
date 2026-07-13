@@ -1,0 +1,48 @@
+# ---------- Build ----------
+target/
+build/
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ---------- IDE ----------
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse / STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# ---------- Maven ----------
+.mvn/wrapper/maven-wrapper.jar
+HELP.md
+
+# ---------- Environment ----------
+.env
+*.env
+
+# ---------- Logs ----------
+logs/
+
+# ---------- OS ----------
+.DS_Store
+Thumbs.db
