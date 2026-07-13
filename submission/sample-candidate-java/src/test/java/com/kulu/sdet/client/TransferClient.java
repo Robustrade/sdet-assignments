@@ -19,6 +19,17 @@ public class TransferClient {
         return toResponseBody(response);
     }
 
+    public TransferResponseBody create(TransferRequestBody body, String idempotencyKey) {
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .header("Idempotency-Key", idempotencyKey)
+                .body(body)
+                .when()
+                .post("/transfers");
+
+        return toResponseBody(response);
+    }
+
     public TransferResponseBody getById(String id) {
         Response response = given()
                 .when()

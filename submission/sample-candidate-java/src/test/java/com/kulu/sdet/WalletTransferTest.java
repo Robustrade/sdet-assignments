@@ -7,6 +7,8 @@ import com.kulu.sdet.model.TransferResponseBody;
 import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testng.Assert.*;
@@ -47,6 +49,7 @@ public class WalletTransferTest extends BaseTest {
         String senderId = "wallet_001";
         String receiverId = "wallet_002";
         long amount = 200L;
+        String idempotencyKey = UUID.randomUUID().toString();
 
         long senderBalanceBefore = walletClient.getById(senderId).getBalance();
         long receiverBalanceBefore = walletClient.getById(receiverId).getBalance();
@@ -60,17 +63,19 @@ public class WalletTransferTest extends BaseTest {
                 .build();
 
         // Act
-        TransferResponseBody responseBody = transferClient.create(requestBody);
+        TransferResponseBody response = transferClient.create(requestBody, idempotencyKey);
 
         // Assert
-        assertEquals(responseBody.getStatusCode(), 201, "expected 201 Created");
-        assertEquals(responseBody.getStatus(), "completed", "expected completed status");
+        assertEquals(response.getStatusCode(), 201, "expected 201 Created");
+        response.assertCreated(requestBody, idempotencyKey);
+
+        TransferResponseBody fetchedTransferResponse = transferClient.getById(response.getId());
+        assertEquals(fetchedTransferResponse.getStatusCode(), 200, "transfer should be retrievable");
 
         long senderBalanceAfter = walletClient.getById(senderId).getBalance();
         long receiverBalanceAfter = walletClient.getById(receiverId).getBalance();
-        assertEquals(senderBalanceBefore - senderBalanceAfter, amount);
-        assertEquals(receiverBalanceAfter - receiverBalanceBefore, amount);
-        assertEquals(senderBalanceBefore + receiverBalanceBefore, senderBalanceAfter + receiverBalanceAfter,
-                "money conserved");
+        assertEquals(senderBalanceAfter, senderBalanceBefore - amount);
+        assertEquals(receiverBalanceAfter, receiverBalanceBefore + amount);
     }
+
 }
