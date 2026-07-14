@@ -124,7 +124,7 @@ public class WalletTransferTest extends BaseTest {
         assertNotNull(fetchedRes.getCreatedAt());
     }
 
-    @Test(description = "Verify wallet-to-wallet transfer for insufficient balance")
+    @Test(description = "Verify wallet-to-wallet transfer is rejected for amount greater than available balance")
     public void shouldRejectTransactionForInsufficientBalance() {
         long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
         transferRequestBody.setAmount(senderBalanceBefore + 1);
@@ -138,6 +138,29 @@ public class WalletTransferTest extends BaseTest {
         assertEquals(senderBalanceBefore, senderBalanceAfter);
     }
 
+    @Test(description = "Verify wallet-to-wallet transfer for zero amount")
+    public void shouldRejectTransactionForZeroAmount() {
+        long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
+        transferRequestBody.setAmount(0L);
 
+        TransferResponseBody responseBody = transferClient.create(transferRequestBody, idempotencyKey);
+
+        assertEquals(responseBody.getStatusCode(), 422);
+        assertEquals(responseBody.getError(), "amount must be positive");
+    }
+
+    @Test(description = "Verify wallet-to-wallet transfer is rejected for negative amount")
+    public void shouldRejectTransactionForNegativeAmount() {
+        long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
+        transferRequestBody.setAmount(-100L);
+
+        ErrorResponseBody responseBody = transferClient.createExpectingError(transferRequestBody, idempotencyKey);
+
+        assertEquals(responseBody.getStatusCode(), 422);
+        assertEquals(responseBody.getError(), "amount must be positive");
+
+        long senderBalanceAfter = walletDB.getBalance(SENDER_ID);
+        assertEquals(senderBalanceBefore, senderBalanceAfter);
+    }
 
 }
