@@ -1,5 +1,6 @@
 package com.kulu.sdet.client;
 
+import com.kulu.sdet.model.ErrorResponseBody;
 import com.kulu.sdet.model.TransferRequestBody;
 import com.kulu.sdet.model.TransferResponseBody;
 import io.restassured.http.ContentType;
@@ -28,6 +29,20 @@ public class TransferClient {
                 .post("/transfers");
 
         return toResponseBody(response);
+    }
+
+    public ErrorResponseBody createExpectingError(TransferRequestBody body, String idempotencyKey) {
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .header("Idempotency-Key", idempotencyKey)
+                .body(body)
+                .when()
+                .post("/transfers");
+
+        ErrorResponseBody errorResponseBody = response.as(ErrorResponseBody.class);
+        errorResponseBody.setStatusCode(response.getStatusCode());
+
+        return errorResponseBody;
     }
 
     public TransferResponseBody getById(String id) {

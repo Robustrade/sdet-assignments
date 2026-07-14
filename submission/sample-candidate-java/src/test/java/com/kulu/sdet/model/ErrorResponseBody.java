@@ -7,12 +7,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WalletResponseBody {
+public class ErrorResponseBody {
 
     private int statusCode;
-    private String id;
-    private Long balance;
-    private String currency;
+    private String timestamp;
+    private int status;
     private String error;
+    private String message;
+    private String path;
 
 }

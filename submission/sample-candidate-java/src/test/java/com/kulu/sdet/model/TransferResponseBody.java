@@ -12,6 +12,7 @@ import static org.testng.Assert.*;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TransferResponseBody {
+
     private int statusCode;
     private String id;
     private String sourceWalletId;
@@ -38,4 +39,5 @@ public class TransferResponseBody {
         assertCreated(requestBody);
         assertEquals(this.getIdempotencyKey(), idempotencyKey, "Idempotency-Key not matched");
     }
+
 }
