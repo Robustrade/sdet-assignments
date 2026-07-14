@@ -64,6 +64,19 @@ public class TransferClient {
         return errorResponseBody;
     }
 
+    public ErrorResponseBody createRaw(String rawJsonBody, String idempotencyKey) {
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .header("Idempotency-Key", idempotencyKey)
+                .body(rawJsonBody)
+                .when()
+                .post("/transfers");
+
+        ErrorResponseBody errorResponseBody = response.as(ErrorResponseBody.class);
+        errorResponseBody.setStatusCode(response.getStatusCode());
+        return errorResponseBody;
+    }
+
     private TransferResponseBody toResponseBody(Response response) {
         TransferResponseBody transferResponseBody = response.as(TransferResponseBody.class);
         transferResponseBody.setStatusCode(response.getStatusCode());

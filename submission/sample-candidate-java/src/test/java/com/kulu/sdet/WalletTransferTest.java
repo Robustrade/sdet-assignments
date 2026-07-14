@@ -294,4 +294,39 @@ public class WalletTransferTest extends BaseTest {
         assertEquals(responseBody.getMessage(), "destination wallet not found");
     }
 
+    @Test(description = "Verify transfer is rejected when required field is missing")
+    public void shouldRejectTransactionForMissingCurrencyField() {
+        transferRequestBody.setCurrency(null);
+
+        ErrorResponseBody responseBody = transferClient.createExpectingError(transferRequestBody, idempotencyKey);
+
+        assertEquals(responseBody.getStatusCode(), 422);
+        assertEquals(responseBody.getError(), "currency is required");
+    }
+
+    @Test(description = "Verify malformed JSON body is rejected")
+    public void shouldRejectMalformedRequest() {
+        String malformedJson = "{ \"sourceWalletId\": \"wallet_001\", \"amount\": }";
+
+        ErrorResponseBody responseBody = transferClient.createRaw(malformedJson, idempotencyKey);
+
+        assertEquals(responseBody.getStatusCode(), 400);
+    }
+
+    @Test(description = "Verify a non-numeric amount is rejected")
+    public void shouldRejectForNonNumericAmount() {
+        String badTypeJson = """
+                {
+                    "sourceWalletId": "wallet_001",
+                    "destinationWalletId": "wallet_002",
+                    "amount": "not-a-number",
+                    "currency": "AED"
+                }
+                """;
+
+        ErrorResponseBody responseBody = transferClient.createRaw(badTypeJson, idempotencyKey);
+
+        assertEquals(responseBody.getStatusCode(), 400);
+    }
+
 }
