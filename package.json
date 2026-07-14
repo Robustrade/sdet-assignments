@@ -1,0 +1,27 @@
+{
+  "name": "sdet-assignments",
+  "version": "1.0.0",
+  "description": "This repository contains the take-home infrastructure assignment for SDET engineering candidates at Kulu.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.18.1",
+    "express": "^5.2.1",
+    "sqlite3": "^6.0.1",
+    "uuid": "^14.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^10.7.0",
+    "jest": "^30.4.2",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2"
+  }
+}
