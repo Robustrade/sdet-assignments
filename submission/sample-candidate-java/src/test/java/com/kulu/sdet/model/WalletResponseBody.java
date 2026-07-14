@@ -13,6 +13,5 @@ public class WalletResponseBody {
     private String id;
     private Long balance;
     private String currency;
-    private String error;
 
 }

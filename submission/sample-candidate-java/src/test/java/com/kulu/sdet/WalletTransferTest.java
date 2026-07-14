@@ -6,6 +6,7 @@ import com.kulu.sdet.db.WalletDB;
 import com.kulu.sdet.model.ErrorResponseBody;
 import com.kulu.sdet.model.TransferRequestBody;
 import com.kulu.sdet.model.TransferResponseBody;
+import com.kulu.sdet.model.WalletResponseBody;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -235,6 +236,62 @@ public class WalletTransferTest extends BaseTest {
 
         assertEquals(responseBody.getStatusCode(), 422);
         assertEquals(responseBody.getMessage(), "invalid currency");
+    }
+
+    @Test(description = "Verify fetching an existing wallet")
+    public void shouldFetchWalletById() {
+        long expectedBalance = walletDB.getBalance(SENDER_ID);
+
+        WalletResponseBody responseBody = walletClient.getById(SENDER_ID);
+
+        assertEquals(responseBody.getStatusCode(), 200);
+        assertEquals(responseBody.getId(), SENDER_ID);
+        assertEquals(responseBody.getBalance().longValue(), expectedBalance);
+        assertEquals(responseBody.getCurrency(), "AED");
+    }
+
+    @Test(description = "Verify fetching non-existing wallet")
+    public void shouldReturnNotFoundForNonExistingWalletFetch() {
+        ErrorResponseBody responseBody = walletClient.getByIdExpectingError("wallet_does_not_exist");
+
+        assertEquals(responseBody.getStatusCode(), 404);
+        assertEquals(responseBody.getError(), "Not Found");
+        assertEquals(responseBody.getMessage(), "wallet not found");
+    }
+
+    @Test(description = "Verify fetching non-existing transfer")
+    public void shouldReturnNotFoundForFetchingNonExistingTransfer() {
+        ErrorResponseBody responseBody = transferClient.getByIdExpectingError(UUID.randomUUID().toString());
+
+        assertEquals(responseBody.getStatusCode(), 404);
+        assertEquals(responseBody.getError(), "Not Found");
+        assertEquals(responseBody.getMessage(), "transfer not found");
+    }
+
+    @Test(description = "Verify transfer is rejected when source and destintion is same")
+    public void shouldRejectTransactionForSameSourceAndDestination() {
+        long balanceBefore = walletDB.getBalance(SENDER_ID);
+        transferRequestBody.setDestinationWalletId(SENDER_ID);
+
+        ErrorResponseBody responseBody = transferClient.createExpectingError(transferRequestBody, idempotencyKey);
+
+        assertEquals(responseBody.getStatusCode(), 422);
+        assertEquals(responseBody.getError(), "Unprocessable Entity");
+        assertEquals(responseBody.getMessage(), "source and destination must differ");
+
+        long balanceAfter = walletDB.getBalance(SENDER_ID);
+        assertEquals(balanceBefore, balanceAfter);
+    }
+
+    @Test(description = "Verify transfer is rejected when destination wallet does not exists")
+    public void shouldRejectTransactionForUnknownWallet() {
+        transferRequestBody.setDestinationWalletId("unknown_wallet");
+
+        ErrorResponseBody responseBody = transferClient.createExpectingError(transferRequestBody, idempotencyKey);
+
+        assertEquals(responseBody.getStatusCode(), 422);
+        assertEquals(responseBody.getError(), "Unprocessable Entity");
+        assertEquals(responseBody.getMessage(), "destination wallet not found");
     }
 
 }

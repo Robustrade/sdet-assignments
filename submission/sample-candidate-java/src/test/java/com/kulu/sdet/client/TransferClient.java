@@ -53,6 +53,17 @@ public class TransferClient {
         return toResponseBody(response);
     }
 
+    public ErrorResponseBody getByIdExpectingError(String id) {
+        Response response = given()
+                .when()
+                .get("/transfers/{id}", id);
+
+        ErrorResponseBody errorResponseBody = response.as(ErrorResponseBody.class);
+        errorResponseBody.setStatusCode(response.getStatusCode());
+
+        return errorResponseBody;
+    }
+
     private TransferResponseBody toResponseBody(Response response) {
         TransferResponseBody transferResponseBody = response.as(TransferResponseBody.class);
         transferResponseBody.setStatusCode(response.getStatusCode());
