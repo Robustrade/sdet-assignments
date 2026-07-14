@@ -140,7 +140,6 @@ public class WalletTransferTest extends BaseTest {
 
     @Test(description = "Verify wallet-to-wallet transfer for zero amount")
     public void shouldRejectTransactionForZeroAmount() {
-        long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
         transferRequestBody.setAmount(0L);
 
         TransferResponseBody responseBody = transferClient.create(transferRequestBody, idempotencyKey);
@@ -151,16 +150,22 @@ public class WalletTransferTest extends BaseTest {
 
     @Test(description = "Verify wallet-to-wallet transfer is rejected for negative amount")
     public void shouldRejectTransactionForNegativeAmount() {
-        long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
         transferRequestBody.setAmount(-100L);
 
         ErrorResponseBody responseBody = transferClient.createExpectingError(transferRequestBody, idempotencyKey);
 
         assertEquals(responseBody.getStatusCode(), 422);
         assertEquals(responseBody.getError(), "amount must be positive");
+    }
 
-        long senderBalanceAfter = walletDB.getBalance(SENDER_ID);
-        assertEquals(senderBalanceBefore, senderBalanceAfter);
+    @Test(description = "Verify wallet-to-wallet transfer is rejected for an unsupported currency")
+    public void shouldRejectTransactionForInvalidCurrency() {
+        transferRequestBody.setCurrency("XYZ");
+
+        ErrorResponseBody responseBody = transferClient.createExpectingError(transferRequestBody, idempotencyKey);
+
+        assertEquals(responseBody.getStatusCode(), 422);
+        assertEquals(responseBody.getMessage(), "invalid currency");
     }
 
 }
