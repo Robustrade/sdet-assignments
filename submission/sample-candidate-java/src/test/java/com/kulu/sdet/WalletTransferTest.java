@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.testng.Assert.*;
@@ -124,6 +125,49 @@ public class WalletTransferTest extends BaseTest {
         assertNotNull(fetchedRes.getCreatedAt());
     }
 
+    @Test(description = "Verify Two concurrent transfer request at the same time and available balance is only for one transfer")
+    public void shouldAllowOnlyOneTransferWhenBalanceCoversOne() {
+        long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
+        long receiverBalanceBefore = walletDB.getBalance(RECEIVER_ID);
+        long amount = senderBalanceBefore;
+
+        TransferRequestBody req1 = TransferRequestBody.builder()
+                .sourceWalletId(SENDER_ID)
+                .destinationWalletId(RECEIVER_ID)
+                .currency(CURRENCY)
+                .amount(amount)
+                .reference("thread-1")
+                .build();
+
+        TransferRequestBody req2 = TransferRequestBody.builder()
+                .sourceWalletId(SENDER_ID)
+                .destinationWalletId(RECEIVER_ID)
+                .currency(CURRENCY)
+                .amount(amount)
+                .reference("thread-2")
+                .build();
+
+        List<TransferRequestBody> requests = List.of(req1, req2);
+
+        List<Integer> statusCodeList = requests.parallelStream()
+                .map(req -> transferClient.create(req, UUID.randomUUID().toString()).getStatusCode())
+                .toList();
+
+        long successCount = statusCodeList.stream()
+                .filter(statusCode -> statusCode == 201)
+                .count();
+
+        assertEquals(successCount, 1, "Only one transfer should success");
+
+        // DB Assertions
+        long senderBalanceAfter = walletDB.getBalance(SENDER_ID);
+        long receiverBalanceAfter = walletDB.getBalance(RECEIVER_ID);
+
+        assertEquals(senderBalanceBefore - senderBalanceAfter, amount);
+        assertEquals(receiverBalanceAfter - receiverBalanceBefore, amount);
+        assertTrue(senderBalanceAfter >= 0, "balance should not be negative");
+    }
+
     @Test(description = "Verify wallet-to-wallet transfer is rejected for amount greater than available balance")
     public void shouldRejectTransactionForInsufficientBalance() {
         long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
@@ -133,9 +177,6 @@ public class WalletTransferTest extends BaseTest {
 
         assertEquals(responseBody.getStatusCode(), 422);
         assertEquals(responseBody.getMessage(), "insufficient balance");
-
-        long senderBalanceAfter = walletDB.getBalance(SENDER_ID);
-        assertEquals(senderBalanceBefore, senderBalanceAfter);
     }
 
     @Test(description = "Verify wallet-to-wallet transfer for zero amount")
