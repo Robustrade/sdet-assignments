@@ -28,4 +28,18 @@ public class WalletDB {
         }
     }
 
+    public int countTransfersByIdempotencyKey(String idempotencyKey) {
+        String sql = "SELECT COUNT(*) FROM transfers WHERE idempotency_key = ?";
+        try (Connection conn = connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, idempotencyKey);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("DB query failed", e);
+        }
+    }
+
 }

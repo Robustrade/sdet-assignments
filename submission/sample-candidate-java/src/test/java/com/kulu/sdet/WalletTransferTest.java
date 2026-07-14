@@ -168,6 +168,34 @@ public class WalletTransferTest extends BaseTest {
         assertTrue(senderBalanceAfter >= 0, "balance should not be negative");
     }
 
+    @Test(description = "Verify concurrent duplicate requests with the same Idempotency-Key but creates exactly one transfers")
+    public void shouldCreateOnlyOneTransferForConcurrentSameKeyRequests() {
+        long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
+        long amount = 100L;
+        transferRequestBody.setAmount(amount);
+
+        // Sends 5 request in parallel
+        List<TransferRequestBody> requests = List.of(transferRequestBody, transferRequestBody, transferRequestBody,
+                transferRequestBody, transferRequestBody);
+
+        List<Integer> statusCodeList = requests.parallelStream()
+                .map(req -> transferClient.create(req, idempotencyKey).getStatusCode())
+                .toList();
+
+        long successCount = statusCodeList.stream()
+                .filter(statusCode -> statusCode == 201)
+                .count();
+
+        assertEquals(successCount, 1, "exactly one request should be passed");
+
+        // DB Assertions
+        long senderBalanceAfter = walletDB.getBalance(SENDER_ID);
+        assertEquals(senderBalanceBefore - senderBalanceAfter, amount);
+
+        int rowCount = walletDB.countTransfersByIdempotencyKey(idempotencyKey);
+        assertEquals(rowCount, 1);
+    }
+
     @Test(description = "Verify wallet-to-wallet transfer is rejected for amount greater than available balance")
     public void shouldRejectTransactionForInsufficientBalance() {
         long senderBalanceBefore = walletDB.getBalance(SENDER_ID);
