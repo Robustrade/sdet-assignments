@@ -30,7 +30,50 @@ function updateBalance(id, balance) {
     });
 }
 
+
+
+function updateBalances(sourceWalletId, sourceBalance, destinationWalletId, destinationBalance) {
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.run(
+                "UPDATE wallets SET balance = ? WHERE id = ?",
+                [sourceBalance, sourceWalletId]
+            );
+
+            db.run(
+                "UPDATE wallets SET balance = ? WHERE id = ?",
+                [destinationBalance, destinationWalletId],
+                function (err) {
+                    if (err) {
+                        return reject(err);
+                    }
+
+                    resolve();
+                }
+            );
+        });
+    });
+}
+
+function getAllWallets() {
+    return new Promise((resolve, reject) => {
+        db.all(
+            "SELECT * FROM wallets",
+            [],
+            (err, rows) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                resolve(rows);
+            }
+        );
+    });
+}
+
 module.exports = {
     getWalletById,
-    updateBalance
+    getAllWallets,
+    updateBalance,
+    updateBalances
 };
