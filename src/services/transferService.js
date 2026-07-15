@@ -14,7 +14,7 @@ async function transferMoney(request) {
     if (existingRequest) {
         return {
             id: existingRequest.transfer_id,
-            status: "SUCCESS",
+            status: "completed",
             message: "Duplicate request"
         };
     }
@@ -48,7 +48,7 @@ async function transferMoney(request) {
         amount: request.amount,
         currency: request.currency,
         reference: request.reference,
-        status: "SUCCESS"
+        status: "completed"
     };
 
     await walletRepository.updateBalances(
