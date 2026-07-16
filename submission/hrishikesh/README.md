@@ -14,8 +14,8 @@ compatibility mode)**.
 
 ```bash
 cd submission/hrishikesh
-mvn test                                # 38 tests, all layers
-mvn test -Dtest="*Reliability*"         # 4 concurrency / reliability tests only
+mvn test                                # 39 tests, all layers
+mvn test -Dtest="*Reliability*"         # 5 concurrency / reliability tests only
 mvn spotless:check                      # google-java-format
 mvn exec:java -Dexec.mainClass=ValidateSchema   # CI schema smoke test
 ```
@@ -37,7 +37,7 @@ which lets a single test assert that:
    number of times,
 4. all of the above hold **under concurrent load**.
 
-### Coverage matrix (38 tests)
+### Coverage matrix (39 tests)
 
 | Layer | File | What it proves |
 |---|---|---|
@@ -55,6 +55,7 @@ which lets a single test assert that:
 | **Reliability** | `reliability/ConcurrentDuplicateIdempotencyReliabilityTest` (1) | 10 threads, same key → 1 transfer, 1 idempotency row, 1 audit row, 1 outbox row, 1 delivery |
 | **Reliability** | `reliability/ConcurrentTransfersRaceReliabilityTest` (1) | 10 threads compete for balance of 5 → exactly 5 succeed, 5 rejected with 422, no overdraft |
 | **Reliability** | `reliability/RetrySafetyReliabilityTest` (2) | retry after 500 injection is safe; outbox drain is safe to run repeatedly |
+| **Reliability** | `reliability/PartialFailureRollbackReliabilityTest` (1) | forced mid-transaction failure rolls back every table including the idempotency placeholder, so a retry proceeds cleanly |
 
 ### Invariants asserted (explicit)
 
