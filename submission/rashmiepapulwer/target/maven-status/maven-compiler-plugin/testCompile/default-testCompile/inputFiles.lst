@@ -1,0 +1,16 @@
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/assertions/IdempotencyAssertions.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/assertions/TransferAssertions.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/assertions/WalletAssertions.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/base/WalletTransferTestBase.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/client/DatabaseVerificationClient.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/client/WalletTransferApiClient.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/fixture/TransferRequestBuilder.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/fixture/WalletFixture.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/model/TransferRecord.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/model/TransferRequest.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/model/TransferResponse.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/model/WalletBalance.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/tests/HappyPathTransferTest.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/tests/IdempotencyTest.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/tests/ReliabilityTest.java
+/Users/parthmehta/Desktop/sdet-assignments/submission/rashmiepapulwer/src/test/java/com/wallet/tests/ValidationFailureTest.java
