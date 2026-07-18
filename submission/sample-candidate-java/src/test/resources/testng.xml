@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Wallet Transfer Automation Suite" verbose="2" parallel="false">
+    
+    <test name="End-to-End Transfer Validation">
+        <classes>
+            <!-- Points to the Cucumber TestRunner generated earlier -->
+            <class name="com.wallet.runners.TestRunner"/>
+        </classes>
+    </test>
+
+</suite>

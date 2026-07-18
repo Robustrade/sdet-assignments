@@ -1,0 +1,10 @@
+# API Configuration
+base.url=http://localhost:8080
+
+# Database Configuration (PostgreSQL example)
+db.url=jdbc:postgresql://localhost:5432/wallet_transfer_db
+db.user=admin
+db.password=secure_password_123
+
+# Automation Settings
+timeout.seconds=10
