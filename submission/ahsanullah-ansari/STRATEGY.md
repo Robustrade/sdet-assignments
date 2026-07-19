@@ -343,7 +343,7 @@ def test_two_transfers_racing_for_limited_balance(client, db, wallets):
 
 If row-locking is missing, `balance_of(db, wallets.a)` returns `-20` and the test fails hard. This is the "double debit" test.
 
-Concurrency tests are `@pytest.mark.reliability` so they can be run in isolation via `pytest -m reliability`, and are part of the default suite in CI.
+Concurrency tests are `@pytest.mark.reliability` so they can be run in isolation via `pytest -m reliability`. Because this repo’s CI runs both `pytest -q` and `pytest -q -m reliability`, the Step-2 deliverable will configure the default `pytest` run to exclude reliability tests (e.g., `addopts = -m "not reliability"`) so they only execute in the dedicated reliability job.
 
 ---
 
