@@ -208,6 +208,7 @@ Assertions read like domain sentences. A failure message says *"balance not cons
 
 ## 6. Test architecture
 
+Planned target folder layout for Step 2 (files beyond `STRATEGY.md`/`README.md` will land in follow-up commits):
 ```
 submission/ahsanullah-ansari/
 ├── STRATEGY.md                  ← this document
