@@ -296,6 +296,8 @@ Tests **assert** each branch, including the "no state mutation" postcondition �
 
 Concurrency tests don't have to be complex to be meaningful — they have to actually race, and they have to fail loudly when they do.
 
+**Client setup for these tests:** the `client` fixture used in this section binds to a live uvicorn server (started once per session at a random port) — **not** FastAPI's in-process `TestClient`. The in-process client serializes requests on a single event loop and shares one DB connection, which silently defeats the race; real HTTP over multiple worker threads is required for both requests to actually reach `SELECT ... FOR UPDATE` concurrently.
+
 Two concurrency scenarios, both required by the assignment:
 
 ### 8.1 Duplicate in-flight (scenario #11)
@@ -325,7 +327,7 @@ def test_concurrent_duplicate_creates_exactly_one_transfer(client, db, wallets):
 
 ```python
 def test_two_transfers_racing_for_limited_balance(client, db, wallets):
-    seed_wallet(wallets.a, balance=100)
+    seed_wallet(client, wallets.a, balance=100)
     payload = transfer_request(src=wallets.a, dst=wallets.b, amount=60)
 
     responses = parallel_post(client, [
@@ -350,7 +352,10 @@ Concurrency tests are `@pytest.mark.reliability` so they can be run in isolation
 Per-test isolation is a cheap way to avoid an entire category of false positives.
 
 - **Postgres via Testcontainers** at session scope — one container per pytest process, not per test (container startup is ~2s, per-test would dominate wall time). Only the container itself is session-scoped; the data inside it is reset every test.
-- **Fresh state per test** (not per class) via a function-scoped fixture: `TRUNCATE ... RESTART IDENTITY CASCADE` on every table for concurrency tests, or a nested `SAVEPOINT` that is rolled back at teardown for single-connection tests. Class-scoped truncation would let two tests in the same class see each other's rows, which is exactly the kind of coupling this section is meant to prevent.
+- **Fresh state per test** (not per class) via a function-scoped fixture. Two isolation strategies, chosen per test file:
+  - **`TRUNCATE ... RESTART IDENTITY CASCADE`** on every table — the default, used for every concurrency test and for any test where the app-under-test opens its own DB connection(s). This is the *only* correct choice when there is more than one live connection to the database at a time.
+  - **Nested `SAVEPOINT` rolled back at teardown** — used only for narrow unit-style tests where the test body and the code-under-test share a single injected DB connection. **Constraint (must not be violated):** a SAVEPOINT rollback in the test connection cannot roll back writes made on any other connection, so if the app opens a fresh connection (e.g. via SQLAlchemy's engine pool, or because the request handler runs in a worker thread), that data will leak into the next test. In practice this means: no SAVEPOINT isolation for anything that goes through the HTTP layer, and no SAVEPOINT isolation for anything with a `ThreadPoolExecutor`. When in doubt, use `TRUNCATE`.
+  - Class-scoped truncation would let two tests in the same class see each other's rows, which is exactly the kind of coupling this section is meant to prevent.
 - **Wallet ids are generated per-test** (`wallet_{uuid[:8]}`) — no test hardcodes `wallet_001`. This makes accidental cross-test coupling impossible.
 - **Idempotency keys are always fresh** unless a test is deliberately validating replay behavior.
 
