@@ -150,7 +150,7 @@ Each row is one behavior; each column is a layer that gets asserted for that beh
 | 7 | Insufficient balance | ✓ | ✓ (no mutation) | ✓ (rejection logged) | ✓ (absence) | ✓ (absence) |
 | 8 | Idempotent replay — same key, same payload | ✓ (byte-identical body) | ✓ (single row) | ✓ (single event) | ✓ (single row) | ✓ (single call) |
 | 9 | Idempotency conflict — same key, different payload | ✓ (409) | ✓ (no mutation) | · | · | · |
-| 10 | Retry after simulated response loss | ✓ (identical response) | ✓ (no new rows) | · | ✓ (no new rows) | · |
+| 10 | Retry after simulated response loss | ✓ (identical response) | ✓ (no new rows) | ✓ (no new rows) | ✓ (no new rows) | ✓ (no new calls) |
 | 11 | Concurrent duplicate — N parallel requests, same key | ✓ (all responses identical) | ✓ (exactly one transfer) | ✓ (exactly one event) | ✓ (exactly one outbox row) | ✓ (exactly one call) |
 | 12 | Concurrent competing debits — wallet has 100, two ×60 requests parallel | ✓ (one 201, one 422) | ✓ (balance = 40) | ✓ (one success + one rejection) | ✓ (one row) | ✓ (one call) |
 | 13 | Not-found transfer id | ✓ (404) | · | · | · | · |
