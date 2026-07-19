@@ -277,7 +277,7 @@ POST /transfers with Idempotency-Key = K, payload P
   │    return 201 <body>
   │
   ├─ Second arrival, same K, same P:
-  │    SELECT response FROM idempotency_keys WHERE key = K
+  │    SELECT response_body FROM idempotency_keys WHERE key = K
   │    → return stored 201 <body>, no state mutation
   │
   ├─ Second arrival, same K, different P:
