@@ -155,7 +155,7 @@ Each row is one behavior; each column is a layer that gets asserted for that beh
 | 12 | Concurrent competing debits — wallet has 100, two ×60 requests parallel | ✓ (one 201, one 422) | ✓ (balance = 40) | ✓ (one success + one rejection) | ✓ (one row) | ✓ (one call) |
 | 13 | Not-found transfer id | ✓ (404) | · | · | · | · |
 | 14 | Not-found wallet id | ✓ (404) | · | · | · | · |
-| 15 | Outbox row is written inside the transfer tx (killed process before commit → no orphan outbox) | · | ✓ | · | ✓ | · |
+| 15 | Outbox row is written inside the transfer tx (killed process before commit → no orphan outbox) | · | ✓ (absence) | · | ✓ (absence) | · |
 
 15 scenarios × ~4 assertion layers ≈ 60 concrete invariants exercised. This is intentionally close to the ceiling of what fits in a 3–5 hour scope — no filler.
 
