@@ -56,6 +56,18 @@ Request body:
 }
 ```
 
+HTTP status-code convention the SUT will follow (also asserted by the suite):
+
+| Code | Meaning in this service | Scenarios |
+|---|---|---|
+| `201 Created` | Transfer accepted and settled | #1, #8 (replay), #11 (concurrent-duplicate winners) |
+| `400 Bad Request` | Malformed body / schema violation | #2, #3, #4, #5, #6 |
+| `404 Not Found` | Referenced transfer/wallet id does not exist | #13, #14 |
+| `409 Conflict` | Idempotency-key reuse with a **different** payload — reserved exclusively for this case | #9 |
+| `422 Unprocessable Entity` | Business-rule rejection (insufficient balance, currency mismatch) — request is well-formed but cannot be applied | #7, #12 (losing debit) |
+
+Reserving `409` for the idempotency-conflict case and `422` for business-rule rejections means a caller can distinguish "your request is malformed vs. duplicated vs. impossible" from the status code alone. This is what scenario #12 asserts (`[201, 422]`), and it's what row 12 of the coverage matrix reflects.
+
 ### 2.2 Persistence model
 
 Five tables, mirroring the assignment's required coverage:
@@ -138,7 +150,7 @@ Each row is one behavior; each column is a layer that gets asserted for that beh
 | 9 | Idempotency conflict — same key, different payload | ✓ (409) | ✓ (no mutation) | · | · | · |
 | 10 | Retry after simulated response loss | ✓ (identical response) | ✓ (no new rows) | · | ✓ (no new rows) | · |
 | 11 | Concurrent duplicate — N parallel requests, same key | ✓ (all responses identical) | ✓ (exactly one transfer) | ✓ (exactly one event) | ✓ (exactly one outbox row) | ✓ (exactly one call) |
-| 12 | Concurrent competing debits — wallet has 100, two ×60 requests parallel | ✓ (one 201, one 409/422) | ✓ (balance = 40) | ✓ (one success + one rejection) | ✓ (one row) | ✓ (one call) |
+| 12 | Concurrent competing debits — wallet has 100, two ×60 requests parallel | ✓ (one 201, one 422) | ✓ (balance = 40) | ✓ (one success + one rejection) | ✓ (one row) | ✓ (one call) |
 | 13 | Not-found transfer id | ✓ (404) | · | · | · | · |
 | 14 | Not-found wallet id | ✓ (404) | · | · | · | · |
 | 15 | Outbox row is written inside the transfer tx (killed process before commit → no orphan outbox) | · | ✓ | · | ✓ | · |
@@ -162,12 +174,26 @@ def assert_no_mutation(before: Snapshot, after: Snapshot):
     assert before == after
 
 def assert_exactly_one_transfer(db, idempotency_key: str):
-    rows = db.query("SELECT * FROM transfers WHERE idempotency_key = %s", key)
-    assert len(rows) == 1
+    # §2.2 keeps idempotency in a dedicated `idempotency_keys` table with an FK
+    # to `transfers`, so we join through it rather than looking up a column on
+    # `transfers` directly.
+    rows = db.query(
+        """
+        SELECT t.*
+        FROM transfers t
+        JOIN idempotency_keys ik ON ik.transfer_id = t.id
+        WHERE ik.key = %s
+        """,
+        (idempotency_key,),
+    )
+    assert len(rows) == 1, f"expected 1 transfer for key={idempotency_key}, got {len(rows)}"
 
 def assert_outbox_emitted_once(db, transfer_id: str):
-    rows = db.query("SELECT * FROM outbox_events WHERE aggregate_id = %s", transfer_id)
-    assert len(rows) == 1
+    rows = db.query(
+        "SELECT * FROM outbox_events WHERE aggregate_id = %s",
+        (transfer_id,),
+    )
+    assert len(rows) == 1, f"expected 1 outbox row for transfer={transfer_id}, got {len(rows)}"
 
 def assert_response_matches_db(api_body, db_row):
     # explicit field-by-field, not deep-equal, so failures name the diverging field
