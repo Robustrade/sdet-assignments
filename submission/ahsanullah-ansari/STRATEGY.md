@@ -327,7 +327,7 @@ def test_two_transfers_racing_for_limited_balance(client, db, wallets):
     seed_wallet(wallets.a, balance=100)
     payload = transfer_request(src=wallets.a, dst=wallets.b, amount=60)
 
-    responses = parallel_post([
+    responses = parallel_post(client, [
         (payload, fresh_idempotency_key()),
         (payload, fresh_idempotency_key()),
     ])
@@ -407,7 +407,7 @@ Called out honestly, because the evaluation guide rewards this:
 1. **The SUT is my own fixture.** A test suite validating a service you also wrote is at risk of only testing what you already thought of. I mitigate by writing scenarios first (Red step) against the invariants in §1 — the SUT's job is only to make those tests pass, not to define them.
 2. **No real message broker.** Outbox rows are the observable; a real consumer's exactly-once behavior isn't proven. In a real engagement I'd add a Testcontainers-Kafka and an in-test consumer that asserts on `SELECT ... WHERE published_at IS NULL`.
 3. **Clock is injectable but not exhaustive.** Time-based edge cases (idempotency key TTL, event ordering across DST) aren't automated. Noted, not automated.
-4. **Concurrency tests are stochastic.** They will nearly always catch a lost-update bug on the first run, but a single passing run isn't proof of correctness under all schedulings. `pytest --count=20 -m reliability` is documented as the way to shake harder.
+4. **Concurrency tests are stochastic.** They will nearly always catch a lost-update bug on the first run, but a single passing run isn't proof of correctness under all interleavings. `pytest --count=20 -m reliability` is documented as the way to shake harder.
 5. **No auth / rate-limiting / observability.** Real production concerns; out of the 3–5 hour scope.
 6. **The service fixture is a fixture, not production code.** No connection pooling tuning, no graceful shutdown, no migrations tool. It exists to make the tests meaningful.
 
