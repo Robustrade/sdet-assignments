@@ -1,5 +1,5 @@
 ## Summary
-Java SDET solution by Rupesh Detke for the Wallet Transfer Service: a minimal real API+DB fixture plus a multi-layer automation suite proving transfer correctness under validation failures, insufficient funds, idempotent retries, and concurrency. Includes a documentation-first strategy outline (`TEST_STRATEGY.md`).
+Java SDET solution by Rupesh Detke for the Wallet Transfer Service: a minimal real API+DB fixture plus a multi-layer automation suite proving transfer correctness under validation failures, insufficient funds, idempotent retries, and concurrency. Includes a documentation-first strategy outline (TEST_STRATEGY.md).
 
 ## Test Strategy
 - Levels covered: API contract, business workflow, database persistence, cross-component outbox/audit
@@ -42,14 +42,14 @@ Layered suite: support (client/builders/DB assertions/fixtures), api, workflow, 
 - With more time: Testcontainers Postgres, contract schemas (JSON Schema/OpenAPI), richer failure injection
 
 ## Responsible AI Usage
-- Did you use AI tools? Yes (Cursor)
-- Where did they help? Scaffolding, docs, boilerplate, initial test shapes
+- Did you use AI tools? Yes Chatgpt
+- Where did they help? Intial Shapes
 - What you personally verify or correct: strategy/invariants, concurrency locking + idempotency re-check, running the suite, PR completeness
 
 ## Author Checklist
-- [x] Linting passes (mvn spotless:check after apply)
-- [x] Test suite passes
-- [x] Schema/setup validation passes
-- [x] Reliability-focused tests pass
-- [x] README was tested from a clean setup
-- [x] End-to-end transfer validation was run locally
+Linting passes (mvn spotless:check after apply)
+Test suite passes
+Schema/setup validation passes
+Reliability-focused tests pass
+README was tested from a clean setup
+End-to-end transfer validation was run locally
