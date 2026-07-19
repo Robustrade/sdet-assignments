@@ -61,10 +61,12 @@ HTTP status-code convention the SUT will follow (also asserted by the suite):
 | Code | Meaning in this service | Scenarios |
 |---|---|---|
 | `201 Created` | Transfer accepted and settled | #1, #8 (replay), #11 (concurrent-duplicate winners) |
-| `400 Bad Request` | Malformed body / schema violation | #2, #3, #4, #5, #6 |
+| `400 Bad Request` | Malformed body / schema violation (missing field, non-positive amount, same source & destination, missing idempotency header) | #2, #3, #4, #6 |
 | `404 Not Found` | Referenced transfer/wallet id does not exist | #13, #14 |
 | `409 Conflict` | Idempotency-key reuse with a **different** payload — reserved exclusively for this case | #9 |
-| `422 Unprocessable Entity` | Business-rule rejection (insufficient balance, currency mismatch) — request is well-formed but cannot be applied | #7, #12 (losing debit) |
+| `422 Unprocessable Entity` | Business-rule rejection — request is well-formed and wallets exist, but the transfer cannot be applied (insufficient balance, currency mismatch between the two referenced wallets) | #5, #7, #12 (losing debit) |
+
+Note on currency mismatch (scenario #5): the request body is well-formed and both wallet ids resolve, so it is not a `400` (malformed) nor a `404` (not found). The service can only reject it after a DB lookup shows the two wallets are in different currencies — that is the same shape as insufficient-balance, so it is grouped under `422`.
 
 Reserving `409` for the idempotency-conflict case and `422` for business-rule rejections means a caller can distinguish "your request is malformed vs. duplicated vs. impossible" from the status code alone. This is what scenario #12 asserts (`[201, 422]`), and it's what row 12 of the coverage matrix reflects.
 
@@ -122,7 +124,7 @@ This is called out explicitly so a reviewer knows which claims are load-bearing.
 ### 3.2 Explicitly out of scope
 
 - UI or frontend
-- Multi-currency FX conversion (single-currency wallets only; mismatched currency returns 400)
+- Multi-currency FX conversion (single-currency wallets only; mismatched currency is rejected with `422` — see §2.1)
 - Performance / load testing (the assignment excludes this)
 - Real message broker (Kafka/RabbitMQ) — outbox table is the observable
 - Distributed transactions across services
@@ -143,7 +145,7 @@ Each row is one behavior; each column is a layer that gets asserted for that beh
 | 2 | Missing required field (`amount`) | ✓ | ✓ (absence) | · | · | · |
 | 3 | Amount ≤ 0 | ✓ | ✓ (absence) | · | · | · |
 | 4 | Same source & destination wallet | ✓ | ✓ (absence) | · | · | · |
-| 5 | Currency mismatch between wallets | ✓ | ✓ (absence) | · | · | · |
+| 5 | Currency mismatch between wallets | ✓ (422) | ✓ (absence) | · | · | · |
 | 6 | Missing `Idempotency-Key` header | ✓ | ✓ (absence) | · | · | · |
 | 7 | Insufficient balance | ✓ | ✓ (no mutation) | ✓ (rejection logged) | ✓ (absence) | ✓ (absence) |
 | 8 | Idempotent replay — same key, same payload | ✓ (byte-identical body) | ✓ (single row) | ✓ (single event) | ✓ (single row) | ✓ (single call) |
@@ -387,7 +389,7 @@ Not every scenario needs three commits — small ones combine — but the shape 
 | **FastAPI** | Fastest way to a real HTTP surface with declared request/response schemas |
 | **SQLAlchemy 2.0 (Core)** | Explicit SQL where locking matters (`.with_for_update()`); less magic than ORM sessions in concurrency tests |
 | **Testcontainers-Postgres** | Real Postgres, real UNIQUE constraint, real row locks — the alternative (SQLite) silently makes concurrency tests pass for the wrong reason |
-| **httpx** | `AsyncClient` for concurrency; sync client for straight-line tests |
+| **httpx** | Sync `httpx.Client` throughout — the two concurrency scenarios drive parallelism with `ThreadPoolExecutor` (see §8.1) rather than an asyncio event loop; that keeps the tests readable and matches the concrete example without introducing async plumbing |
 | **ruff + black** | Match the CI expectations already present in the repo |
 
 Rejected alternatives:
