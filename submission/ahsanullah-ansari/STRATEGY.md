@@ -270,9 +270,9 @@ The lifecycle:
 POST /transfers with Idempotency-Key = K, payload P
   ├─ First arrival:
   │    BEGIN
-  │    INSERT INTO idempotency_keys (key=K, request_hash=sha(P), response=NULL) ...
+  │    INSERT INTO idempotency_keys (key=K, request_hash=sha(P), response_body=NULL) ...
   │    ... execute transfer ...
-  │    UPDATE idempotency_keys SET response = <body>, transfer_id = <id> WHERE key = K
+  │    UPDATE idempotency_keys SET response_body = <body>, transfer_id = <id> WHERE key = K
   │    COMMIT
   │    return 201 <body>
   │
