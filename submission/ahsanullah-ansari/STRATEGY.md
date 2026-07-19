@@ -334,8 +334,8 @@ def test_two_transfers_racing_for_limited_balance(client, db, wallets):
 
     statuses = sorted(r.status_code for r in responses)
     assert statuses == [201, 422]          # exactly one wins
-    assert balance_of(wallets.a) == 40     # not -20, not 100
-    assert len(transfers_for(wallets.a)) == 1
+    assert balance_of(db, wallets.a) == 40     # not -20, not 100
+    assert len(transfers_for(db, wallets.a)) == 1
 ```
 
 If row-locking is missing, `balance_of` returns `-20` and the test fails hard. This is the "double debit" test.
