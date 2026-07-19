@@ -88,7 +88,7 @@ Money is stored in **minor units (integer)** — floating-point currency is an a
 
 Just enough for the invariants above to be testable:
 
-- Transfer creation runs inside a single DB transaction that: (a) `SELECT ... FOR UPDATE` on both wallets (ordered by id to avoid deadlock), (b) checks source balance, (c) updates both balances, (d) inserts the transfer row, (e) writes an event row, (f) writes an outbox row, (g) upserts the idempotency-key row. Commit is atomic.
+- Transfer creation runs inside a single DB transaction that: (a) inserts the idempotency-key row (`INSERT` with `UNIQUE (key)`; `response_body` starts `NULL` — see §7 for the full lifecycle), (b) `SELECT ... FOR UPDATE` on both wallets (ordered by id to avoid deadlock), (c) checks source balance, (d) updates both balances, (e) inserts the transfer row, (f) writes an event row, (g) writes an outbox row, (h) `UPDATE`s the idempotency-key row with the response body and `transfer_id`. Commit is atomic. The idempotency row is INSERT + UPDATE within one transaction, not an UPSERT — see §7.
 - Idempotency-key row is inserted with a `UNIQUE` constraint on `key`. Second attempt with the same key returns the stored response verbatim. Second attempt with the same key but a **different payload hash** returns `409 Conflict`.
 - Concurrency safety comes from row-level locks; I will not rely on optimistic-version retry.
 
@@ -314,8 +314,8 @@ def test_concurrent_duplicate_creates_exactly_one_transfer(client, db, wallets):
     assert len({r.text for r in responses}) == 1   # byte-identical bodies
     assert_exactly_one_transfer(db, idempotency_key=key)
     assert_outbox_emitted_once(db, transfer_id=extract_id(responses[0]))
-    assert balance_of(wallets.a) == 950
-    assert balance_of(wallets.b) == 1050
+    assert balance_of(db, wallets.a) == 950
+    assert balance_of(db, wallets.b) == 1050
 ```
 
 10 threads, 1 idempotency key, real DB, real HTTP. If the UNIQUE constraint isn't in place, this fails on `assert_exactly_one_transfer`.
@@ -333,12 +333,12 @@ def test_two_transfers_racing_for_limited_balance(client, db, wallets):
     ])
 
     statuses = sorted(r.status_code for r in responses)
-    assert statuses == [201, 422]          # exactly one wins
+    assert statuses == [201, 422]              # exactly one wins
     assert balance_of(db, wallets.a) == 40     # not -20, not 100
     assert len(transfers_for(db, wallets.a)) == 1
 ```
 
-If row-locking is missing, `balance_of` returns `-20` and the test fails hard. This is the "double debit" test.
+If row-locking is missing, `balance_of(db, wallets.a)` returns `-20` and the test fails hard. This is the "double debit" test.
 
 Concurrency tests are `@pytest.mark.reliability` so they can be run in isolation via `pytest -m reliability`, and are part of the default suite in CI.
 
@@ -348,8 +348,8 @@ Concurrency tests are `@pytest.mark.reliability` so they can be run in isolation
 
 Per-test isolation is a cheap way to avoid an entire category of false positives.
 
-- **Postgres via Testcontainers** at session scope — one container per pytest process, not per test (container startup is ~2s, per-test would dominate wall time).
-- **Fresh schema per test class** via a `truncate_all` fixture; or nested `SAVEPOINT` rollback for tests that don't touch concurrency. Concurrency tests can't use SAVEPOINT (multiple connections needed) so they use TRUNCATE.
+- **Postgres via Testcontainers** at session scope — one container per pytest process, not per test (container startup is ~2s, per-test would dominate wall time). Only the container itself is session-scoped; the data inside it is reset every test.
+- **Fresh state per test** (not per class) via a function-scoped fixture: `TRUNCATE ... RESTART IDENTITY CASCADE` on every table for concurrency tests, or a nested `SAVEPOINT` that is rolled back at teardown for single-connection tests. Class-scoped truncation would let two tests in the same class see each other's rows, which is exactly the kind of coupling this section is meant to prevent.
 - **Wallet ids are generated per-test** (`wallet_{uuid[:8]}`) — no test hardcodes `wallet_001`. This makes accidental cross-test coupling impossible.
 - **Idempotency keys are always fresh** unless a test is deliberately validating replay behavior.
 
