@@ -1,21 +1,53 @@
 # Wallet Transfer SDET Automation
 
-## Run Instructions
+## Tech Stack
 
-Terminal 1:
-cd api-server
+- TypeScript
+- Playwright API Testing
+- Node.js
+- Express Mock API
+
+
+## Project Structure
+
+Wallet_Transfer_Ashvini
+
+├── api-server
+├── src
+├── tests
+├── playwright.config.ts
+└── README.md
+
+
+## Execution Steps
+
+### Install dependencies
+
 npm install
+
+
+### Start Mock Wallet API
+
+cd api-server
+
+npm install
+
 node server.js
 
-Terminal 2:
-npm install
+
+### Execute Automation
+
 npx playwright test
 
-Coverage:
-- Successful transfer
-- Validation failures
-- Insufficient balance
-- Idempotency duplicate request
-- Different payload same idempotency key
-- Concurrency duplicate requests
-- API contract validation
+
+### Test Result
+
+4 scenarios automated successfully:
+
+✓ Successful wallet transfer
+
+✓ Duplicate request handling using idempotency key
+
+✓ Invalid transfer validation
+
+✓ Concurrent duplicate request handling
