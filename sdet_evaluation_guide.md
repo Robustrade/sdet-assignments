@@ -26,6 +26,20 @@ Do not over-index on test framework/library choice if the automation strategy an
 
 ---
 
+## Originality Check — Similarity to `submission/sample-candidate-ts`
+
+`submission/sample-candidate-ts/` is a full working reference solution that candidates are told to read before building their own submission. That makes it a legitimate learning aid, but also a possible shortcut — a candidate could rename and lightly reword the scaffold and submit it as original work.
+
+Before scoring, diff the candidate's submission structure and code against `submission/sample-candidate-ts/`:
+
+- Same domain vocabulary, same four endpoints, and general OOP-with-design-patterns shape are **expected** and not a signal of copying — the assignment prescribes all of that.
+- Look instead for things a candidate would not independently reproduce: identical file/class/variable naming beyond the obvious (e.g. `FakePaymentProvider`, `SubscriptionRequestBuilder` matched exactly, including less-obvious internal helper names), matching comments, identical test scenario wording, or near-identical function bodies with only cosmetic renames.
+- Distinguish "used the scaffold as a structural reference" (fine, even expected) from "copied and lightly reworded the scaffold" (an integrity concern).
+
+If you find substantial unattributed copying, do not silently fold it into the OOP/design-pattern score — call it out explicitly as a separate flag in the report, with the specific file:line pairs compared side by side, and let the human reviewer decide how to weight it. Do not accuse a candidate of copying based on superficial similarity alone (shared endpoint names, shared lifecycle terms, or a Builder/Repository pattern used the same way the assignment asks for) — the bar is unattributed near-identical code, not convergent design.
+
+---
+
 ## Scoring Rubric
 
 You may score each category on a 1–4 scale:
