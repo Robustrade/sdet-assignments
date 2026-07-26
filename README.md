@@ -4,7 +4,7 @@ This repository contains the take-home infrastructure assignment for SDET engine
 
 ## Language
 
-Solutions must be written in **TypeScript** (plain JavaScript is acceptable with a strong reason — see [SDET_ASSIGNMENT.md](./SDET_ASSIGNMENT.md)). See the reference scaffold in [`submission/sample-candidate-ts`](./submission/sample-candidate-ts) for the expected project structure, design patterns, and how to run the suite.
+Solutions must be written in **TypeScript** (plain JavaScript is acceptable with a strong reason — see [SDET_ASSIGNMENT.md](./SDET_ASSIGNMENT.md)).
 
 ## How to Submit
 
