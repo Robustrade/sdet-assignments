@@ -1,57 +1,109 @@
-## Summary
-Describe what you implemented.
+# Summary
 
-## Test Strategy
-- Levels covered:
-- In scope:
-- Out of scope:
-- What is real vs stubbed/mocked, and why:
+Implemented an automated API testing framework for a Subscription Billing system using Python, PyTest, and the Requests library. The framework validates the complete subscription lifecycle, including subscription creation, retrieval, cancellation, payment processing, webhook handling, and database verification. The project is built using reusable components, fixtures, helper utilities, and a modular structure to ensure scalability, maintainability, and easy extension for future test scenarios.
 
-## OOP & Design Pattern Choices
-- Which patterns did you use, and where (file/class)?
-- What problem did each one actually solve in your codebase?
-- What's the seam around the payment provider (interface, injection point)?
+---
 
-## API Validation Approach
-- How are requests/responses validated?
-- How is webhook request handling (signature, malformed payload) validated, separately from webhook business logic?
-- Which failure scenarios are covered?
+# Test Strategy
 
-## Database Validation Approach
-- Which entities are checked (subscriptions, invoices/payments, webhook events, audit log)?
-- Which invariants are asserted?
-- How is persisted state checked at each lifecycle stage, not just at creation?
+**Levels Covered:**
+- API Testing
+- Integration Testing
+- Database Validation
+- End-to-End Lifecycle Testing
 
-## Mock Payment Provider & Webhook Validation
-- How is the payment provider mocked, and what do you assert against it (call count, arguments)?
-- How is webhook idempotency (duplicate `event_id`) proven?
-- How is out-of-order/stale webhook delivery handled and tested?
+**In Scope:**
+- Subscription creation, retrieval, and cancellation
+- Payment success and failure scenarios
+- Webhook processing
+- Database validation
+- Positive and negative API test cases
 
-## State-Machine / Lifecycle Coverage
-- Which valid transitions are tested?
-- Which invalid transitions are proven impossible?
-- What confidence do these tests provide?
+**Out of Scope:**
+- UI Automation
+- Performance/Load Testing
+- Real payment gateway integration
 
-## Test Architecture
-Explain how the suite is structured (fixtures, API client, mock provider, assertions, scenarios, builders) and why it's maintainable.
+**Real vs Stubbed/Mocked:**
+The Subscription Billing APIs and database interactions are tested as part of the application. The payment provider is mocked to simulate successful and failed payment scenarios without relying on an external payment service, making the tests faster and more reliable.
 
-## Validation
-List the commands or workflows you ran to validate the solution (e.g. `npm test`, `npm run lint`, `npm run build`, `npm run validate-schema`).
+---
 
-## Known Limitations / Next Steps
-List tradeoffs, simplifying assumptions, or improvements you would make with more time.
+# OOP & Design Pattern Choices
 
-## Responsible AI Usage
-- Did you use AI tools?
-- Where did they help?
-- What did you personally verify or correct?
+The framework follows a modular and reusable design using API client classes, PyTest fixtures, helper utilities, and payload builders. These components reduce code duplication and improve maintainability. The payment provider is abstracted through a mock implementation, allowing payment-related business logic to be tested independently of external integrations.
 
-## Author Checklist
-- [ ] Linting passes
-- [ ] Type check passes (`npm run build` / `tsc --noEmit`)
-- [ ] Test suite passes
-- [ ] Schema/setup validation passes
-- [ ] Every listed lifecycle transition is exercised by at least one test
-- [ ] At least two invalid transitions are proven impossible
-- [ ] Webhook idempotency (duplicate `event_id`) is tested
-- [ ] README was tested from a clean setup
+---
+
+# API Validation Approach
+
+API validation includes verification of:
+- HTTP status codes
+- Response body and expected values
+- Required fields
+- Error messages for negative scenarios
+
+Webhook requests are validated separately for malformed payloads, duplicate events, and invalid data before validating the business logic. Failure scenarios include invalid input, missing fields, authentication failures, payment failures, and invalid subscription IDs.
+
+---
+
+# Database Validation Approach
+
+Database validation ensures that subscription records, payment information, webhook events, and related entities are correctly stored and updated throughout the subscription lifecycle. The tests verify that the database reflects the expected state after each API request and webhook event.
+
+---
+
+# Mock Payment Provider & Webhook Validation
+
+A mock payment provider is used to simulate successful and failed payment responses. Tests verify that the application processes these responses correctly without depending on an external payment gateway.
+
+Webhook validation includes idempotency checks to ensure duplicate events are ignored and do not create duplicate records or inconsistent subscription states.
+
+---
+
+# State-Machine / Lifecycle Coverage
+
+The framework validates the complete subscription lifecycle, including creation, activation, payment processing, and cancellation. It also verifies that invalid transitions, such as reactivating a cancelled subscription or processing duplicate webhook events, are prevented according to the business rules.
+
+---
+
+# Test Architecture
+
+The project is organised into separate modules for API clients, test cases, fixtures, utilities, and database helpers. Shared fixtures and reusable helper methods minimise code duplication and make the framework easy to maintain and extend with additional test scenarios.
+
+---
+
+# Validation
+
+The solution was validated by:
+- Running the complete PyTest test suite
+- Executing smoke and regression test scenarios
+- Verifying database updates after API and webhook operations
+- Reviewing generated test reports to ensure all scenarios passed successfully
+
+---
+
+# Known Limitations / Next Steps
+
+- Uses a mocked payment provider instead of a real payment gateway.
+- UI automation is not included as it is outside the scope.
+- Performance and load testing are not covered.
+- The framework can be further enhanced with CI/CD integration, contract testing, and support for additional subscription scenarios.
+
+---
+
+# Responsible AI Usage
+
+AI tools were used to assist with framework design, code refactoring, documentation, and generating test case ideas. All generated content was manually reviewed, modified, and verified to ensure it accurately reflected the implemented solution and met the assignment requirements.
+
+---
+
+# Author Checklist
+
+- ✅ Linting passes
+- ✅ Test suite passes
+- ✅ Subscription lifecycle scenarios covered
+- ✅ Positive and negative API scenarios validated
+- ✅ Database verification completed
+- ✅ Webhook idempotency tested
+- ✅ README verified from a clean setup
