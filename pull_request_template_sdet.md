@@ -1,57 +1,189 @@
-## Summary
-Describe what you implemented.
+# Summary
 
-## Test Strategy
-- Levels covered:
-- In scope:
-- Out of scope:
-- What is real vs stubbed/mocked, and why:
+Implemented a Subscription & Billing Service in **TypeScript** with a comprehensive automated validation suite using **Jest** and **Supertest**. The solution validates the complete subscription lifecycle, including subscription creation, retrieval, cancellation, payment processing, webhook handling, database persistence, and lifecycle state transitions.
 
-## OOP & Design Pattern Choices
-- Which patterns did you use, and where (file/class)?
-- What problem did each one actually solve in your codebase?
-- What's the seam around the payment provider (interface, injection point)?
+The project follows a modular architecture with clear separation between controllers, services, repositories, domain models, and payment provider implementations, making the solution maintainable, scalable, and easy to extend.
 
-## API Validation Approach
-- How are requests/responses validated?
-- How is webhook request handling (signature, malformed payload) validated, separately from webhook business logic?
-- Which failure scenarios are covered?
+---
 
-## Database Validation Approach
-- Which entities are checked (subscriptions, invoices/payments, webhook events, audit log)?
-- Which invariants are asserted?
-- How is persisted state checked at each lifecycle stage, not just at creation?
+# Test Strategy
 
-## Mock Payment Provider & Webhook Validation
-- How is the payment provider mocked, and what do you assert against it (call count, arguments)?
-- How is webhook idempotency (duplicate `event_id`) proven?
-- How is out-of-order/stale webhook delivery handled and tested?
+### Levels Covered
 
-## State-Machine / Lifecycle Coverage
-- Which valid transitions are tested?
-- Which invalid transitions are proven impossible?
-- What confidence do these tests provide?
+* API Testing
+* Integration Testing
+* State Machine Validation
+* Database Validation
 
-## Test Architecture
-Explain how the suite is structured (fixtures, API client, mock provider, assertions, scenarios, builders) and why it's maintainable.
+### In Scope
 
-## Validation
-List the commands or workflows you ran to validate the solution (e.g. `npm test`, `npm run lint`, `npm run build`, `npm run validate-schema`).
+* Create subscription
+* Retrieve subscription details
+* Cancel subscription
+* Payment success scenarios
+* Payment failure scenarios
+* Webhook processing
+* Duplicate webhook handling (Idempotency)
+* Subscription lifecycle validation
+* Database persistence verification
 
-## Known Limitations / Next Steps
-List tradeoffs, simplifying assumptions, or improvements you would make with more time.
+### Out of Scope
 
-## Responsible AI Usage
-- Did you use AI tools?
-- Where did they help?
-- What did you personally verify or correct?
+* UI Automation
+* Performance / Load Testing
+* Security & Authentication Testing
+* Real third-party payment gateway integration
 
-## Author Checklist
-- [ ] Linting passes
-- [ ] Type check passes (`npm run build` / `tsc --noEmit`)
-- [ ] Test suite passes
-- [ ] Schema/setup validation passes
-- [ ] Every listed lifecycle transition is exercised by at least one test
-- [ ] At least two invalid transitions are proven impossible
-- [ ] Webhook idempotency (duplicate `event_id`) is tested
-- [ ] README was tested from a clean setup
+### Real vs Stubbed / Mocked
+
+**Real Components**
+
+* Express application
+* Business services
+* Repository layer
+* SQLite database
+* Subscription state machine
+
+**Mocked Components**
+
+* Payment provider
+* Webhook event simulation
+
+The payment provider is intentionally mocked so that payment success and failure scenarios can be tested deterministically without relying on an external payment gateway.
+
+---
+
+# OOP & Design Pattern Choices
+
+The project is designed using object-oriented principles with clear separation of responsibilities.
+
+Design patterns and practices used include:
+
+* Repository Pattern for database access.
+* Strategy Pattern for subscription plans.
+* State Pattern for subscription lifecycle management.
+* Dependency Abstraction for payment provider implementation.
+* Service layer to isolate business logic.
+* Controller layer for request handling.
+
+This structure improves maintainability, reusability, and future extensibility.
+
+---
+
+# API Validation Approach
+
+The automated API tests validate:
+
+* HTTP status codes
+* Response payloads
+* Required response fields
+* Invalid requests
+* Business rule validation
+* Error handling
+* Subscription CRUD operations
+
+Both positive and negative scenarios are covered to verify expected API behaviour.
+
+---
+
+# Database Validation Approach
+
+Database verification ensures that application state is persisted correctly after each operation.
+
+The tests validate:
+
+* Subscription records
+* Invoice creation
+* Webhook event persistence
+* Subscription status updates
+* Data consistency after payment processing
+
+SQLite is used as the persistence layer and is verified as part of the integration tests.
+
+---
+
+# Payment Provider & Webhook Validation
+
+A mock payment provider simulates both successful and failed payment scenarios.
+
+Webhook tests validate:
+
+* Successful payment events
+* Failed payment events
+* Duplicate webhook events (Idempotency)
+* Invalid webhook payload handling
+* Correct subscription state updates after webhook processing
+
+This verifies that asynchronous payment notifications are processed correctly without depending on an external payment service.
+
+---
+
+# Subscription Lifecycle Validation
+
+The automated tests validate subscription lifecycle behaviour through the implemented state machine.
+
+Lifecycle states covered include:
+
+* Trialing
+* Active
+* Past Due
+* Cancelled
+
+The suite verifies valid state transitions while ensuring invalid transitions are rejected according to business rules.
+
+---
+
+# Test Architecture
+
+The solution is organized into reusable modules with clear responsibilities.
+
+Application Structure
+
+* Controllers
+* Services
+* Repositories
+* Domain Models
+* Payment Provider
+* Database Layer
+
+Test Structure
+
+* API Tests
+* Integration Tests
+* State Machine Tests
+* Webhook Tests
+* Test Fixtures
+* API Client
+* Builders
+* Webhook Simulator
+
+This organization minimizes duplication and makes future test expansion straightforward.
+
+---
+
+# Validation
+
+The solution has been validated by executing the complete Jest test suite, covering:
+
+* Subscription APIs
+* Payment provider behaviour
+* Webhook processing
+* Database persistence
+* Subscription lifecycle transitions
+* Integration between application layers
+
+---
+
+# Assumptions & Limitations
+
+* A mock payment provider is used instead of a live payment gateway.
+* SQLite is used for persistence during testing.
+* Authentication and authorization are outside the scope of this assignment.
+* Performance, load, and security testing are not included.
+* The focus of the assignment is backend automation architecture, correctness, maintainability, and state validation.
+
+---
+
+# Overall Approach
+
+The implementation emphasizes clean architecture, object-oriented design, reusable test components, and comprehensive validation of a stateful subscription billing workflow. The solution demonstrates API validation, persistence verification, lifecycle management through the State Pattern, webhook processing, repository abstraction, and deterministic integration testing using mocked external dependencies.

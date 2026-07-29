@@ -1,0 +1,39 @@
+{
+  "name": "subscription-billing-sdet",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+  "test": "jest",
+  "test:watch": "jest --watch",
+  "build": "tsc",
+  "dev": "ts-node src/server.ts"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suiwalnit/subscription-billing-sdet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suiwalnit/subscription-billing-sdet/issues"
+  },
+  "homepage": "https://github.com/suiwalnit/subscription-billing-sdet#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.1.1",
+    "@types/supertest": "^7.2.1",
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.1",
+    "express": "^5.2.1"
+  }
+}
