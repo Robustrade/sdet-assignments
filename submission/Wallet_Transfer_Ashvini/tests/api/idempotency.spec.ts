@@ -5,7 +5,7 @@ import {TransferBuilder} from '../../src/builders/TransferBuilder';
 test('Duplicate request returns same transfer',async({request})=>{
 
  const client=new TransferClient(request);
- const key='same-key';
+ const key=`same-key-${crypto.randomUUID()}`;
 
  const first=await client.createTransfer(
   TransferBuilder.valid(),key
