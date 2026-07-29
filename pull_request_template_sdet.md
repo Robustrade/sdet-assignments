@@ -1,109 +1,189 @@
 # Summary
 
-Implemented an automated API testing framework for a Subscription Billing system using Python, PyTest, and the Requests library. The framework validates the complete subscription lifecycle, including subscription creation, retrieval, cancellation, payment processing, webhook handling, and database verification. The project is built using reusable components, fixtures, helper utilities, and a modular structure to ensure scalability, maintainability, and easy extension for future test scenarios.
+Implemented a Subscription & Billing Service in **TypeScript** with a comprehensive automated validation suite using **Jest** and **Supertest**. The solution validates the complete subscription lifecycle, including subscription creation, retrieval, cancellation, payment processing, webhook handling, database persistence, and lifecycle state transitions.
+
+The project follows a modular architecture with clear separation between controllers, services, repositories, domain models, and payment provider implementations, making the solution maintainable, scalable, and easy to extend.
 
 ---
 
 # Test Strategy
 
-**Levels Covered:**
-- API Testing
-- Integration Testing
-- Database Validation
-- End-to-End Lifecycle Testing
+### Levels Covered
 
-**In Scope:**
-- Subscription creation, retrieval, and cancellation
-- Payment success and failure scenarios
-- Webhook processing
-- Database validation
-- Positive and negative API test cases
+* API Testing
+* Integration Testing
+* State Machine Validation
+* Database Validation
 
-**Out of Scope:**
-- UI Automation
-- Performance/Load Testing
-- Real payment gateway integration
+### In Scope
 
-**Real vs Stubbed/Mocked:**
-The Subscription Billing APIs and database interactions are tested as part of the application. The payment provider is mocked to simulate successful and failed payment scenarios without relying on an external payment service, making the tests faster and more reliable.
+* Create subscription
+* Retrieve subscription details
+* Cancel subscription
+* Payment success scenarios
+* Payment failure scenarios
+* Webhook processing
+* Duplicate webhook handling (Idempotency)
+* Subscription lifecycle validation
+* Database persistence verification
+
+### Out of Scope
+
+* UI Automation
+* Performance / Load Testing
+* Security & Authentication Testing
+* Real third-party payment gateway integration
+
+### Real vs Stubbed / Mocked
+
+**Real Components**
+
+* Express application
+* Business services
+* Repository layer
+* SQLite database
+* Subscription state machine
+
+**Mocked Components**
+
+* Payment provider
+* Webhook event simulation
+
+The payment provider is intentionally mocked so that payment success and failure scenarios can be tested deterministically without relying on an external payment gateway.
 
 ---
 
 # OOP & Design Pattern Choices
 
-The framework follows a modular and reusable design using API client classes, PyTest fixtures, helper utilities, and payload builders. These components reduce code duplication and improve maintainability. The payment provider is abstracted through a mock implementation, allowing payment-related business logic to be tested independently of external integrations.
+The project is designed using object-oriented principles with clear separation of responsibilities.
+
+Design patterns and practices used include:
+
+* Repository Pattern for database access.
+* Strategy Pattern for subscription plans.
+* State Pattern for subscription lifecycle management.
+* Dependency Abstraction for payment provider implementation.
+* Service layer to isolate business logic.
+* Controller layer for request handling.
+
+This structure improves maintainability, reusability, and future extensibility.
 
 ---
 
 # API Validation Approach
 
-API validation includes verification of:
-- HTTP status codes
-- Response body and expected values
-- Required fields
-- Error messages for negative scenarios
+The automated API tests validate:
 
-Webhook requests are validated separately for malformed payloads, duplicate events, and invalid data before validating the business logic. Failure scenarios include invalid input, missing fields, authentication failures, payment failures, and invalid subscription IDs.
+* HTTP status codes
+* Response payloads
+* Required response fields
+* Invalid requests
+* Business rule validation
+* Error handling
+* Subscription CRUD operations
+
+Both positive and negative scenarios are covered to verify expected API behaviour.
 
 ---
 
 # Database Validation Approach
 
-Database validation ensures that subscription records, payment information, webhook events, and related entities are correctly stored and updated throughout the subscription lifecycle. The tests verify that the database reflects the expected state after each API request and webhook event.
+Database verification ensures that application state is persisted correctly after each operation.
+
+The tests validate:
+
+* Subscription records
+* Invoice creation
+* Webhook event persistence
+* Subscription status updates
+* Data consistency after payment processing
+
+SQLite is used as the persistence layer and is verified as part of the integration tests.
 
 ---
 
-# Mock Payment Provider & Webhook Validation
+# Payment Provider & Webhook Validation
 
-A mock payment provider is used to simulate successful and failed payment responses. Tests verify that the application processes these responses correctly without depending on an external payment gateway.
+A mock payment provider simulates both successful and failed payment scenarios.
 
-Webhook validation includes idempotency checks to ensure duplicate events are ignored and do not create duplicate records or inconsistent subscription states.
+Webhook tests validate:
+
+* Successful payment events
+* Failed payment events
+* Duplicate webhook events (Idempotency)
+* Invalid webhook payload handling
+* Correct subscription state updates after webhook processing
+
+This verifies that asynchronous payment notifications are processed correctly without depending on an external payment service.
 
 ---
 
-# State-Machine / Lifecycle Coverage
+# Subscription Lifecycle Validation
 
-The framework validates the complete subscription lifecycle, including creation, activation, payment processing, and cancellation. It also verifies that invalid transitions, such as reactivating a cancelled subscription or processing duplicate webhook events, are prevented according to the business rules.
+The automated tests validate subscription lifecycle behaviour through the implemented state machine.
+
+Lifecycle states covered include:
+
+* Trialing
+* Active
+* Past Due
+* Cancelled
+
+The suite verifies valid state transitions while ensuring invalid transitions are rejected according to business rules.
 
 ---
 
 # Test Architecture
 
-The project is organised into separate modules for API clients, test cases, fixtures, utilities, and database helpers. Shared fixtures and reusable helper methods minimise code duplication and make the framework easy to maintain and extend with additional test scenarios.
+The solution is organized into reusable modules with clear responsibilities.
+
+Application Structure
+
+* Controllers
+* Services
+* Repositories
+* Domain Models
+* Payment Provider
+* Database Layer
+
+Test Structure
+
+* API Tests
+* Integration Tests
+* State Machine Tests
+* Webhook Tests
+* Test Fixtures
+* API Client
+* Builders
+* Webhook Simulator
+
+This organization minimizes duplication and makes future test expansion straightforward.
 
 ---
 
 # Validation
 
-The solution was validated by:
-- Running the complete PyTest test suite
-- Executing smoke and regression test scenarios
-- Verifying database updates after API and webhook operations
-- Reviewing generated test reports to ensure all scenarios passed successfully
+The solution has been validated by executing the complete Jest test suite, covering:
+
+* Subscription APIs
+* Payment provider behaviour
+* Webhook processing
+* Database persistence
+* Subscription lifecycle transitions
+* Integration between application layers
 
 ---
 
-# Known Limitations / Next Steps
+# Assumptions & Limitations
 
-- Uses a mocked payment provider instead of a real payment gateway.
-- UI automation is not included as it is outside the scope.
-- Performance and load testing are not covered.
-- The framework can be further enhanced with CI/CD integration, contract testing, and support for additional subscription scenarios.
-
----
-
-# Responsible AI Usage
-
-AI tools were used to assist with framework design, code refactoring, documentation, and generating test case ideas. All generated content was manually reviewed, modified, and verified to ensure it accurately reflected the implemented solution and met the assignment requirements.
+* A mock payment provider is used instead of a live payment gateway.
+* SQLite is used for persistence during testing.
+* Authentication and authorization are outside the scope of this assignment.
+* Performance, load, and security testing are not included.
+* The focus of the assignment is backend automation architecture, correctness, maintainability, and state validation.
 
 ---
 
-# Author Checklist
+# Overall Approach
 
-- ✅ Linting passes
-- ✅ Test suite passes
-- ✅ Subscription lifecycle scenarios covered
-- ✅ Positive and negative API scenarios validated
-- ✅ Database verification completed
-- ✅ Webhook idempotency tested
-- ✅ README verified from a clean setup
+The implementation emphasizes clean architecture, object-oriented design, reusable test components, and comprehensive validation of a stateful subscription billing workflow. The solution demonstrates API validation, persistence verification, lifecycle management through the State Pattern, webhook processing, repository abstraction, and deterministic integration testing using mocked external dependencies.
