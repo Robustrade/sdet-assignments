@@ -1,7 +1,7 @@
 import crypto from 'crypto';
+import { WEBHOOK_SECRET } from '../utils/config';
 
-export const WEBHOOK_SECRET = 'test_webhook_secret';
-
+/** Create an HMAC-SHA256 hex signature of the raw webhook body. */
 export function createWebhookSignature(rawBody: string) {
   return crypto.createHmac('sha256', WEBHOOK_SECRET).update(rawBody).digest('hex');
 }

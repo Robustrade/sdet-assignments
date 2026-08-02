@@ -4,9 +4,13 @@ import { MockPaymentProvider } from '../../src/infrastructure/MockPaymentProvide
 import { createApp } from '../../src/api/server';
 import http from 'http';
 
+/** Context fixtures made available to Playwright tests. */
 type TestFixtures = {
+  /** In-memory DB adapter instance for test isolation. */
   db: DB;
+  /** Mocked payment provider used to simulate charge outcomes. */
   paymentProvider: MockPaymentProvider;
+  /** URL where the test server is listening (e.g. http://localhost:12345). */
   serverUrl: string;
 };
 

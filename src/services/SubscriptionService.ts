@@ -9,9 +9,18 @@ export interface CreateResult {
   statusCode?: number;
 }
 
+/**
+ * Application service that orchestrates subscription use-cases.
+ * Coordinates domain objects, repository persistence and the payment provider.
+ */
 export class SubscriptionService {
   constructor(private repo: SubscriptionRepository, private paymentProvider: PaymentProvider) {}
 
+  /**
+   * Create a subscription for a customer.
+   * Handles initial charging when the plan has no trial period.
+   * Returns a `CreateResult` containing the subscription or an error and status code.
+   */
   async createSubscription(customerId: string, plan: PlanTier, paymentMethodId: string): Promise<CreateResult> {
     if (!customerId || !plan || !paymentMethodId) {
       return { error: 'Missing required fields', statusCode: 400 };
@@ -64,6 +73,10 @@ export class SubscriptionService {
     return { subscription: sub, statusCode: 201 };
   }
 
+  /**
+   * Change the plan for a subscription. Persists the updated subscription and logs an event.
+   * @throws Error('Not found') if subscription does not exist.
+   */
   async changePlan(subscriptionId: string, newPlan: PlanTier) {
     const sub = this.repo.get(subscriptionId);
     if (!sub) throw new Error('Not found');
@@ -73,6 +86,10 @@ export class SubscriptionService {
     return sub;
   }
 
+  /**
+   * Cancel a subscription immediately and persist the change.
+   * @throws Error('Not found') if subscription does not exist.
+   */
   cancel(subscriptionId: string) {
     const sub = this.repo.get(subscriptionId);
     if (!sub) throw new Error('Not found');
@@ -82,6 +99,11 @@ export class SubscriptionService {
     return sub;
   }
 
+  /**
+   * Handle an inbound webhook payload from the payment provider.
+   * Enforces idempotency and records invoices/events via the repository.
+   * Returns a result object describing the outcome.
+   */
   async handleWebhook(payload: any) {
     const { event_id, type, subscription_id, invoice_id, amount } = payload;
     if (this.repo.isEventProcessed(event_id)) return { status: 'ignored_duplicate' };
