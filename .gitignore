@@ -1,0 +1,18 @@
+# Node
+node_modules/
+
+# Env
+.env
+
+# Test results and artifacts
+test-results/
+
+# Editor
+.vscode/
+.DS_Store
+
+# Build
+dist/
+
+# Cache
+.cache/
