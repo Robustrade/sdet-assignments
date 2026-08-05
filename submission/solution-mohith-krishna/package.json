@@ -1,0 +1,40 @@
+{
+  "name": "wallet-transfer-tests",
+  "version": "1.0.0",
+  "description": "Automated test suite for Wallet Transfer Service — SDET Assignment",
+  "scripts": {
+    "test": "jest --forceExit",
+    "test:reliability": "jest --forceExit --testPathPattern=reliability",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
+  },
+  "keywords": [
+    "sdet",
+    "testing",
+    "wallet"
+  ],
+  "author": "Mohith Krishna",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/supertest": "^6.0.2",
+    "@types/uuid": "^9.0.8",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "@types/better-sqlite3": "^7.6.9",
+    "express": "^4.19.0",
+    "uuid": "^9.0.1"
+  },
+  "allowScripts": {
+    "better-sqlite3@11.10.0": true
+  }
+}
