@@ -1,0 +1,20 @@
+{
+  "name": "wallet-transfer-sdet-solution",
+  "version": "1.0.0",
+  "description": "SDET assignment — Wallet Transfer Service test suite by Parimal Jagtap",
+  "scripts": {
+    "start:service": "node service/server.js",
+    "test": "playwright test",
+    "test:api": "playwright test tests/api",
+    "test:db": "playwright test tests/database",
+    "test:e2e": "playwright test tests/e2e",
+    "test:concurrency": "playwright test tests/concurrency",
+    "test:component": "playwright test tests/component",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
