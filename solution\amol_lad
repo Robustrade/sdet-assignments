@@ -1,0 +1,206 @@
+import io.restassured.response.Response;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class WalletTransferTests {
+
+    // -------------------------------
+    // Happy Path + API + DB Validation
+    // -------------------------------
+    @Test
+    public void verifySuccessfulTransfer() {
+
+        double senderBefore = DBUtils.getBalance("W1001");
+        double receiverBefore = DBUtils.getBalance("W1002");
+
+        Response response = TransferClient.transfer(
+                "W1001",
+                "W1002",
+                500,
+                "INR");
+
+        Assert.assertEquals(response.getStatusCode(), 201);
+
+        String transferId =
+                response.jsonPath().getString("transferId");
+
+        double senderAfter = DBUtils.getBalance("W1001");
+        double receiverAfter = DBUtils.getBalance("W1002");
+
+        // DB Validation
+        Assert.assertEquals(senderAfter, senderBefore - 500);
+        Assert.assertEquals(receiverAfter, receiverBefore + 500);
+
+        // Fund Conservation Validation
+        Assert.assertEquals(
+                senderBefore + receiverBefore,
+                senderAfter + receiverAfter);
+
+        // Transaction Status Validation
+        Assert.assertEquals(
+                DBUtils.getTransferStatus(transferId),
+                "COMPLETED");
+    }
+
+    // -------------------------------
+    // Insufficient Balance Validation
+    // -------------------------------
+    @Test
+    public void verifyInsufficientBalance() {
+
+        Response response = TransferClient.transfer(
+                "EMPTY_WALLET",
+                "W1002",
+                1000,
+                "INR");
+
+        Assert.assertEquals(response.getStatusCode(), 422);
+    }
+
+    // -------------------------------
+    // Duplicate / Idempotency Validation
+    // -------------------------------
+    @Test
+    public void verifyIdempotency() {
+
+        String key = "IDEMP-1001";
+
+        Response first =
+                TransferClient.transferWithKey(
+                        "W1001",
+                        "W1002",
+                        100,
+                        key);
+
+        Response second =
+                TransferClient.transferWithKey(
+                        "W1001",
+                        "W1002",
+                        100,
+                        key);
+
+        Assert.assertEquals(
+                first.jsonPath().getString("transferId"),
+                second.jsonPath().getString("transferId"));
+    }
+
+    // -------------------------------
+    // Retry Validation
+    // -------------------------------
+    @Test
+    public void verifyRetryHandling() {
+
+        String key = "RETRY-1001";
+
+        Response first =
+                TransferClient.transferWithKey(
+                        "W1001",
+                        "W1002",
+                        100,
+                        key);
+
+        Response retry =
+                TransferClient.transferWithKey(
+                        "W1001",
+                        "W1002",
+                        100,
+                        key);
+
+        Assert.assertEquals(
+                first.jsonPath().getString("transferId"),
+                retry.jsonPath().getString("transferId"));
+    }
+
+    // -------------------------------
+    // Negative Validation
+    // -------------------------------
+    @Test
+    public void verifyInvalidAmount() {
+
+        Response response =
+                TransferClient.transfer(
+                        "W1001",
+                        "W1002",
+                        -100,
+                        "INR");
+
+        Assert.assertEquals(response.getStatusCode(), 400);
+    }
+
+    // -------------------------------
+    // Partial Failure Validation
+    // -------------------------------
+    @Test
+    public void verifyRollbackScenario() {
+
+        Response response =
+                TransferClient.transfer(
+                        "W1001",
+                        "INVALID_WALLET",
+                        500,
+                        "INR");
+
+        Assert.assertTrue(
+                response.getStatusCode() == 400
+                        || response.getStatusCode() == 404);
+
+        // Ensure sender balance unchanged
+        Assert.assertEquals(
+                DBUtils.getBalance("W1001"),
+                DBUtils.getOriginalBalance("W1001"));
+    }
+
+    // -------------------------------
+    // Concurrency Validation
+    // -------------------------------
+    @Test(threadPoolSize = 5, invocationCount = 5)
+    public void verifyConcurrentTransfers() {
+
+        Response response =
+                TransferClient.transfer(
+                        "W1001",
+                        "W1002",
+                        100,
+                        "INR");
+
+        Assert.assertTrue(
+                response.getStatusCode() == 201
+                        || response.getStatusCode() == 422);
+    }
+
+    // -------------------------------
+    // Audit Validation
+    // -------------------------------
+    @Test
+    public void verifyAuditRecordCreated() {
+
+        String transferId =
+                TransferClient.transfer(
+                        "W1001",
+                        "W1002",
+                        100,
+                        "INR")
+                        .jsonPath()
+                        .getString("transferId");
+
+        Assert.assertTrue(
+                DBUtils.auditRecordExists(transferId));
+    }
+
+    // -------------------------------
+    // Correlation ID Validation
+    // -------------------------------
+    @Test
+    public void verifyCorrelationIdPresent() {
+
+        Response response =
+                TransferClient.transfer(
+                        "W1001",
+                        "W1002",
+                        100,
+                        "INR");
+
+        Assert.assertNotNull(
+                response.getHeader("Correlation-Id"));
+    }
+}
