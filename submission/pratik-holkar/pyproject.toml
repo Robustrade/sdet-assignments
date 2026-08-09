@@ -1,0 +1,23 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["step_definitions"]
+markers = [
+    "happy: happy-path transfer scenarios",
+    "validation: payload validation failures",
+    "insufficient: insufficient balance rejection scenarios",
+    "idempotency: idempotency-key replay and conflict scenarios",
+    "reliability: concurrency / retry-safety scenarios",
+    "concurrency: scenarios that run threads in parallel",
+    "api: scenarios verifying API contract",
+    "db: scenarios verifying persistence",
+    "boundary: edge-of-balance scenarios",
+    "invariant: properties that must hold for any valid sequence",
+    "property: hypothesis-driven property tests",
+]
+
+[tool.ruff]
+line-length = 100
+exclude = ["plugins/templates"]
+
+[tool.black]
+line-length = 100

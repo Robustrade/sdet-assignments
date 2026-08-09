@@ -1,0 +1,68 @@
+cases:
+  - id: missing_source
+    tags: [validation, api]
+    request:
+      payload: {dest_wallet_id: acc_beta, amount_minor: 100, currency: USD}
+    expected: {status: 422, error: missing_fields}
+
+  - id: missing_destination
+    tags: [validation, api]
+    request:
+      payload: {source_wallet_id: acc_alpha, amount_minor: 100, currency: USD}
+    expected: {status: 422, error: missing_fields}
+
+  - id: missing_amount
+    tags: [validation, api]
+    request:
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_beta, currency: USD}
+    expected: {status: 422, error: missing_fields}
+
+  - id: missing_currency
+    tags: [validation, api]
+    request:
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_beta, amount_minor: 100}
+    expected: {status: 422, error: missing_fields}
+
+  - id: unsupported_currency
+    tags: [validation, api]
+    request:
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_beta, amount_minor: 100, currency: XYZ}
+    expected: {status: 422, error: unsupported_currency}
+
+  - id: negative_amount
+    tags: [validation, api]
+    request:
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_beta, amount_minor: -100, currency: USD}
+    expected: {status: 422, error: invalid_amount}
+
+  - id: zero_amount
+    tags: [validation, api]
+    request:
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_beta, amount_minor: 0, currency: USD}
+    expected: {status: 422, error: invalid_amount}
+
+  - id: amount_above_cap
+    tags: [validation, api, boundary]
+    request:
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_beta, amount_minor: 1000000001, currency: USD}
+    expected: {status: 422, error: invalid_amount}
+
+  - id: same_source_and_dest
+    tags: [validation, api]
+    request:
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_alpha, amount_minor: 100, currency: USD}
+    expected: {status: 422, error: same_wallet}
+
+  - id: currency_mismatch_with_wallet
+    tags: [validation, api]
+    request:
+      # acc_alpha is USD; sending EUR via it should fail mismatch.
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_beta, amount_minor: 100, currency: EUR}
+    expected: {status: 422, error: currency_mismatch}
+
+  - id: amount_as_float
+    tags: [validation, api]
+    request:
+      # amount_minor must be integer (no fractional minor units).
+      payload: {source_wallet_id: acc_alpha, dest_wallet_id: acc_beta, amount_minor: 100.50, currency: USD}
+    expected: {status: 422, error: invalid_amount}

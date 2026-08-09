@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Wallet Transfer Test Report - {{ env }}</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif; margin: 24px; color:#1f2328; }
+  h1 { margin: 0 0 4px; }
+  .meta { color:#57606a; margin-bottom: 16px; font-size: 13px; }
+  .cards { display:flex; gap:12px; margin-bottom: 20px; flex-wrap:wrap; }
+  .card { padding: 12px 18px; border-radius:8px; min-width: 110px; border:1px solid #d0d7de; }
+  .card .n { font-size: 24px; font-weight:600; }
+  .card .l { font-size: 12px; text-transform:uppercase; color:#57606a; }
+  .pass { background:#dafbe1; }
+  .fail { background:#ffebe9; }
+  .skip { background:#fff8c5; }
+  .err  { background:#ffe3b3; }
+  table { width:100%; border-collapse: collapse; font-size: 13px; }
+  th, td { border-bottom: 1px solid #d0d7de; padding:8px 10px; text-align:left; vertical-align: top; }
+  th { background:#f6f8fa; }
+  tr.row-passed td { background:#f5fff7; }
+  tr.row-failed td { background:#fff5f5; }
+  tr.row-skipped td { background:#fffbe6; }
+  tr.row-error td  { background:#fff5eb; }
+  .toggle { cursor:pointer; color:#0969da; user-select:none; }
+  .steps { display:none; margin: 8px 0 4px; padding:8px 12px; background:#f6f8fa; border-left: 3px solid #d0d7de; }
+  .steps.show { display:block; }
+  .step { padding: 4px 0; border-bottom: 1px dashed #d0d7de; }
+  .step:last-child { border-bottom:none; }
+  .step .name { font-weight:600; }
+  .step .det  { color:#57606a; white-space: pre-wrap; font-family: ui-monospace, Consolas, monospace; font-size:12px; margin-top:2px; }
+  .badge { display:inline-block; padding:2px 6px; border-radius:10px; font-size:11px; font-weight:600; }
+  .b-passed { background:#1f883d; color:#fff; }
+  .b-failed { background:#cf222e; color:#fff; }
+  .b-skipped { background:#9a6700; color:#fff; }
+  .b-error  { background:#bc4c00; color:#fff; }
+  .b-info   { background:#0969da; color:#fff; }
+  .tags { font-size: 11px; color:#57606a; }
+  .err-block { white-space: pre-wrap; background:#fff5f5; border:1px solid #ffcecb;
+               padding:8px; border-radius:6px; font-family: ui-monospace, Consolas, monospace;
+               font-size: 12px; margin-top: 6px; }
+</style>
+</head>
+<body>
+<h1>Wallet Transfer Test Report</h1>
+<div class="meta">
+  Environment: <strong>{{ env }}</strong> &middot;
+  Generated: {{ generated_at }} &middot;
+  Duration: {{ duration_s }}s &middot;
+  Python {{ python_version }}
+</div>
+
+<div class="cards">
+  <div class="card"><div class="n">{{ totals.total }}</div><div class="l">Total</div></div>
+  <div class="card pass"><div class="n">{{ totals.passed }}</div><div class="l">Passed</div></div>
+  <div class="card fail"><div class="n">{{ totals.failed }}</div><div class="l">Failed</div></div>
+  <div class="card err"><div class="n">{{ totals.error }}</div><div class="l">Error</div></div>
+  <div class="card skip"><div class="n">{{ totals.skipped }}</div><div class="l">Skipped</div></div>
+  <div class="card"><div class="n">{{ totals.pass_pct }}%</div><div class="l">Pass rate</div></div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:38%">Test</th>
+      <th>Tags</th>
+      <th style="width:90px">Status</th>
+      <th style="width:80px">Duration</th>
+      <th style="width:110px">Steps (P/F)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in results %}
+    <tr class="row-{{ r.outcome }}">
+      <td>
+        <div class="toggle" onclick="this.parentElement.querySelector('.steps').classList.toggle('show')">
+          &#9656; <strong>{{ r.nodeid }}</strong>
+        </div>
+        <div class="steps">
+          {% if r.steps %}
+            {% for s in r.steps %}
+              <div class="step">
+                <span class="badge b-{{ s.status }}">{{ s.status }}</span>
+                <span class="name">{{ s.name }}</span>
+                <span style="color:#57606a;font-size:11px;">({{ "%.1f"|format(s.duration_ms) }} ms)</span>
+                {% if s.details %}<div class="det">{{ s.details }}</div>{% endif %}
+              </div>
+            {% endfor %}
+          {% else %}
+            <em>No steps recorded.</em>
+          {% endif %}
+          {% if r.longrepr %}
+            <div class="err-block">{{ r.longrepr }}</div>
+          {% endif %}
+        </div>
+      </td>
+      <td><span class="tags">{{ r.tags|join(", ") }}</span></td>
+      <td><span class="badge b-{{ r.outcome }}">{{ r.outcome }}</span></td>
+      <td>{{ "%.3f"|format(r.duration_s) }}s</td>
+      <td>{{ r.passed_steps }} / {{ r.failed_steps }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</body>
+</html>

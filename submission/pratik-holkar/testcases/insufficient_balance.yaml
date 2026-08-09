@@ -1,0 +1,34 @@
+cases:
+  - id: one_minor_over_balance
+    tags: [insufficient, api, db]
+    request:
+      payload:
+        source_wallet_id: acc_alpha
+        dest_wallet_id: acc_beta
+        amount_minor: 5000001
+        currency: USD
+      idem: insuf-1
+    expected:
+      status: 422
+      error: insufficient_balance
+      src_balance: 5000000
+      dst_balance: 2500000
+      transfer_count: 0
+      ledger_count: 0
+
+  - id: zero_balance_wallet_cannot_send
+    tags: [insufficient, api, db]
+    request:
+      payload:
+        source_wallet_id: acc_gamma
+        dest_wallet_id: acc_beta
+        amount_minor: 100
+        currency: USD
+      idem: insuf-2
+    expected:
+      status: 422
+      error: insufficient_balance
+      src_balance: 0
+      dst_balance: 2500000
+      transfer_count: 0
+      ledger_count: 0
