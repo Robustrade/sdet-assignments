@@ -1,0 +1,39 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------< com.robustrade:wallet-transfer-sdet >-----------------
+[INFO] Building wallet-transfer-sdet 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.7.0:tree (default-cli) @ wallet-transfer-sdet ---
+[INFO] com.robustrade:wallet-transfer-sdet:jar:1.0.0
+[INFO] +- com.h2database:h2:jar:2.2.224:compile
+[INFO] +- com.fasterxml.jackson.core:jackson-databind:jar:2.17.0:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.17.0:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-core:jar:2.17.0:compile
+[INFO] |  \- net.bytebuddy:byte-buddy:jar:1.14.9:compile
+[INFO] +- io.rest-assured:rest-assured:jar:5.4.0:test
+[INFO] |  +- org.apache.groovy:groovy:jar:4.0.16:test
+[INFO] |  +- org.apache.groovy:groovy-xml:jar:4.0.16:test
+[INFO] |  +- org.apache.httpcomponents:httpclient:jar:4.5.13:test
+[INFO] |  |  +- org.apache.httpcomponents:httpcore:jar:4.4.13:test
+[INFO] |  |  +- commons-logging:commons-logging:jar:1.2:test
+[INFO] |  |  \- commons-codec:commons-codec:jar:1.11:test
+[INFO] |  +- org.apache.httpcomponents:httpmime:jar:4.5.13:test
+[INFO] |  +- org.hamcrest:hamcrest:jar:2.2:test
+[INFO] |  +- org.ccil.cowan.tagsoup:tagsoup:jar:1.2.1:test
+[INFO] |  +- io.rest-assured:json-path:jar:5.4.0:test
+[INFO] |  |  +- org.apache.groovy:groovy-json:jar:4.0.16:test
+[INFO] |  |  \- io.rest-assured:rest-assured-common:jar:5.4.0:test
+[INFO] |  \- io.rest-assured:xml-path:jar:5.4.0:test
+[INFO] |     \- org.apache.commons:commons-lang3:jar:3.11:test
+[INFO] \- org.testng:testng:jar:7.9.0:test
+[INFO]    +- org.slf4j:slf4j-api:jar:1.7.36:test
+[INFO]    +- com.beust:jcommander:jar:1.82:test
+[INFO]    \- org.webjars:jquery:jar:3.7.1:test
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.768 s
+[INFO] Finished at: 2026-07-17T08:37:26+05:30
+[INFO] ------------------------------------------------------------------------

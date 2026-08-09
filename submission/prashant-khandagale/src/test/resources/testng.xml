@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="WalletTransferServiceSuite" verbose="1">
+
+    <test name="WalletTransferServiceTests">
+        <classes>
+            <class name="com.robustrade.wallet.tests.ApiContractTests"/>
+            <class name="com.robustrade.wallet.tests.DatabaseVerificationTests"/>
+            <class name="com.robustrade.wallet.tests.EndToEndFlowTests"/>
+            <class name="com.robustrade.wallet.tests.ConcurrencyReliabilityTests"/>
+            <class name="com.robustrade.wallet.tests.ComponentInteractionTests"/>
+        </classes>
+    </test>
+
+</suite>
