@@ -1,0 +1,10 @@
+node_modules/
+dist/
+
+# Playwright artifacts
+playwright-report/
+test-results/
+.test-env.json
+
+# OS
+.DS_Store
