@@ -1,0 +1,20 @@
+{
+  "name": "wallet-transfer-tests",
+  "version": "1.0.0",
+  "description": "Wallet Transfer Service - Playwright API Test Suite",
+  "scripts": {
+    "start:server": "node src/server.js",
+    "test": "npx playwright test --reporter=list",
+    "test:api": "npx playwright test tests/api --reporter=list",
+    "test:db": "npx playwright test tests/db --reporter=list",
+    "test:e2e": "npx playwright test tests/e2e --reporter=list",
+    "test:concurrency": "npx playwright test tests/concurrency --reporter=list"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+}
