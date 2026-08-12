@@ -5,7 +5,7 @@ Implemented a TypeScript/Jest automated validation solution for a Subscription &
 ## Test Strategy
 
 - Levels covered: API tests, application service tests, state-machine tests, persistence repository tests, and mock-provider tests.
-- In scope: subscription creation, retrieval, cancellation, plan-specific immediate charging, payment success/decline/timeout behavior, signed webhook validation, malformed webhook payloads, duplicate webhook delivery, out-of-order webhook delivery, refund handling, and persistence verification.
+- In scope: subscription creation, retrieval, cancellation, plan-specific immediate charging, payment success/decline/timeout behavior, multiple successful payments, wrong-amount webhook rejection, signed webhook validation, malformed webhook payloads, duplicate webhook delivery, out-of-order webhook delivery, refund handling, and persistence verification.
 - Out of scope: real database setup, real payment-provider integration, frontend/UI, concurrency/racing webhook delivery, full customer-management service, duration-based pricing, taxation, proration, and production-grade observability.
 - What is real vs stubbed/mocked: Express routes, lifecycle rules, HMAC-style validation, services, and repositories are real fixture code. The payment provider is mocked through `MockPaymentProvider`. Persistence is in-memory. Customer existence is simplified to non-empty `customer_id` validation.
 
@@ -50,6 +50,7 @@ Failure scenarios covered:
 - Invalid webhook type
 - Invalid currency
 - Invalid amount
+- Validly signed webhook with an amount that does not match the subscription plan price
 - Unknown subscription in a validly signed webhook
 
 ## Database Validation Approach
@@ -67,6 +68,8 @@ Invariants asserted:
 - API-visible subscription state matches repository state.
 - A `basic` subscription starts `trialing` and does not call the payment provider.
 - A `pro` subscription charges with the expected amount and moves according to provider outcome.
+- Multiple successful payments for the same subscription create separate paid invoices when they use different invoice IDs.
+- Signed webhook payments are rejected when their amount/currency does not match the subscription plan price.
 - Canceled subscriptions remain canceled after later webhooks.
 - Duplicate webhook delivery does not reprocess the event.
 - Paid invoices are not regressed by later failed events for the same invoice.
@@ -96,6 +99,14 @@ Tests assert:
 - outcome-specific return values
 
 Webhook simulation is also provided by `MockPaymentProvider` through deterministic payload creation and signature generation. API and service tests use this to send validly signed payloads and intentionally invalid signatures.
+
+Wrong-amount webhook validation is proven by sending a validly signed webhook with a numeric amount that does not match the subscription plan price and asserting:
+
+- HTTP 400 at the API layer
+- a meaningful amount mismatch message
+- no invoice is persisted
+- no webhook event is persisted
+- subscription state remains unchanged
 
 Webhook idempotency is proven by processing the same `event_id` twice and asserting:
 
@@ -138,6 +149,7 @@ These tests assert both `canTransition()` and `transition()` behavior. Applicati
 The suite is organized by responsibility:
 
 - API tests use Supertest for HTTP contract and end-to-end API-to-persistence flows.
+- Integration tests exercise complete subscription, webhook, and persistence flows through the HTTP boundary.
 - Application service tests validate subscription and webhook business workflows.
 - State-machine tests validate lifecycle rules directly and compactly with parameterized test data.
 - Persistence tests validate repository behavior in isolation.
@@ -159,7 +171,7 @@ Results:
 
 ```text
 9 test suites passed
-131 tests passed
+137 tests passed
 TypeScript build passed
 ```
 
@@ -192,4 +204,3 @@ There is no separate lint script or schema validation script in this fixture.
 - [x] At least two invalid transitions are proven impossible
 - [x] Webhook idempotency (duplicate `event_id`) is tested
 - [ ] README was tested from a clean setup
-

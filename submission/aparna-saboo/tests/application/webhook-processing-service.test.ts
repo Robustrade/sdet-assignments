@@ -133,6 +133,53 @@ describe('WebhookProcessingService', () => {
     expect(subscriptionRepo.findById('sub_001')?.status).toBe('active');
   });
 
+  it('persists separate paid invoices for separate successful payments on the same subscription', () => {
+    const subscriptionRepo = new InMemorySubscriptionRepository();
+    const invoiceRepo = new InMemoryInvoiceRepository();
+    const webhookRepo = new InMemoryWebhookEventRepository();
+    const service = new WebhookProcessingService(subscriptionRepo, invoiceRepo, webhookRepo);
+
+    subscriptionRepo.save(makeSubscription({ status: 'active' }));
+
+    service.processWebhook(
+      makeEvent({ eventId: 'evt_payment_001', invoiceId: 'inv_payment_001', type: 'payment.succeeded' }),
+      4900,
+      'USD',
+    );
+    service.processWebhook(
+      makeEvent({ eventId: 'evt_payment_002', invoiceId: 'inv_payment_002', type: 'payment.succeeded' }),
+      4900,
+      'USD',
+    );
+
+    expect(invoiceRepo.findById('inv_payment_001')).toMatchObject({ amount: 4900, status: 'paid' });
+    expect(invoiceRepo.findById('inv_payment_002')).toMatchObject({ amount: 4900, status: 'paid' });
+    expect(webhookRepo.findByEventId('evt_payment_001')).toMatchObject({ invoiceId: 'inv_payment_001' });
+    expect(webhookRepo.findByEventId('evt_payment_002')).toMatchObject({ invoiceId: 'inv_payment_002' });
+    expect(subscriptionRepo.findById('sub_001')?.status).toBe('active');
+  });
+
+  it('rejects a webhook payment amount that does not match the subscription plan price', () => {
+    const subscriptionRepo = new InMemorySubscriptionRepository();
+    const invoiceRepo = new InMemoryInvoiceRepository();
+    const webhookRepo = new InMemoryWebhookEventRepository();
+    const service = new WebhookProcessingService(subscriptionRepo, invoiceRepo, webhookRepo);
+
+    subscriptionRepo.save(makeSubscription({ status: 'trialing', plan: 'pro' }));
+
+    expect(() =>
+      service.processWebhook(
+        makeEvent({ eventId: 'evt_wrong_amount', invoiceId: 'inv_wrong_amount', type: 'payment.succeeded' }),
+        100,
+        'USD',
+      ),
+    ).toThrow(/does not match pro plan price/i);
+
+    expect(subscriptionRepo.findById('sub_001')?.status).toBe('trialing');
+    expect(invoiceRepo.findById('inv_wrong_amount')).toBeUndefined();
+    expect(webhookRepo.findByEventId('evt_wrong_amount')).toBeUndefined();
+  });
+
   it('keeps an already active subscription active for payment.succeeded', () => {
     const subscriptionRepo = new InMemorySubscriptionRepository();
     const invoiceRepo = new InMemoryInvoiceRepository();

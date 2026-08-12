@@ -293,6 +293,7 @@ describe('subscription api', () => {
       event_id: 'evt_duplicate_test',
       subscription_id: created.id,
       invoice_id: 'inv_duplicate',
+      amount: 2900,
     });
     const signature = provider.signWebhookPayload(payload);
 
@@ -520,6 +521,7 @@ describe('subscription api', () => {
       type: 'payment.succeeded',
       subscription_id: created.id,
       invoice_id: 'inv_canceled_subscription',
+      amount: 2900,
     });
     const signature = provider.signWebhookPayload(payload);
 
@@ -532,6 +534,93 @@ describe('subscription api', () => {
     expect(response.body).toEqual({ processed: true, duplicate: false });
     expect(testApp.locals.subscriptionRepository.findById(created.id)?.status).toBe('canceled');
     expect(testApp.locals.invoiceRepository.findById('inv_canceled_subscription')?.status).toBe('paid');
+  });
+
+  it('processes multiple successful payments as separate paid invoices for the same subscription', async () => {
+    const testApp = createApp();
+    const provider = new MockPaymentProvider();
+    const subscriptionApp = testApp.locals.subscriptionService;
+    const created = await subscriptionApp.createSubscription({
+      customerId: 'cust_multiple_payments',
+      plan: 'pro',
+      paymentMethodId: 'pm_test_visa_4242',
+    });
+
+    const firstPayload = provider.createWebhookPayload({
+      event_id: 'evt_multi_payment_001',
+      type: 'payment.succeeded',
+      subscription_id: created.id,
+      invoice_id: 'inv_multi_payment_001',
+      amount: 4900,
+      currency: 'USD',
+    });
+    const secondPayload = provider.createWebhookPayload({
+      event_id: 'evt_multi_payment_002',
+      type: 'payment.succeeded',
+      subscription_id: created.id,
+      invoice_id: 'inv_multi_payment_002',
+      amount: 4900,
+      currency: 'USD',
+    });
+
+    await request(testApp)
+      .post('/webhooks/payment-provider')
+      .set('X-Provider-Signature', provider.signWebhookPayload(firstPayload))
+      .send(firstPayload)
+      .expect(200);
+
+    await request(testApp)
+      .post('/webhooks/payment-provider')
+      .set('X-Provider-Signature', provider.signWebhookPayload(secondPayload))
+      .send(secondPayload)
+      .expect(200);
+
+    expect(testApp.locals.invoiceRepository.findById('inv_multi_payment_001')).toMatchObject({
+      amount: 4900,
+      status: 'paid',
+    });
+    expect(testApp.locals.invoiceRepository.findById('inv_multi_payment_002')).toMatchObject({
+      amount: 4900,
+      status: 'paid',
+    });
+    expect(testApp.locals.webhookEventRepository.findByEventId('evt_multi_payment_001')).toMatchObject({
+      invoiceId: 'inv_multi_payment_001',
+    });
+    expect(testApp.locals.webhookEventRepository.findByEventId('evt_multi_payment_002')).toMatchObject({
+      invoiceId: 'inv_multi_payment_002',
+    });
+    expect(testApp.locals.subscriptionRepository.findById(created.id)?.status).toBe('active');
+  });
+
+  it('rejects a validly signed webhook when the amount does not match the subscription plan', async () => {
+    const testApp = createApp();
+    const provider = new MockPaymentProvider();
+    const subscriptionApp = testApp.locals.subscriptionService;
+    const created = await subscriptionApp.createSubscription({
+      customerId: 'cust_wrong_amount',
+      plan: 'pro',
+      paymentMethodId: 'pm_test_visa_4242',
+    });
+
+    const payload = provider.createWebhookPayload({
+      event_id: 'evt_wrong_amount',
+      type: 'payment.succeeded',
+      subscription_id: created.id,
+      invoice_id: 'inv_wrong_amount',
+      amount: 100,
+      currency: 'USD',
+    });
+
+    const response = await request(testApp)
+      .post('/webhooks/payment-provider')
+      .set('X-Provider-Signature', provider.signWebhookPayload(payload))
+      .send(payload)
+      .expect(400);
+
+    expect(response.body.message).toMatch(/does not match pro plan price/i);
+    expect(testApp.locals.subscriptionRepository.findById(created.id)?.status).toBe('active');
+    expect(testApp.locals.invoiceRepository.findById('inv_wrong_amount')).toBeUndefined();
+    expect(testApp.locals.webhookEventRepository.findByEventId('evt_wrong_amount')).toBeUndefined();
   });
 
   it('does not regress an active subscription when a payment.failed webhook arrives after a successful invoice', async () => {

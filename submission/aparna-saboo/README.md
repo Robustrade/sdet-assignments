@@ -40,6 +40,7 @@ tests/
   application/               Service-level workflow tests
   builders/                  Test data builder
   fixtures/                  Test fixture helpers
+  integration/               End-to-end API, webhook, and persistence flows
   payment/                   Mock provider behavior tests
   persistence/               Repository tests
   state/                     State-machine transition tests
@@ -51,7 +52,7 @@ The suite validates behavior at multiple layers:
 
 - API level: subscription creation, retrieval, cancellation, validation errors, webhook endpoint responses, signature handling, and malformed payload handling.
 - State-machine level: all valid lifecycle transitions and invalid transitions such as canceled-to-active and active-to-trialing.
-- Application workflow level: payment success, decline, timeout, cancellation, duplicate webhooks, stale webhook ordering, refund handling, and repository side effects.
+- Application workflow level: payment success, decline, timeout, cancellation, multiple successful payments, wrong-amount webhooks, duplicate webhooks, stale webhook ordering, refund handling, and repository side effects.
 - Persistence level: subscriptions, invoices, and webhook events are checked through repository interfaces.
 - External-integration level: the payment provider is represented by a mockable `PaymentProvider` interface and `MockPaymentProvider` implementation.
 
@@ -92,6 +93,8 @@ Mocked or simplified:
 - Canceling an already canceled subscription is rejected.
 - A canceled subscription is terminal and cannot be reactivated by webhooks.
 - Duplicate webhook delivery with the same `event_id` is idempotent.
+- Multiple successful payments with different invoice IDs are persisted as separate paid invoices for the same subscription.
+- Signed webhook payments with amounts that do not match the subscription plan price are rejected before invoice or event persistence.
 - A later failed webhook for an already paid invoice does not regress invoice or subscription state.
 - A failed invoice can later become paid when a valid success event arrives.
 - Refunds update invoice state without inventing a refunded subscription state.
@@ -119,6 +122,6 @@ Result:
 
 ```text
 9 test suites passed
-131 tests passed
+137 tests passed
 TypeScript build passed
 ```

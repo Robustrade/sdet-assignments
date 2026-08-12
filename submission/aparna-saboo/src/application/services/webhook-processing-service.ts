@@ -2,6 +2,7 @@ import type { CurrencyCode, Subscription } from '../../domain/models/subscriptio
 import type { Invoice, InvoiceStatus } from '../../domain/models/invoice';
 import type { WebhookEvent, WebhookEventType } from '../../domain/models/webhook-event';
 import { subscriptionStateMachine } from '../../domain/state/subscription-state';
+import { PLAN_CATALOG } from '../../domain/models/plan-catalog';
 import type { InvoiceRepository } from '../ports/invoice-repository';
 import type { SubscriptionRepository } from '../ports/subscription-repository';
 import type { WebhookEventRepository } from '../ports/webhook-event-repository';
@@ -29,6 +30,8 @@ export class WebhookProcessingService {
       throw new Error(`Subscription not found: ${event.subscriptionId}`);
     }
 
+    this.assertWebhookAmountMatchesPlan(subscription, amount, currency);
+
     const invoice = this.invoiceRepository.findById(event.invoiceId);
     const nextInvoiceStatus = this.resolveInvoiceStatus(invoice?.status, event.type);
     const invoiceStatusChanged = invoice ? invoice.status !== nextInvoiceStatus : true;
@@ -53,6 +56,16 @@ export class WebhookProcessingService {
     this.webhookEventRepository.save(event);
 
     return { processed: true, duplicate: false };
+  }
+
+  private assertWebhookAmountMatchesPlan(subscription: Subscription, amount: number, currency: CurrencyCode): void {
+    const plan = PLAN_CATALOG[subscription.plan];
+
+    if (amount !== plan.price || currency !== plan.currency) {
+      throw new Error(
+        `Webhook amount ${amount} ${currency} does not match ${subscription.plan} plan price ${plan.price} ${plan.currency}`,
+      );
+    }
   }
 
   private resolveInvoiceStatus(currentStatus: InvoiceStatus | undefined, eventType: WebhookEventType): InvoiceStatus {

@@ -1,9 +1,9 @@
 import {
   type Plan,
-  type PlanName,
   type Subscription,
   type SubscriptionStatus,
 } from '../../domain/models/subscription';
+import { PLAN_CATALOG } from '../../domain/models/plan-catalog';
 import { subscriptionStateMachine } from '../../domain/state/subscription-state';
 import type { PaymentProvider } from '../ports/payment-provider';
 import type { SubscriptionRepository } from '../ports/subscription-repository';
@@ -20,23 +20,6 @@ export interface SubscriptionService {
   cancelSubscription(id: string): Promise<Subscription>;
 }
 
-const PLAN_CATALOG: Record<PlanName, Plan> = {
-  basic: {
-    name: 'basic',
-    price: 2900,
-    currency: 'USD',
-    trialLengthDays: 14,
-    chargesImmediately: false,
-  },
-  pro: {
-    name: 'pro',
-    price: 4900,
-    currency: 'USD',
-    trialLengthDays: 14,
-    chargesImmediately: true,
-  },
-};
-
 export class DefaultSubscriptionService implements SubscriptionService {
   constructor(
     private readonly repository: SubscriptionRepository,
@@ -50,7 +33,7 @@ export class DefaultSubscriptionService implements SubscriptionService {
       throw new Error(`Unknown plan: ${planName}`);
     }
 
-    return PLAN_CATALOG[normalizedPlan as PlanName];
+    return PLAN_CATALOG[normalizedPlan as keyof typeof PLAN_CATALOG];
   }
 
   private getNowIso(): string {
