@@ -1,0 +1,282 @@
+{
+  "users": [
+    {
+      "id": "user-001",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "status": "active"
+    },
+    {
+      "id": "user-002",
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "status": "active"
+    },
+    {
+      "name": "Test User pUYQZ",
+      "email": "test_1786818968606_Rwl33@example.com",
+      "id": "efzXEDx5Dd8"
+    },
+    {
+      "name": "Test User vZybO",
+      "email": "test_1786818993915_Kl3JZ@example.com",
+      "id": "7uMxWmX9tsY"
+    },
+    {
+      "name": "Test User 53TZ2",
+      "email": "test_1786819169025_38JyU@example.com",
+      "id": "gipW7TKIx_4"
+    },
+    {
+      "name": "Test User ApUUx",
+      "email": "test_1786819191081_nYNq4@example.com",
+      "id": "M2y9LsUD7D4"
+    },
+    {
+      "name": "Test User 9BTlC",
+      "email": "test_1786819289209_dyFfx@example.com",
+      "id": "9sjE8dV2O48"
+    },
+    {
+      "name": "Test User kjtdr",
+      "email": "test_1786819645718_HWgK8@example.com",
+      "id": "Kvhmyt11aI0"
+    },
+    {
+      "name": "Test User Ea3wX",
+      "email": "test_1786822467718_BbVB0@example.com",
+      "id": "eNQUrWGib8w"
+    },
+    {
+      "name": "Test User APdTG",
+      "email": "test_1786822488556_RTds6@example.com",
+      "id": "d3shUIEcrrE"
+    },
+    {
+      "name": "Test User xLHRD",
+      "email": "test_1786823482331_L45Vg@example.com",
+      "id": "0fRhlGfq_Q0"
+    },
+    {
+      "name": "Test User UhpZ7",
+      "email": "test_1786866467381_0Uxzu@example.com",
+      "id": "ucBy62k4ir8"
+    },
+    {
+      "name": "Test User tCCu3",
+      "email": "test_1786866491813_30TSO@example.com",
+      "id": "y5nxNPmdWSI"
+    },
+    {
+      "name": "Test User o3jjn",
+      "email": "test_1786866513023_x99ZG@example.com",
+      "id": "3uDm7gu2EhU"
+    },
+    {
+      "name": "Test User 1x6OB",
+      "email": "test_1786885452593_I6zNH@example.com",
+      "id": "w060sAnhl3g"
+    },
+    {
+      "name": "Test User vnZ7b",
+      "email": "test_1786886684043_iErDq@example.com",
+      "id": "Xfka-TA5PWI"
+    },
+    {
+      "name": "Test User yYFKq",
+      "email": "test_1786886703838_PDv0Y@example.com",
+      "id": "sjsDcbCKaIs"
+    },
+    {
+      "name": "Test User jmARD",
+      "email": "test_1786886715646_5MlyF@example.com",
+      "id": "fWDKFY6nOn0"
+    },
+    {
+      "name": "Test User HfVgD",
+      "email": "test_1786888626895_J968z@example.com",
+      "id": "38iX7SqMSqk"
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "sub-001",
+      "userId": "user-001",
+      "plan": "Premium",
+      "status": "Active",
+      "startDate": "2024-01-01",
+      "endDate": "2024-12-31"
+    },
+    {
+      "id": "sub-002",
+      "userId": "user-002",
+      "plan": "Basic",
+      "status": "Active",
+      "startDate": "2024-02-01",
+      "endDate": "2025-02-01"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "8Qp0_ApTkps"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "3QEOHPCMp4s"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "VFRxinDlI5A"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "LM2j6rerKEg"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "dcqePbyqdr4"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "0dmjZRLHDOc"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "IMj8TX7RuTE"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "D8hG4hKhcpE"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "8_hTQUFB-Gk"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "rJKIUIFNXBc"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "vvHhveGuvsI"
+    },
+    {
+      "userId": "test-user-id",
+      "plan": "basic",
+      "id": "5aNYUOSl76E"
+    }
+  ],
+  "billing": [
+    {
+      "id": "bill-001",
+      "userId": "user-001",
+      "subscriptionId": "sub-001",
+      "amount": 99.99,
+      "date": "2024-01-01",
+      "status": "paid"
+    },
+    {
+      "id": "bill-002",
+      "userId": "user-002",
+      "subscriptionId": "sub-002",
+      "amount": 49.99,
+      "date": "2024-02-01",
+      "status": "paid"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 395,
+      "currency": "USD",
+      "id": "BgFntyB3vBk"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 55,
+      "currency": "USD",
+      "id": "SaLShmbt9gc"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 833,
+      "currency": "USD",
+      "id": "W5sctksD6Og"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 844,
+      "currency": "USD",
+      "id": "M1db5WI_5r0"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 351,
+      "currency": "USD",
+      "id": "LDiDVpA2-6k"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 962,
+      "currency": "USD",
+      "id": "Y3LsWytLYzA"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 803,
+      "currency": "USD",
+      "id": "MI7kA9jAxUg"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 792,
+      "currency": "USD",
+      "id": "gn4mht6b6qk"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 292,
+      "currency": "USD",
+      "id": "cMaGt2AsrFA"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 250,
+      "currency": "USD",
+      "id": "j6Gd24LQonM"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 18,
+      "currency": "USD",
+      "id": "TeSHqbQgZqc"
+    },
+    {
+      "userId": "test-user-id",
+      "subscriptionId": "test-subscription-id",
+      "amount": 402,
+      "currency": "USD",
+      "id": "uDw6fFp2hwc"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

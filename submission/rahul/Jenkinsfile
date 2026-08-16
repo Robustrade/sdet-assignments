@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    environment {
+        BASE_URL = credentials('subscription-billing-base-url')
+        API_TOKEN = credentials('subscription-billing-api-token')
+        ENVIRONMENT = 'jenkins'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Environment') {
+            steps {
+                bat 'docker --version'
+                bat 'docker compose version'
+                bat 'node --version'
+                bat 'npm --version'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                bat 'docker compose up --build --abort-on-container-exit --exit-code-from api-tests'
+            }
+        }
+    }
+
+    post {
+        always {
+            bat 'docker compose down'
+        }
+    }
+}
