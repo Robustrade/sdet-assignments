@@ -1,0 +1,17 @@
+services:
+  api-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      BASE_URL: ${BASE_URL}
+      API_TOKEN: ${API_TOKEN}
+      ENVIRONMENT: ${ENVIRONMENT:-local}
+      CI: "true"
+
+    volumes:
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+
+    command: npm test

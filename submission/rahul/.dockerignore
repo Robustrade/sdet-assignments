@@ -1,0 +1,9 @@
+node_modules
+.git
+.github
+.env
+playwright-report
+test-results
+dist
+coverage
+*.log
