@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="tests.TransferApiTest" time="8.938" tests="34" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Users\Dell\git\wallet-transfer-tests\target\test-classes;C:\Users\Dell\git\wallet-transfer-tests\target\classes;C:\Users\Dell\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\Dell\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\Dell\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Dell\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\Dell\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Dell\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\Dell\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\Dell\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;C:\Users\Dell\.m2\repository\io\rest-assured\rest-assured\5.3.2\rest-assured-5.3.2.jar;C:\Users\Dell\.m2\repository\org\apache\groovy\groovy\4.0.11\groovy-4.0.11.jar;C:\Users\Dell\.m2\repository\org\apache\groovy\groovy-xml\4.0.11\groovy-xml-4.0.11.jar;C:\Users\Dell\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;C:\Users\Dell\.m2\repository\org\apache\httpcomponents\httpcore\4.4.13\httpcore-4.4.13.jar;C:\Users\Dell\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\Dell\.m2\repository\commons-codec\commons-codec\1.11\commons-codec-1.11.jar;C:\Users\Dell\.m2\repository\org\apache\httpcomponents\httpmime\4.5.13\httpmime-4.5.13.jar;C:\Users\Dell\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;C:\Users\Dell\.m2\repository\org\ccil\cowan\tagsoup\tagsoup\1.2.1\tagsoup-1.2.1.jar;C:\Users\Dell\.m2\repository\io\rest-assured\json-path\5.3.2\json-path-5.3.2.jar;C:\Users\Dell\.m2\repository\org\apache\groovy\groovy-json\4.0.11\groovy-json-4.0.11.jar;C:\Users\Dell\.m2\repository\io\rest-assured\rest-assured-common\5.3.2\rest-assured-common-5.3.2.jar;C:\Users\Dell\.m2\repository\io\rest-assured\xml-path\5.3.2\xml-path-5.3.2.jar;C:\Users\Dell\.m2\repository\org\apache\commons\commons-lang3\3.11\commons-lang3-3.11.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers\2.0.5\testcontainers-2.0.5.jar;C:\Users\Dell\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\Dell\.m2\repository\org\apache\commons\commons-compress\1.28.0\commons-compress-1.28.0.jar;C:\Users\Dell\.m2\repository\commons-io\commons-io\2.20.0\commons-io-2.20.0.jar;C:\Users\Dell\.m2\repository\org\rnorth\duct-tape\duct-tape\1.0.8\duct-tape-1.0.8.jar;C:\Users\Dell\.m2\repository\org\jetbrains\annotations\17.0.0\annotations-17.0.0.jar;C:\Users\Dell\.m2\repository\com\github\docker-java\docker-java-api\3.7.1\docker-java-api-3.7.1.jar;C:\Users\Dell\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.20\jackson-annotations-2.20.jar;C:\Users\Dell\.m2\repository\com\github\docker-java\docker-java-transport-zerodep\3.7.1\docker-java-transport-zerodep-3.7.1.jar;C:\Users\Dell\.m2\repository\com\github\docker-java\docker-java-transport\3.7.1\docker-java-transport-3.7.1.jar;C:\Users\Dell\.m2\repository\net\java\dev\jna\jna\5.18.1\jna-5.18.1.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers-junit-jupiter\2.0.5\testcontainers-junit-jupiter-2.0.5.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers-postgresql\2.0.5\testcontainers-postgresql-2.0.5.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers-jdbc\2.0.5\testcontainers-jdbc-2.0.5.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers-database-commons\2.0.5\testcontainers-database-commons-2.0.5.jar;C:\Users\Dell\.m2\repository\org\postgresql\postgresql\42.7.7\postgresql-42.7.7.jar;C:\Users\Dell\.m2\repository\org\checkerframework\checker-qual\3.49.3\checker-qual-3.49.3.jar;C:\Users\Dell\.m2\repository\org\slf4j\slf4j-simple\1.7.36\slf4j-simple-1.7.36.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="Asia/Calcutta"/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21.0.12\bin"/>
+    <property name="sun.java.command" value="C:\Users\Dell\AppData\Local\Temp\surefire15827776652342271789\surefirebooter-20260830175231894_3.jar C:\Users\Dell\AppData\Local\Temp\surefire15827776652342271789 2026-08-30T17-52-31_691-jvmRun1 surefire-20260830175231894_1tmp surefire_0-20260830175231894_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="C:\Users\Dell\git\wallet-transfer-tests\target\test-classes;C:\Users\Dell\git\wallet-transfer-tests\target\classes;C:\Users\Dell\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\Dell\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\Dell\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Dell\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\Dell\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Dell\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\Dell\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\Dell\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;C:\Users\Dell\.m2\repository\io\rest-assured\rest-assured\5.3.2\rest-assured-5.3.2.jar;C:\Users\Dell\.m2\repository\org\apache\groovy\groovy\4.0.11\groovy-4.0.11.jar;C:\Users\Dell\.m2\repository\org\apache\groovy\groovy-xml\4.0.11\groovy-xml-4.0.11.jar;C:\Users\Dell\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;C:\Users\Dell\.m2\repository\org\apache\httpcomponents\httpcore\4.4.13\httpcore-4.4.13.jar;C:\Users\Dell\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\Dell\.m2\repository\commons-codec\commons-codec\1.11\commons-codec-1.11.jar;C:\Users\Dell\.m2\repository\org\apache\httpcomponents\httpmime\4.5.13\httpmime-4.5.13.jar;C:\Users\Dell\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;C:\Users\Dell\.m2\repository\org\ccil\cowan\tagsoup\tagsoup\1.2.1\tagsoup-1.2.1.jar;C:\Users\Dell\.m2\repository\io\rest-assured\json-path\5.3.2\json-path-5.3.2.jar;C:\Users\Dell\.m2\repository\org\apache\groovy\groovy-json\4.0.11\groovy-json-4.0.11.jar;C:\Users\Dell\.m2\repository\io\rest-assured\rest-assured-common\5.3.2\rest-assured-common-5.3.2.jar;C:\Users\Dell\.m2\repository\io\rest-assured\xml-path\5.3.2\xml-path-5.3.2.jar;C:\Users\Dell\.m2\repository\org\apache\commons\commons-lang3\3.11\commons-lang3-3.11.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers\2.0.5\testcontainers-2.0.5.jar;C:\Users\Dell\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\Dell\.m2\repository\org\apache\commons\commons-compress\1.28.0\commons-compress-1.28.0.jar;C:\Users\Dell\.m2\repository\commons-io\commons-io\2.20.0\commons-io-2.20.0.jar;C:\Users\Dell\.m2\repository\org\rnorth\duct-tape\duct-tape\1.0.8\duct-tape-1.0.8.jar;C:\Users\Dell\.m2\repository\org\jetbrains\annotations\17.0.0\annotations-17.0.0.jar;C:\Users\Dell\.m2\repository\com\github\docker-java\docker-java-api\3.7.1\docker-java-api-3.7.1.jar;C:\Users\Dell\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.20\jackson-annotations-2.20.jar;C:\Users\Dell\.m2\repository\com\github\docker-java\docker-java-transport-zerodep\3.7.1\docker-java-transport-zerodep-3.7.1.jar;C:\Users\Dell\.m2\repository\com\github\docker-java\docker-java-transport\3.7.1\docker-java-transport-3.7.1.jar;C:\Users\Dell\.m2\repository\net\java\dev\jna\jna\5.18.1\jna-5.18.1.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers-junit-jupiter\2.0.5\testcontainers-junit-jupiter-2.0.5.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers-postgresql\2.0.5\testcontainers-postgresql-2.0.5.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers-jdbc\2.0.5\testcontainers-jdbc-2.0.5.jar;C:\Users\Dell\.m2\repository\org\testcontainers\testcontainers-database-commons\2.0.5\testcontainers-database-commons-2.0.5.jar;C:\Users\Dell\.m2\repository\org\postgresql\postgresql\42.7.7\postgresql-42.7.7.jar;C:\Users\Dell\.m2\repository\org\checkerframework\checker-qual\3.49.3\checker-qual-3.49.3.jar;C:\Users\Dell\.m2\repository\org\slf4j\slf4j-simple\1.7.36\slf4j-simple-1.7.36.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\Dell"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2026-07-21"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk-21.0.12"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\Dell\git\wallet-transfer-tests"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\Dell\AppData\Local\Temp\surefire15827776652342271789\surefirebooter-20260830175231894_3.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.12+7-LTS-205"/>
+    <property name="user.name" value="Dell"/>
+    <property name="stdout.encoding" value="Cp1252"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="C:\Users\Dell\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\Dell\AppData\Local\Temp\"/>
+    <property name="java.version" value="21.0.12"/>
+    <property name="user.dir" value="C:\Users\Dell\git\wallet-transfer-tests"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk-21.0.12\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Java\jdk-21.0.12\bin;C:\Users\Dell\Downloads\apache-maven-3.9.14\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Users\Dell\AppData\Local\Programs\Python\Python314\Scripts\;C:\Users\Dell\AppData\Local\Programs\Python\Python314\;C:\Users\Dell\AppData\Local\Microsoft\WindowsApps;C:\Users\Dell\AppData\Local\Programs\Microsoft VS Code\bin;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="Cp1252"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="21.0.12+7-LTS-205"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testMissingIdempotencyKeyThroughApi" classname="tests.TransferApiTest" time="2.188">
+    <system-out><![CDATA[Transfer API started on port 8080
+API test environment ready!
+Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Missing idempotency key response status: 400
+Missing idempotency key response body: {"error":"Idempotency key must not be null or blank"}
+Missing idempotency key handled correctly. Balances remain unchanged!
+]]></system-out>
+  </testcase>
+  <testcase name="testTransferEntireSourceBalanceThroughApi" classname="tests.TransferApiTest" time="0.202">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+Full balance transfer response status: 200
+Full balance transfer response body: {"status":"completed"}
+Entire source wallet balance transferred successfully.
+]]></system-out>
+  </testcase>
+  <testcase name="testSuccessfulTransferThroughApi" classname="tests.TransferApiTest" time="0.214">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+API response status: 200
+API response body: {"status":"completed"}
+API response, wallet balances and transfer database record verified successfully!
+]]></system-out>
+  </testcase>
+  <testcase name="testSuccessfulDecimalTransferThroughApi" classname="tests.TransferApiTest" time="0.184">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+Decimal transfer handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testVeryLongIdempotencyKeyThroughApi" classname="tests.TransferApiTest" time="0.151">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Long idempotency key response status: 400
+Long idempotency key response body: {"error":"ERROR: value too long for type character varying(100)"}
+Very long idempotency key handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testDuplicateTransferThroughApi" classname="tests.TransferApiTest" time="0.193">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+First response: {"status":"completed"}
+Duplicate transfer detected. Transfer ignored.
+Second response: {"status":"completed"}
+Duplicate API request handled correctly with exactly one transfer!
+]]></system-out>
+  </testcase>
+  <testcase name="testTransactionRollbackThroughApi" classname="tests.TransferApiTest" time="0.151">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transaction rollback verified successfully.
+]]></system-out>
+  </testcase>
+  <testcase name="testTransferStatusInDatabase" classname="tests.TransferApiTest" time="0.129">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+Transfer status verified successfully.
+]]></system-out>
+  </testcase>
+  <testcase name="testZeroWalletIdThroughApi" classname="tests.TransferApiTest" time="0.178">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Zero wallet ID response status: 400
+Zero wallet ID response body: {"error":"Source wallet not found: 0"}
+Zero wallet ID handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testNegativeAmountThroughApi" classname="tests.TransferApiTest" time="0.139">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Negative amount handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testMissingSourceWalletIdThroughApi" classname="tests.TransferApiTest" time="0.089">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Missing source wallet ID handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testConcurrentTransfersThroughApi" classname="tests.TransferApiTest" time="0.17">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+Concurrent request 1: 200 - {"status":"completed"}
+Concurrent request 2: 400 - {"error":"Insufficient balance in wallet: 1001"}
+Final source balance: 300.00
+Final destination balance: 1200.00
+Concurrent transfers handled correctly. Wallet was not overdrawn!
+]]></system-out>
+  </testcase>
+  <testcase name="testMalformedJson" classname="tests.TransferApiTest" time="0.139">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Malformed JSON response status: 400
+Malformed JSON response body: {"error":"Malformed JSON request"}
+Malformed JSON handled correctly. Balances unchanged and no transfer record created!
+]]></system-out>
+  </testcase>
+  <testcase name="testSameSourceAndDestinationWalletThroughApi" classname="tests.TransferApiTest" time="0.125">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Same wallet response status: 400
+Same wallet response body: {"error":"Source and destination wallets cannot be the same"}
+Same source and destination wallet handled correctly. Balance unchanged and no transfer record created!
+]]></system-out>
+  </testcase>
+  <testcase name="testUnknownJsonFieldThroughApi" classname="tests.TransferApiTest" time="0.208">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+Unknown field response status: 200
+Unknown field response body: {"status":"completed"}
+Unknown JSON field handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testIdempotencyKeyReuseWithDifferentRequestThroughApi" classname="tests.TransferApiTest" time="0.263">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+First request status: 200
+First request body: {"status":"completed"}
+Duplicate transfer detected. Transfer ignored.
+Second request status: 200
+Second request body: {"status":"completed"}
+Idempotency key reuse handled correctly. Only the original transfer was processed.
+]]></system-out>
+  </testcase>
+  <testcase name="testTransferDetailsInDatabase" classname="tests.TransferApiTest" time="0.12">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+Transfer details verified successfully.
+]]></system-out>
+  </testcase>
+  <testcase name="testMissingDestinationWalletId" classname="tests.TransferApiTest" time="0.149">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Missing destination wallet response status: 400
+Missing destination wallet response body: {"error":"Missing required field: destination_wallet_id"}
+Missing destination wallet ID handled correctly. Balances unchanged and no transfer record created!
+]]></system-out>
+  </testcase>
+  <testcase name="testAmountWithMoreThanTwoDecimalPlaces" classname="tests.TransferApiTest" time="0.151">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Amount with more than two decimal places handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testTransferAmountSlightlyGreaterThanBalanceThroughApi" classname="tests.TransferApiTest" time="0.214">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Balance exceeded response status: 400
+Balance exceeded response body: {"error":"Insufficient balance in wallet: 1001"}
+Transfer exceeding available balance by one cent handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testInvalidSourceWalletIdThroughApi" classname="tests.TransferApiTest" time="0.156">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Invalid source wallet ID response status: 400
+Invalid source wallet ID response body: {"error":"For input string: \"abc\""}
+Invalid source wallet ID handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testMissingSource_WalletIdThroughApi" classname="tests.TransferApiTest" time="0.285">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Missing source wallet ID response status: 400
+Missing source wallet ID response body: {"error":"Missing required field: source_wallet_id"}
+Missing source wallet ID handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testConcurrentDuplicateTransfersThroughApi" classname="tests.TransferApiTest" time="0.469">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+Duplicate transfer detected. Transfer ignored.
+Concurrent response status: 200
+Concurrent response body: {"status":"completed"}
+Duplicate transfer detected. Transfer ignored.
+Duplicate transfer detected. Transfer ignored.
+Duplicate transfer detected. Transfer ignored.
+Concurrent response status: 200
+Concurrent response body: {"status":"completed"}
+Concurrent response status: 200
+Concurrent response body: {"status":"completed"}
+Concurrent response status: 200
+Concurrent response body: {"status":"completed"}
+Concurrent response status: 200
+Concurrent response body: {"status":"completed"}
+Concurrent duplicate requests handled correctly. Exactly one transfer was processed.
+]]></system-out>
+  </testcase>
+  <testcase name="testInsufficientBalanceThroughApi" classname="tests.TransferApiTest" time="0.338">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Insufficient balance response status: 400
+Insufficient balance response body: {"error":"Insufficient balance in wallet: 1001"}
+Insufficient balance handled correctly. Balances unchanged and no transfer record created!
+]]></system-out>
+  </testcase>
+  <testcase name="testMinimumValidTransferAmountThroughApi" classname="tests.TransferApiTest" time="0.162">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Transfer completed successfully!
+Minimum amount response status: 200
+Minimum amount response body: {"status":"completed"}
+Minimum valid transfer amount of 0.01 handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testDestinationWalletNotFoundThroughApi" classname="tests.TransferApiTest" time="0.159">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Destination wallet not found handled correctly and transaction rolled back.
+]]></system-out>
+  </testcase>
+  <testcase name="testBlankIdempotencyKeyThroughApi" classname="tests.TransferApiTest" time="0.134">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Blank idempotency key response status: 400
+Blank idempotency key response body: {"error":"Idempotency key must not be null or blank"}
+Blank idempotency key handled correctly. Balances remain unchanged!
+]]></system-out>
+  </testcase>
+  <testcase name="testZeroAmountThroughApi" classname="tests.TransferApiTest" time="0.17">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Zero amount response status: 400
+Zero amount response body: {"error":"Transfer amount must be greater than zero"}
+Zero amount handled correctly. Balances unchanged and no transfer record created!
+]]></system-out>
+  </testcase>
+  <testcase name="testInvalidAmountThroughApi" classname="tests.TransferApiTest" time="0.167">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Invalid amount response status: 400
+Invalid amount response body: {"error":"Character a is neither a decimal digit number, decimal point, nor \"e\" notation exponential mark."}
+Invalid amount handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testMissingAmountThroughApi" classname="tests.TransferApiTest" time="0.113">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Missing amount handled correctly.
+]]></system-out>
+  </testcase>
+  <testcase name="testSourceWalletNotFound" classname="tests.TransferApiTest" time="0.16">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Source wallet not found response status: 400
+Source wallet not found response body: {"error":"Source wallet not found: 9999"}
+Source wallet not found handled correctly. Destination balance unchanged and no transfer record created!
+]]></system-out>
+  </testcase>
+  <testcase name="testGetMethodNotAllowed" classname="tests.TransferApiTest" time="0.122">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+GET method correctly rejected with 405.
+]]></system-out>
+  </testcase>
+  <testcase name="testMissingContentTypeThroughApi" classname="tests.TransferApiTest" time="0.168">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Missing content type response status: 400
+Missing content type response body: {"error":"Content-Type must be application/json"}
+Missing content type handled correctly. Balances unchanged and no transfer record created!
+]]></system-out>
+  </testcase>
+  <testcase name="testInvalidContentTypeThroughApi" classname="tests.TransferApiTest" time="0.148">
+    <system-out><![CDATA[Test database reset successfully!
+database tables created successfully!
+test wallets created successfully!
+API test database reset successfully!
+Invalid content type response status: 400
+Invalid content type response body: {"error":"Content-Type must be application/json"}
+Invalid content type handled correctly. Balances unchanged and no transfer record created!
+]]></system-out>
+  </testcase>
+</testsuite>
