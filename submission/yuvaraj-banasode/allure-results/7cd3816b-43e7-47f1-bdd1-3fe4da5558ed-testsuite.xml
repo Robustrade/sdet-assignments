@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788242984511' stop='1788242984738'>
+    <name>Persistence Tests Invoice Persistence</name>
+    <title>Persistence Tests Invoice Persistence</title>
+    <test-cases>
+        <test-case start='1788242984511' status='passed' stop='1788242984577'>
+            <name>should persist invoice for trialing subscription</name>
+            <title>should persist invoice for trialing subscription</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242984577' status='passed' stop='1788242984617'>
+            <name>should persist invoice after successful payment webhook</name>
+            <title>should persist invoice after successful payment webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242984617' status='passed' stop='1788242984693'>
+            <name>should not create duplicate invoices for repeated webhook</name>
+            <title>should not create duplicate invoices for repeated webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242984693' status='passed' stop='1788242984738'>
+            <name>should persist failed payment as failed invoice</name>
+            <title>should persist failed payment as failed invoice</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788244152383' stop='1788244152953'>
+    <name>Webhook Idempotency Tests Duplicate Event ID Handling</name>
+    <title>Webhook Idempotency Tests Duplicate Event ID Handling</title>
+    <test-cases>
+        <test-case start='1788244152383' status='passed' stop='1788244152743'>
+            <name>should process same event_id exactly once</name>
+            <title>should process same event_id exactly once</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244152743' status='passed' stop='1788244152808'>
+            <name>should not create duplicate invoice for replay webhook</name>
+            <title>should not create duplicate invoice for replay webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244152808' status='passed' stop='1788244152865'>
+            <name>should not call payment provider twice for duplicate webhook</name>
+            <title>should not call payment provider twice for duplicate webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244152865' status='passed' stop='1788244152953'>
+            <name>should store webhook event exactly once despite multiple deliveries</name>
+            <title>should store webhook event exactly once despite multiple deliveries</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788242984862' stop='1788242984906'>
+    <name>Persistence Tests State Consistency</name>
+    <title>Persistence Tests State Consistency</title>
+    <test-cases>
+        <test-case start='1788242984862' status='passed' stop='1788242984906'>
+            <name>should maintain consistency between subscription and invoices</name>
+            <title>should maintain consistency between subscription and invoices</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

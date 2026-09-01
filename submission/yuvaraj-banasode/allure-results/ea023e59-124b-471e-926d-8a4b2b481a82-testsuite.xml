@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788244154474' stop='1788244154566'>
+    <name>Mock Payment Provider Interaction Tests Provider Response Handling</name>
+    <title>Mock Payment Provider Interaction Tests Provider Response Handling</title>
+    <test-cases>
+        <test-case start='1788244154474' status='passed' stop='1788244154503'>
+            <name>should transition to active on successful charge</name>
+            <title>should transition to active on successful charge</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244154503' status='passed' stop='1788244154535'>
+            <name>should transition to past_due on payment decline</name>
+            <title>should transition to past_due on payment decline</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244154535' status='passed' stop='1788244154566'>
+            <name>should handle provider timeout gracefully</name>
+            <title>should handle provider timeout gracefully</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

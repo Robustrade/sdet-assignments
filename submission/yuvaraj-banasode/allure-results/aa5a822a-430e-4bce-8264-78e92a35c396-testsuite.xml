@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788242985662' stop='1788242985747'>
+    <name>State Machine Tests Invalid State Transitions</name>
+    <title>State Machine Tests Invalid State Transitions</title>
+    <test-cases>
+        <test-case start='1788242985662' status='passed' stop='1788242985747'>
+            <name>should ignore payment.failed webhook when already canceled</name>
+            <title>should ignore payment.failed webhook when already canceled</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788242984357' stop='1788242984510'>
+    <name>Persistence Tests Subscription Persistence</name>
+    <title>Persistence Tests Subscription Persistence</title>
+    <test-cases>
+        <test-case start='1788242984357' status='passed' stop='1788242984401'>
+            <name>should persist subscription with correct plan</name>
+            <title>should persist subscription with correct plan</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242984401' status='passed' stop='1788242984459'>
+            <name>should persist subscription state transitions</name>
+            <title>should persist subscription state transitions</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242984459' status='passed' stop='1788242984510'>
+            <name>should persist canceledAt timestamp when canceled</name>
+            <title>should persist canceledAt timestamp when canceled</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

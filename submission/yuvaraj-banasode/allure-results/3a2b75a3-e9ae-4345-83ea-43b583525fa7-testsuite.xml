@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788243241543' stop='1788243241636'>
+    <name>Webhook Idempotency Tests Duplicate Prevention with Different Signatures</name>
+    <title>Webhook Idempotency Tests Duplicate Prevention with Different Signatures</title>
+    <test-cases>
+        <test-case start='1788243241543' status='passed' stop='1788243241636'>
+            <name>should reject replay with invalid signature</name>
+            <title>should reject replay with invalid signature</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

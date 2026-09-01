@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788244156013' stop='1788244156191'>
+    <name>API Contract Tests POST /subscriptions</name>
+    <title>API Contract Tests POST /subscriptions</title>
+    <test-cases>
+        <test-case start='1788244156013' status='passed' stop='1788244156060'>
+            <name>should create subscription with valid plan and customer</name>
+            <title>should create subscription with valid plan and customer</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244156060' status='passed' stop='1788244156087'>
+            <name>should return 422 for unknown plan</name>
+            <title>should return 422 for unknown plan</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244156087' status='passed' stop='1788244156136'>
+            <name>should return 422 for unknown customer</name>
+            <title>should return 422 for unknown customer</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244156136' status='passed' stop='1788244156159'>
+            <name>should return 400 for missing required fields</name>
+            <title>should return 400 for missing required fields</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788244156159' status='passed' stop='1788244156191'>
+            <name>should charge payment provider for plan with 0-day trial</name>
+            <title>should charge payment provider for plan with 0-day trial</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
