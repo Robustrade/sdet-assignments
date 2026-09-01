@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788243243536' stop='1788243243647'>
+    <name>API Contract Tests POST /subscriptions/:id/cancel</name>
+    <title>API Contract Tests POST /subscriptions/:id/cancel</title>
+    <test-cases>
+        <test-case start='1788243243536' status='passed' stop='1788243243585'>
+            <name>should cancel active subscription</name>
+            <title>should cancel active subscription</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243243585' status='passed' stop='1788243243599'>
+            <name>should return 404 for non-existent subscription</name>
+            <title>should return 404 for non-existent subscription</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243243599' status='passed' stop='1788243243647'>
+            <name>should return 422 for already-canceled subscription</name>
+            <title>should return 422 for already-canceled subscription</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

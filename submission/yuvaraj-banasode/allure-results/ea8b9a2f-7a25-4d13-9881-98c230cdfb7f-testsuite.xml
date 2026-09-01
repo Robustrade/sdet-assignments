@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788242983878' stop='1788242984073'>
+    <name>Webhook Idempotency Tests State Machine Idempotency</name>
+    <title>Webhook Idempotency Tests State Machine Idempotency</title>
+    <test-cases>
+        <test-case start='1788242983878' status='passed' stop='1788242983987'>
+            <name>should not regress subscription state with late-arriving webhook</name>
+            <title>should not regress subscription state with late-arriving webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242983987' status='passed' stop='1788242984073'>
+            <name>should ignore duplicate failure webhook for already-active subscription</name>
+            <title>should ignore duplicate failure webhook for already-active subscription</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

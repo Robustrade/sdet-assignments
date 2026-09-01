@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788242985987' stop='1788242986136'>
+    <name>Mock Payment Provider Interaction Tests Provider Call Verification</name>
+    <title>Mock Payment Provider Interaction Tests Provider Call Verification</title>
+    <test-cases>
+        <test-case start='1788242985987' status='passed' stop='1788242986024'>
+            <name>should call payment provider when creating subscription</name>
+            <title>should call payment provider when creating subscription</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242986024' status='passed' stop='1788242986066'>
+            <name>should not call payment provider for validation failures</name>
+            <title>should not call payment provider for validation failures</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242986066' status='passed' stop='1788242986102'>
+            <name>should use subscription ID as idempotency key</name>
+            <title>should use subscription ID as idempotency key</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788242986102' status='passed' stop='1788242986136'>
+            <name>should charge correct amount for subscription plan</name>
+            <title>should charge correct amount for subscription plan</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

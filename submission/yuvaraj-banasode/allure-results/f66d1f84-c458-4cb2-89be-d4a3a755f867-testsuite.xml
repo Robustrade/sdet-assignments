@@ -1,0 +1,71 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788243241984' stop='1788243242489'>
+    <name>State Machine Tests Subscription Lifecycle Transitions</name>
+    <title>State Machine Tests Subscription Lifecycle Transitions</title>
+    <test-cases>
+        <test-case start='1788243241984' status='passed' stop='1788243242055'>
+            <name>should start subscription in trialing state</name>
+            <title>should start subscription in trialing state</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243242055' status='passed' stop='1788243242111'>
+            <name>should transition from trialing to active on payment.succeeded webhook</name>
+            <title>should transition from trialing to active on payment.succeeded webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243242111' status='passed' stop='1788243242164'>
+            <name>should transition from trialing to past_due on payment.failed webhook</name>
+            <title>should transition from trialing to past_due on payment.failed webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243242164' status='passed' stop='1788243242238'>
+            <name>should transition from active to past_due on payment.failed webhook</name>
+            <title>should transition from active to past_due on payment.failed webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243242238' status='passed' stop='1788243242302'>
+            <name>should transition from past_due back to active on payment.succeeded webhook</name>
+            <title>should transition from past_due back to active on payment.succeeded webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243242302' status='passed' stop='1788243242351'>
+            <name>should allow cancellation from trialing state</name>
+            <title>should allow cancellation from trialing state</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243242351' status='passed' stop='1788243242423'>
+            <name>should allow cancellation from active state</name>
+            <title>should allow cancellation from active state</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243242423' status='passed' stop='1788243242489'>
+            <name>should NOT transition from canceled state via webhook</name>
+            <title>should NOT transition from canceled state via webhook</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788243112289' stop='1788243112372'>
+    <name>Mock Payment Provider Interaction Tests Idempotency Key Usage</name>
+    <title>Mock Payment Provider Interaction Tests Idempotency Key Usage</title>
+    <test-cases>
+        <test-case start='1788243112289' status='passed' stop='1788243112314'>
+            <name>should use same idempotency key for idempotent retries</name>
+            <title>should use same idempotency key for idempotent retries</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243112314' status='passed' stop='1788243112372'>
+            <name>should charge different customers separately</name>
+            <title>should charge different customers separately</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

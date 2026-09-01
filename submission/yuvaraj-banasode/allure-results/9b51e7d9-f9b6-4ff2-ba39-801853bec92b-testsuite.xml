@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1788243243062' stop='1788243243159'>
+    <name>Persistence Tests Webhook Event Persistence</name>
+    <title>Persistence Tests Webhook Event Persistence</title>
+    <test-cases>
+        <test-case start='1788243243062' status='passed' stop='1788243243096'>
+            <name>should persist webhook event as processed</name>
+            <title>should persist webhook event as processed</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1788243243096' status='passed' stop='1788243243159'>
+            <name>should mark duplicate webhook events as already-processed</name>
+            <title>should mark duplicate webhook events as already-processed</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
