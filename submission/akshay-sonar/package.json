@@ -1,0 +1,29 @@
+{
+  "name": "akshay-sonar",
+  "version": "1.0.0",
+  "description": "Implementation and automated tests for the Subscription & Billing system.",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "build": "tsc",
+    "start": "tsx src/api/app.ts"
+  },
+  "keywords": [],
+  "author": "Akshay Sonar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.4.1",
+    "@types/supertest": "^7.2.1",
+    "@vitest/coverage-v8": "^2.1.9",
+    "supertest": "^7.2.2",
+    "tsx": "^4.23.13",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.9"
+  }
+}
