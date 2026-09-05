@@ -1,0 +1,9 @@
+[project]
+name = "subscription-billing-assignment"
+version = "0.1.0"
+description = "Minimal subscription billing fixture and SDET validation suite"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
