@@ -9,7 +9,6 @@ before(async()=>{ctx.reset(); base=`http://127.0.0.1:${(await http.listen()).por
 after(async()=>{await http.close();});
 
 async function request(method: string, path: string, body?: any, headers: Record<string,string> = {}) {
-  ctx.repo; // keep fixture explicit in test scope
   const res = await fetch(base + path, { method, headers: { 'content-type':'application/json', connection:'close', ...headers }, body: body === undefined ? undefined : JSON.stringify(body) });
   return { status: res.status, body: await res.json() };
 }

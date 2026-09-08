@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createContext, baseWebhook, sign } from '../testHelpers';
-import { WebhookBuilder } from '../../src/builders/testDataBuilders';
 
 function createTrialSub(ctx:any){ return ctx.service.create({customerId:'cust_001',plan:'pro',paymentMethodId:'pm'}); }
 
@@ -18,7 +17,7 @@ test('covers trialing -> past_due via payment.failed, then past_due -> active vi
 
 test('covers active -> past_due and past_due -> canceled using the service state-machine seam', async()=>{
  const ctx=createContext(); const c=await ctx.service.create({customerId:'cust_001',plan:'basic',paymentMethodId:'pm'}); const id=c.body.id; assert.equal(c.body.status,'active');
- const fail=baseWebhook(id,{event_id:'evt_rec_fail',type:'payment.failed',invoice_id:'inv_rec_fail',amount:1000}); let raw=JSON.stringify(fail); ctx.service.webhook(raw,sign(raw)); assert.equal(ctx.repo.getSubscription(id)!.status,'past_due');
+ const fail=baseWebhook(id,{event_id:'evt_rec_fail',type:'payment.failed',invoice_id:'inv_rec_fail',amount:1000}); const raw=JSON.stringify(fail); ctx.service.webhook(raw,sign(raw)); assert.equal(ctx.repo.getSubscription(id)!.status,'past_due');
  const sm=ctx.stateMachine; const canceled=sm.transition('past_due','retries_exhausted'); assert.equal(canceled,'canceled');
 });
 
