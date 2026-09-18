@@ -1,0 +1,20 @@
+{
+  "name": "subscription-billing-sdet-assignment",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Automated validation suite + minimal service fixture for a Subscription & Billing Service (Kulu SDET take-home).",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "node --import tsx --test $(find test -name '*.test.ts' | sort)",
+    "test:watch": "node --import tsx --test --watch $(find test -name '*.test.ts' | sort)"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsx": "^4.7.0",
+    "@types/node": "^20.11.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
