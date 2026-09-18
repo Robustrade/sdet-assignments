@@ -1,0 +1,29 @@
+{
+  "name": "subscription-billing-test-suite",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Object-oriented automated validation suite for a Subscription & Billing Service",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:api": "vitest run tests/specs/api-contract.spec.ts",
+    "test:lifecycle": "vitest run tests/specs/lifecycle-state-machine.spec.ts",
+    "test:webhooks": "vitest run tests/specs/webhook-idempotency.spec.ts",
+    "test:provider": "vitest run tests/specs/provider-interaction.spec.ts",
+    "test:persistence": "vitest run tests/specs/persistence.spec.ts",
+    "test:e2e": "vitest run tests/specs/end-to-end.spec.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^6.3.4",
+    "typescript": "^5.5.4",
+    "vitest": "^1.6.0"
+  }
+}
