@@ -433,4 +433,55 @@ describe('Webhook API', () => {
         expect(response.body.status)
             .toBe('active');
     });
+
+    it('rejects an invalid transition and records the rejected attempt', async () => {
+        db = createDatabase();
+
+        const {
+            app,
+            subscriptionId,
+        } = await createBasicSubscription();
+
+        const firstBody = JSON.stringify({
+            event_id: 'evt-invalid-transition-first',
+            event_type: 'payment.succeeded',
+            subscription_id: subscriptionId,
+        });
+
+        await request(app)
+            .post('/webhooks/payment-provider')
+            .set('X-Webhook-Signature', `sha256=${sign(firstBody)}`)
+            .send(firstBody);
+
+        const rejectedBody = JSON.stringify({
+            event_id: 'evt-invalid-transition-rejected',
+            event_type: 'payment.succeeded',
+            subscription_id: subscriptionId,
+        });
+
+        const response = await request(app)
+            .post('/webhooks/payment-provider')
+            .set('X-Webhook-Signature', `sha256=${sign(rejectedBody)}`)
+            .send(rejectedBody);
+
+        expect(response.status).toBe(409);
+
+        const audit = db.prepare(`
+            SELECT old_state, new_state, event_type
+            FROM audit_log
+            WHERE subscription_id = ?
+            ORDER BY id DESC
+            LIMIT 1
+        `).get(subscriptionId) as {
+            old_state: string;
+            new_state: string;
+            event_type: string;
+        };
+
+        expect(audit).toEqual({
+            old_state: 'active',
+            new_state: 'active',
+            event_type: 'payment.succeeded.rejected',
+        });
+    });
 });

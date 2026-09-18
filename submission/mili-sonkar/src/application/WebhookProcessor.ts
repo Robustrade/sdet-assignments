@@ -130,6 +130,25 @@ export class WebhookProcessor {
 
             return result;
         } catch (error) {
+            if (error instanceof Error && error.name === 'InvalidTransitionError') {
+                const subscription = this.subscriptionRepository.getById(
+                    webhook.subscriptionId,
+                );
+
+                if (subscription) {
+                    runInTransaction(this.db, () => {
+                        this.auditRepository.create({
+                            subscriptionId: subscription.id,
+                            oldState: subscription.status,
+                            newState: subscription.status,
+                            eventType: `${webhook.eventType}.rejected`,
+                            correlationId: webhook.correlationId,
+                            createdAt: new Date().toISOString(),
+                        });
+                    });
+                }
+            }
+
             this.webhookRepository.markFailed(
                 webhook.eventId,
             );

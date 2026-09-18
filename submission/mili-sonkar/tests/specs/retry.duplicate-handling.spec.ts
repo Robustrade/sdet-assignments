@@ -47,4 +47,33 @@ describe('Retry and duplicate handling', () => {
         expect(retry.status).toBe(201);
         expect(fixture.subscriptionRepository.getByCustomerId('customer-provider-failure-001')).toHaveLength(1);
     });
+
+    it('records provider reconciliation when local persistence fails after charging', async () => {
+        fixture = new BillingTestFixture();
+        fixture.db.exec(`
+            CREATE TRIGGER fail_subscription_insert
+            BEFORE INSERT ON subscriptions
+            BEGIN
+                SELECT RAISE(ABORT, 'simulated persistence failure');
+            END;
+        `);
+
+        const response = await fixture.subscriptionClient.createSubscription(
+            { customerId: 'customer-reconciliation-001', plan: 'pro' },
+            {
+                idempotencyKey: 'idem-reconciliation-001',
+                correlationId: 'corr-reconciliation-001',
+            },
+        );
+
+        expect(response.status).toBe(500);
+        expect(fixture.paymentProviderMock.getChargeCount()).toBe(1);
+        const providerPaymentId = fixture.paymentProviderMock.getCharges()[0].subscriptionId;
+        expect(fixture.subscriptionRepository.getByCustomerId('customer-reconciliation-001')).toHaveLength(0);
+        expect(fixture.reconciliationRepository.getByProviderPaymentId(`mock-payment-1`)).toHaveLength(1);
+        expect(fixture.reconciliationRepository.getByProviderPaymentId(`mock-payment-1`)[0]).toMatchObject({
+            correlationId: 'corr-reconciliation-001',
+        });
+        expect(providerPaymentId).toMatch(/^sub-/);
+    });
 });

@@ -66,4 +66,35 @@ import { WebhookEventBuilder } from '../builders/WebhookEventBuilder.js';
         expect(fixture.invoiceRepository.getBySubscriptionId(created.body.subscription.id)).toHaveLength(1);
         expect(fixture.auditRepository.countBySubscriptionId(created.body.subscription.id)).toBe(2);
     });
+
+    it('audits rejected transitions without changing subscription state', async () => {
+        fixture = new BillingTestFixture();
+        const created = await fixture.subscriptionClient.createSubscription(
+            { customerId: 'customer-rejected-001', plan: 'basic' },
+            { idempotencyKey: 'idem-rejected-001' },
+        );
+
+        const firstCancellation = await fixture.subscriptionClient.cancelSubscription(
+            created.body.subscription.id,
+            'corr-cancel-first',
+        );
+        expect(firstCancellation.status).toBe(200);
+
+        const rejectedCancellation = await fixture.subscriptionClient.cancelSubscription(
+            created.body.subscription.id,
+            'corr-cancel-rejected',
+        );
+        expect(rejectedCancellation.status).toBe(409);
+        expect(fixture.subscriptionRepository.getById(created.body.subscription.id)?.status).toBe('canceled');
+
+        const audit = fixture.auditRepository.getLatestBySubscriptionId(
+            created.body.subscription.id,
+        );
+        expect(audit).toMatchObject({
+            oldState: 'canceled',
+            newState: 'canceled',
+            eventType: 'subscription.cancel_rejected',
+            correlationId: 'corr-cancel-rejected',
+        });
+    });
 });

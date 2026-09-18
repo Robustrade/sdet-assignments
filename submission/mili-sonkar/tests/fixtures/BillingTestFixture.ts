@@ -8,6 +8,7 @@ import { InvoiceRepository } from '../../src/infrastructure/repositories/Invoice
 import { WebhookRepository } from '../../src/infrastructure/repositories/WebhookRepository.js';
 import { AuditRepository } from '../../src/infrastructure/repositories/AuditRepository.js';
 import { IdempotencyKeyRepository } from '../../src/infrastructure/repositories/IdempotencyKeyRepository.js';
+import { ReconciliationRepository } from '../../src/infrastructure/repositories/ReconciliationRepository.js';
 import { SubscriptionApiClient } from '../clients/SubscriptionApiClient.js';
 import { WebhookApiClient } from '../clients/WebhookApiClient.js';
 import { SubscriptionValidator } from '../validators/SubscriptionValidator.js';
@@ -28,6 +29,7 @@ export class BillingTestFixture {
     readonly webhookRepository: WebhookRepository;
     readonly idempotencyKeyRepository: IdempotencyKeyRepository;
     readonly auditRepository: AuditRepository;
+    readonly reconciliationRepository: ReconciliationRepository;
     readonly subscriptionValidator: SubscriptionValidator;
     readonly invoiceValidator: InvoiceValidator;
     readonly stateValidator: StateTransitionValidator;
@@ -51,6 +53,7 @@ export class BillingTestFixture {
         this.webhookRepository = new WebhookRepository(this.db);
         this.idempotencyKeyRepository = new IdempotencyKeyRepository(this.db);
         this.auditRepository = new AuditRepository(this.db);
+        this.reconciliationRepository = new ReconciliationRepository(this.db);
         this.subscriptionValidator = new SubscriptionValidator();
         this.invoiceValidator = new InvoiceValidator();
         this.stateValidator = new StateTransitionValidator();

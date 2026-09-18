@@ -19,6 +19,7 @@ describe('SQLite database', () => {
             'audit_log',
             'idempotency_keys',
             'invoices',
+            'reconciliation_events',
             'subscriptions',
             'webhook_events',
         ]);

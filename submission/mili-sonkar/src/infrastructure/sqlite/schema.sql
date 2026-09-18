@@ -45,3 +45,11 @@ CREATE TABLE idempotency_keys (
     status TEXT NOT NULL DEFAULT 'complete' CHECK (status IN ('pending', 'complete')),
     created_at TEXT NOT NULL
 );
+
+CREATE TABLE reconciliation_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    provider_payment_id TEXT NOT NULL,
+    correlation_id TEXT NOT NULL,
+    error_message TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);

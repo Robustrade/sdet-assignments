@@ -9,6 +9,7 @@ import { IdempotencyKeyRepository } from '../infrastructure/repositories/Idempot
 import { InvoiceRepository } from '../infrastructure/repositories/InvoiceRepository.js';
 import { SubscriptionRepository } from '../infrastructure/repositories/SubscriptionRepository.js';
 import { runInTransaction } from '../infrastructure/sqlite/db.js';
+import { ReconciliationRepository } from '../infrastructure/repositories/ReconciliationRepository.js';
 import type { DatabaseSync } from 'node:sqlite';
 
 export interface CreateSubscriptionRequest {
@@ -65,6 +66,7 @@ export class SubscriptionService {
     private readonly auditRepository: AuditRepository;
     private readonly idempotencyRepository: IdempotencyKeyRepository;
     private readonly stateMachine: SubscriptionStateMachine;
+    private readonly reconciliationRepository: ReconciliationRepository;
 
     constructor(
         private readonly db: DatabaseSync,
@@ -84,6 +86,9 @@ export class SubscriptionService {
 
         this.stateMachine =
             new SubscriptionStateMachine();
+
+        this.reconciliationRepository =
+            new ReconciliationRepository(db);
     }
 
     createSubscription(
@@ -174,11 +179,30 @@ export class SubscriptionService {
             );
         }
 
-        const newState =
-            this.stateMachine.transition(
+        let newState: SubscriptionState;
+
+        try {
+            newState = this.stateMachine.transition(
                 existing.status,
                 Trigger.CancelRequested,
             );
+        } catch (error) {
+            if (error instanceof Error && error.name === 'InvalidTransitionError') {
+                const now = new Date().toISOString();
+                runInTransaction(this.db, () => {
+                    this.auditRepository.create({
+                        subscriptionId: id,
+                        oldState: existing.status,
+                        newState: existing.status,
+                        eventType: 'subscription.cancel_rejected',
+                        correlationId,
+                        createdAt: now,
+                    });
+                });
+            }
+
+            throw error;
+        }
 
         const now = new Date().toISOString();
 
@@ -296,6 +320,15 @@ export class SubscriptionService {
             });
         } catch (error) {
             if (providerPaymentId) {
+                this.reconciliationRepository.create({
+                    providerPaymentId,
+                    correlationId: request.correlationId,
+                    errorMessage: error instanceof Error
+                        ? error.message
+                        : 'Local persistence failed after provider charge',
+                    createdAt: new Date().toISOString(),
+                });
+
                 throw new ProviderChargeReconciliationError(
                     providerPaymentId,
                     `Payment ${providerPaymentId} succeeded but local persistence failed`,
