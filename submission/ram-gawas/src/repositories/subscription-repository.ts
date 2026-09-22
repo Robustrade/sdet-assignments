@@ -7,6 +7,7 @@ export interface Subscription {
   plan: string;
   state: SubscriptionState;
   paymentMethodId: string;
+  trialEndsAt?: string;
 }
 
 export class SubscriptionRepository {
@@ -20,9 +21,10 @@ export class SubscriptionRepository {
         plan,
         state,
         payment_method_id,
+        trial_ends_at,
         created_at
       )
-      VALUES (?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
 
     statement.run(
@@ -31,6 +33,7 @@ export class SubscriptionRepository {
       subscription.plan,
       subscription.state,
       subscription.paymentMethodId,
+      subscription.trialEndsAt ?? null,
       new Date().toISOString(),
     );
   }
@@ -54,6 +57,9 @@ export class SubscriptionRepository {
       plan: row.plan,
       state: row.state,
       paymentMethodId: row.payment_method_id,
+      ...(row.trial_ends_at != null
+        ? { trialEndsAt: row.trial_ends_at }
+        : {}),
     };
   }
 

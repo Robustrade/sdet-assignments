@@ -1,43 +1,84 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { createDatabase } from '../src/database';
-import { SubscriptionRepository } from '../src/repositories/subscription-repository';
-import { PaymentRepository } from '../src/repositories/payment-repository';
-import { WebhookEventRepository } from '../src/repositories/webhook-event-repository';
-import { SubscriptionService } from '../src/subscription-service';
-import { MockPaymentProvider } from './mocks/mock-payment-provider';
+import { SubscriptionBuilder } from './builders/subscription-builder';
+import { WebhookBuilder } from './builders/webhook-builder';
+import { createTestEnvironment, type TestEnvironment } from './fixtures/test-environment';
 
 describe('SubscriptionService', () => {
-  let service: SubscriptionService;
-  let subscriptionRepository: SubscriptionRepository;
-  let paymentRepository: PaymentRepository;
-  let webhookEventRepository: WebhookEventRepository;
-  let paymentProvider: MockPaymentProvider;
-  let db: ReturnType<typeof createDatabase>;
+  let db: TestEnvironment['db'];
+  let service: TestEnvironment['service'];
+  let subscriptionRepository: TestEnvironment['subscriptionRepository'];
+  let paymentRepository: TestEnvironment['paymentRepository'];
+  let webhookEventRepository: TestEnvironment['webhookRepository'];
+  let paymentProvider: TestEnvironment['paymentProvider'];
 
   beforeEach(() => {
-    db = createDatabase();
-
-    subscriptionRepository = new SubscriptionRepository(db);
-    paymentRepository = new PaymentRepository(db);
-    webhookEventRepository = new WebhookEventRepository(db);
-    paymentProvider = new MockPaymentProvider();
-
-    service = new SubscriptionService(
+    ({
+      db,
+      service,
       subscriptionRepository,
       paymentRepository,
-      webhookEventRepository,
+      webhookRepository: webhookEventRepository,
       paymentProvider,
+    } = createTestEnvironment());
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    db.close();
+  });
+
+  it.each([
+    { plan: 'basic', price: 1900, trialEndsAt: '2026-10-02T12:00:00.000Z' },
+    { plan: 'pro', price: 4900, trialEndsAt: '2026-10-09T12:00:00.000Z' },
+  ])('applies $plan trial length and payment price', async ({ plan, price, trialEndsAt }) => {
+    vi.spyOn(Date, 'now').mockReturnValue(
+      Date.parse('2026-09-25T12:00:00.000Z'),
     );
+
+    const subscription = await service.createSubscription(
+      new SubscriptionBuilder().withPlan(plan).build(),
+    );
+
+    expect(subscription.state).toBe('trialing');
+    expect(subscription.trialEndsAt).toBe(trialEndsAt);
+    expect(subscriptionRepository.findById('sub_001')).toEqual(subscription);
+    expect(paymentProvider.calls).toHaveLength(0);
+
+    const paid = await service.processPayment('sub_001');
+
+    expect(paid.state).toBe('active');
+    expect(paid.trialEndsAt).toBe(trialEndsAt);
+    expect(paymentProvider.calls).toEqual([{
+      customerId: 'cust_001',
+      paymentMethodId: 'pm_001',
+      amount: price,
+      reference: 'sub_001',
+    }]);
+    expect(paymentRepository.findBySubscriptionId('sub_001')).toEqual([
+      expect.objectContaining({ amount: price, status: 'success' }),
+    ]);
+    expect(subscriptionRepository.findById('sub_001')).toEqual(paid);
+  });
+
+  it('preserves an explicitly supplied payment amount', async () => {
+    await service.createSubscription(
+      new SubscriptionBuilder().withPlan('basic').build(),
+    );
+
+    await service.processPayment('sub_001', 1000);
+
+    expect(paymentProvider.calls).toHaveLength(1);
+    expect(paymentProvider.calls[0]?.amount).toBe(1000);
+    expect(paymentRepository.findBySubscriptionId('sub_001')).toEqual([
+      expect.objectContaining({ amount: 1000, status: 'success' }),
+    ]);
   });
 
   it('creates a trialing subscription', async () => {
-    const subscription = await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    const subscription = await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
     expect(subscription.state).toBe('trialing');
 
@@ -47,13 +88,22 @@ describe('SubscriptionService', () => {
     expect(persisted?.state).toBe('trialing');
   });
 
-  it('moves subscription to active after successful payment', async () => {
-    await service.createSubscription({
+  it('rejects an unsupported plan before saving a subscription', async () => {
+    await expect(service.createSubscription({
       id: 'sub_001',
       customerId: 'cust_001',
-      plan: 'pro',
+      plan: 'unknown',
       paymentMethodId: 'pm_001',
-    });
+    })).rejects.toThrow('Invalid plan');
+
+    expect(subscriptionRepository.findById('sub_001')).toBeUndefined();
+    expect(paymentProvider.calls).toHaveLength(0);
+  });
+
+  it('moves subscription to active after successful payment', async () => {
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
     paymentProvider.respondWithSuccess('txn_001');
 
@@ -86,12 +136,9 @@ describe('SubscriptionService', () => {
   });
 
   it('moves subscription to past_due after declined payment', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
     paymentProvider.respondWithDecline('card_declined');
 
@@ -123,12 +170,9 @@ describe('SubscriptionService', () => {
   });
 
   it('does not create a successful payment when provider times out', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
     paymentProvider.respondWithTimeout();
 
@@ -150,20 +194,13 @@ describe('SubscriptionService', () => {
   });
 
   it('processes a successful payment webhook and moves subscription to active', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
-    const result = await service.handleWebhook({
-      eventId: 'evt_001',
-      type: 'payment.succeeded',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    });
+    const result = await service.handleWebhook(
+      new WebhookBuilder().paymentSucceeded().build(),
+    );
 
     expect(result.state).toBe('active');
 
@@ -188,20 +225,13 @@ describe('SubscriptionService', () => {
   });
 
   it('processes a failed payment webhook and moves subscription to past_due', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
-    const result = await service.handleWebhook({
-      eventId: 'evt_001',
-      type: 'payment.failed',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    });
+    const result = await service.handleWebhook(
+      new WebhookBuilder().paymentFailed().build(),
+    );
 
     expect(result.state).toBe('past_due');
 
@@ -224,20 +254,11 @@ describe('SubscriptionService', () => {
   });
 
   it('processes duplicate payment webhook only once', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
-    const webhook = {
-      eventId: 'evt_001',
-      type: 'payment.succeeded' as const,
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    };
+    const webhook = new WebhookBuilder().paymentSucceeded().build();
 
     const firstResult =
       await service.handleWebhook(webhook);
@@ -267,32 +288,27 @@ describe('SubscriptionService', () => {
   });
 
   it('does not regress active subscription when stale failure arrives after success for same invoice', async () => {
-    const subscription = await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    const subscription = await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
     expect(subscription.state).toBe('trialing');
 
-    const success = await service.handleWebhook({
-      eventId: 'evt_success',
-      type: 'payment.succeeded',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    });
+    const success = await service.handleWebhook(
+      new WebhookBuilder()
+        .withEventId('evt_success')
+        .paymentSucceeded()
+        .build(),
+    );
 
     expect(success.state).toBe('active');
 
-    const failure = await service.handleWebhook({
-      eventId: 'evt_failure',
-      type: 'payment.failed',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    });
+    const failure = await service.handleWebhook(
+      new WebhookBuilder()
+        .withEventId('evt_failure')
+        .paymentFailed()
+        .build(),
+    );
 
     expect(failure.state).toBe('active');
     expect(
@@ -324,12 +340,9 @@ describe('SubscriptionService', () => {
   });
 
   it('cancels an active subscription', async () => {
-  await service.createSubscription({
-    id: 'sub_001',
-    customerId: 'cust_001',
-    plan: 'pro',
-    paymentMethodId: 'pm_001',
-  });
+  await service.createSubscription(
+    new SubscriptionBuilder().build(),
+  );
 
   paymentProvider.respondWithSuccess('txn_001');
 
@@ -347,22 +360,15 @@ describe('SubscriptionService', () => {
 });
 
 it('does not reactivate a canceled subscription from a success webhook', async () => {
-  await service.createSubscription({
-    id: 'sub_001',
-    customerId: 'cust_001',
-    plan: 'pro',
-    paymentMethodId: 'pm_001',
-  });
+  await service.createSubscription(
+    new SubscriptionBuilder().build(),
+  );
 
   await service.cancelSubscription('sub_001');
 
-  const result = await service.handleWebhook({
-    eventId: 'evt_001',
-    type: 'payment.succeeded',
-    subscriptionId: 'sub_001',
-    invoiceId: 'inv_001',
-    amount: 4900,
-  });
+  const result = await service.handleWebhook(
+    new WebhookBuilder().paymentSucceeded().build(),
+  );
 
   expect(result.state).toBe('canceled');
 

@@ -1,70 +1,74 @@
 import {
+  afterEach,
   beforeEach,
   describe,
   expect,
   it,
+  vi,
 } from 'vitest';
 
 import request from 'supertest';
 
-import { createDatabase } from '../src/database';
-import { createApp } from '../src/app';
-import { SubscriptionService } from '../src/subscription-service';
-
-import { SubscriptionRepository } from '../src/repositories/subscription-repository';
-import { PaymentRepository } from '../src/repositories/payment-repository';
-import { WebhookEventRepository } from '../src/repositories/webhook-event-repository';
-
-import { MockPaymentProvider } from './mocks/mock-payment-provider';
-
+import { SubscriptionBuilder } from './builders/subscription-builder';
+import { WebhookBuilder } from './builders/webhook-builder';
+import { createTestEnvironment, type TestEnvironment } from './fixtures/test-environment';
 import { generateWebhookSignature } from '../src/webhook-signature';
 
 describe('Subscription API', () => {
   const webhookSecret = 'test_webhook_secret';
 
-  let app: ReturnType<typeof createApp>;
-
-  let service: SubscriptionService;
-
-  let subscriptionRepository: SubscriptionRepository;
-  let paymentRepository: PaymentRepository;
-  let webhookRepository: WebhookEventRepository;
-  let paymentProvider: MockPaymentProvider;
+  let db: TestEnvironment['db'];
+  let app: TestEnvironment['app'];
+  let service: TestEnvironment['service'];
+  let subscriptionRepository: TestEnvironment['subscriptionRepository'];
+  let paymentRepository: TestEnvironment['paymentRepository'];
+  let webhookRepository: TestEnvironment['webhookRepository'];
+  let paymentProvider: TestEnvironment['paymentProvider'];
 
   beforeEach(() => {
-    const db = createDatabase();
-
-    subscriptionRepository =
-      new SubscriptionRepository(db);
-
-    paymentRepository =
-      new PaymentRepository(db);
-
-    webhookRepository =
-      new WebhookEventRepository(db);
-
-    paymentProvider =
-      new MockPaymentProvider();
-
-    service = new SubscriptionService(
+    ({
+      db,
+      app,
+      service,
       subscriptionRepository,
       paymentRepository,
       webhookRepository,
       paymentProvider,
+    } = createTestEnvironment(webhookSecret));
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    db.close();
+  });
+
+  it.each([
+    { plan: 'basic', trialEndsAt: '2026-10-02T12:00:00.000Z' },
+    { plan: 'pro', trialEndsAt: '2026-10-09T12:00:00.000Z' },
+  ])('creates and retrieves a $plan subscription with its trial end date', async ({ plan, trialEndsAt }) => {
+    vi.spyOn(Date, 'now').mockReturnValue(
+      Date.parse('2026-09-25T12:00:00.000Z'),
     );
 
-    app = createApp(service, webhookSecret);
+    const response = await request(app)
+      .post('/subscriptions')
+      .send(new SubscriptionBuilder().withPlan(plan).build());
+
+    expect(response.status).toBe(201);
+    expect(response.body).toMatchObject({ plan, state: 'trialing', trialEndsAt });
+    expect(subscriptionRepository.findById('sub_001')).toEqual(response.body);
+
+    const retrieved = await request(app).get('/subscriptions/sub_001');
+
+    expect(retrieved.status).toBe(200);
+    expect(retrieved.body).toEqual(response.body);
+    expect(paymentProvider.calls).toHaveLength(0);
   });
 
   it('creates a subscription', async () => {
     const response = await request(app)
       .post('/subscriptions')
-      .send({
-        id: 'sub_001',
-        customerId: 'cust_001',
-        plan: 'pro',
-        paymentMethodId: 'pm_001',
-      });
+      .send(new SubscriptionBuilder().build());
 
     expect(response.status).toBe(201);
 
@@ -123,12 +127,9 @@ describe('Subscription API', () => {
   });
 
   it('retrieves an existing subscription', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
     const response = await request(app)
       .get('/subscriptions/sub_001');
@@ -155,12 +156,9 @@ describe('Subscription API', () => {
   });
 
   it('cancels a subscription', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
     const response = await request(app)
       .post('/subscriptions/sub_001/cancel');
@@ -178,12 +176,9 @@ describe('Subscription API', () => {
   });
 
   it('rejects canceling an already canceled subscription', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
     await service.cancelSubscription('sub_001');
 
@@ -200,20 +195,11 @@ describe('Subscription API', () => {
   });
 
   it('processes a payment success webhook through the API', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
-    const webhook = {
-      eventId: 'evt_001',
-      type: 'payment.succeeded',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    };
+    const webhook = new WebhookBuilder().paymentSucceeded().build();
 
     const signature =
       generateWebhookSignature(webhook, webhookSecret);
@@ -248,20 +234,11 @@ describe('Subscription API', () => {
   });
 
   it('processes a payment failed webhook through the API', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
-    const webhook = {
-      eventId: 'evt_001',
-      type: 'payment.failed',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    };
+    const webhook = new WebhookBuilder().paymentFailed().build();
 
     const signature =
       generateWebhookSignature(webhook, webhookSecret);
@@ -295,20 +272,11 @@ describe('Subscription API', () => {
   });
 
   it('does not duplicate side effects when webhook is replayed', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
-    const webhook = {
-      eventId: 'evt_001',
-      type: 'payment.succeeded',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    };
+    const webhook = new WebhookBuilder().paymentSucceeded().build();
 
     const signature =
       generateWebhookSignature(webhook, webhookSecret);
@@ -339,20 +307,14 @@ describe('Subscription API', () => {
   });
 
   it('does not regress subscription when failed webhook arrives after success for same invoice', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
-    const successWebhook = {
-      eventId: 'evt_success',
-      type: 'payment.succeeded',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    };
+    const successWebhook = new WebhookBuilder()
+      .withEventId('evt_success')
+      .paymentSucceeded()
+      .build();
 
     const success = await request(app)
       .post('/webhooks/payment-provider')
@@ -396,20 +358,11 @@ describe('Subscription API', () => {
   });
 
   it('rejects webhook with invalid signature', async () => {
-    await service.createSubscription({
-      id: 'sub_001',
-      customerId: 'cust_001',
-      plan: 'pro',
-      paymentMethodId: 'pm_001',
-    });
+    await service.createSubscription(
+      new SubscriptionBuilder().build(),
+    );
 
-    const webhook = {
-      eventId: 'evt_001',
-      type: 'payment.succeeded',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    };
+    const webhook = new WebhookBuilder().paymentSucceeded().build();
 
     const response = await request(app)
       .post('/webhooks/payment-provider')
@@ -442,13 +395,7 @@ describe('Subscription API', () => {
   });
 
   it('rejects webhook without signature', async () => {
-    const webhook = {
-      eventId: 'evt_001',
-      type: 'payment.succeeded',
-      subscriptionId: 'sub_001',
-      invoiceId: 'inv_001',
-      amount: 4900,
-    };
+    const webhook = new WebhookBuilder().paymentSucceeded().build();
 
     const response = await request(app)
       .post('/webhooks/payment-provider')

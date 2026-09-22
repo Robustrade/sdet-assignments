@@ -10,6 +10,7 @@ import { PaymentRepository } from './repositories/payment-repository';
 import { WebhookEventRepository } from './repositories/webhook-event-repository';
 
 import { transition } from './subscription-state';
+import { getPlan } from './plans/plan-registry';
 
 export interface CreateSubscriptionRequest {
   id: string;
@@ -37,12 +38,21 @@ export class SubscriptionService {
   async createSubscription(
     request: CreateSubscriptionRequest,
   ): Promise<Subscription> {
+    const plan = getPlan(request.plan);
+
+    if (!plan) {
+      throw new Error('Invalid plan');
+    }
+
     const subscription: Subscription = {
       id: request.id,
       customerId: request.customerId,
-      plan: request.plan,
+      plan: plan.name,
       state: 'trialing',
       paymentMethodId: request.paymentMethodId,
+      trialEndsAt: new Date(
+        Date.now() + plan.trialDays * 24 * 60 * 60 * 1000,
+      ).toISOString(),
     };
 
     this.subscriptionRepository.save(subscription);
@@ -52,7 +62,7 @@ export class SubscriptionService {
 
   async processPayment(
     subscriptionId: string,
-    amount: number,
+    amount?: number,
   ): Promise<Subscription> {
     const subscription =
       this.subscriptionRepository.findById(subscriptionId);
@@ -60,6 +70,14 @@ export class SubscriptionService {
     if (!subscription) {
       throw new Error('Subscription not found');
     }
+
+    const plan = getPlan(subscription.plan);
+
+    if (!plan) {
+      throw new Error('Invalid plan');
+    }
+
+    amount = amount ?? plan.price;
 
     const result = await this.paymentProvider.charge({
       customerId: subscription.customerId,

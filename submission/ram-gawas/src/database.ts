@@ -10,6 +10,7 @@ export function createDatabase(): Database.Database {
       plan TEXT NOT NULL,
       state TEXT NOT NULL,
       payment_method_id TEXT NOT NULL,
+      trial_ends_at TEXT,
       created_at TEXT NOT NULL
     );
 

@@ -1,6 +1,7 @@
 import express from 'express';
 import { SubscriptionService } from './subscription-service';
 import { verifyWebhookSignature } from './webhook-signature';
+import { getPlan } from './plans/plan-registry';
 
 export function createApp(
   subscriptionService: SubscriptionService,
@@ -25,7 +26,7 @@ export function createApp(
         });
       }
 
-      if (!['basic', 'pro'].includes(plan)) {
+      if (!getPlan(plan)) {
         return res.status(400).json({
           error: 'Invalid plan',
         });
