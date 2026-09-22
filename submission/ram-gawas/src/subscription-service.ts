@@ -1,4 +1,7 @@
+import { randomUUID } from 'crypto';
+import type Database from 'better-sqlite3';
 import { PaymentProvider } from './payment-provider';
+import { CustomerValidator, CustomerValidationError } from './customer-validator';
 
 import {
   Subscription,
@@ -21,7 +24,7 @@ export interface CreateSubscriptionRequest {
 
 export interface PaymentWebhook {
   eventId: string;
-  type: 'payment.succeeded' | 'payment.failed';
+  type: 'payment.succeeded' | 'payment.failed' | 'payment.refunded';
   subscriptionId: string;
   invoiceId: string;
   amount: number;
@@ -33,6 +36,8 @@ export class SubscriptionService {
     private paymentRepository: PaymentRepository,
     private webhookEventRepository: WebhookEventRepository,
     private paymentProvider: PaymentProvider,
+    private customerValidator: CustomerValidator,
+    private db: Database.Database,
   ) {}
 
   async createSubscription(
@@ -42,6 +47,17 @@ export class SubscriptionService {
 
     if (!plan) {
       throw new Error('Invalid plan');
+    }
+
+    if (!this.customerValidator.isKnownCustomer(request.customerId)) {
+      throw new CustomerValidationError('Unknown customer');
+    }
+
+    if (!this.customerValidator.isValidPaymentMethod(
+      request.customerId,
+      request.paymentMethodId,
+    )) {
+      throw new CustomerValidationError('Invalid payment method for customer');
     }
 
     const subscription: Subscription = {
@@ -71,6 +87,10 @@ export class SubscriptionService {
       throw new Error('Subscription not found');
     }
 
+    if (subscription.state === 'canceled') {
+      throw new Error('Canceled subscription cannot be billed');
+    }
+
     const plan = getPlan(subscription.plan);
 
     if (!plan) {
@@ -93,7 +113,7 @@ export class SubscriptionService {
       );
 
       this.paymentRepository.save({
-        id: `pay_${Date.now()}`,
+        id: `pay_${randomUUID()}`,
         subscriptionId: subscription.id,
         amount,
         status: 'success',
@@ -117,7 +137,7 @@ export class SubscriptionService {
     );
 
     this.paymentRepository.save({
-      id: `pay_${Date.now()}`,
+      id: `pay_${randomUUID()}`,
       subscriptionId: subscription.id,
       amount,
       status: 'failed',
@@ -132,6 +152,23 @@ export class SubscriptionService {
       ...subscription,
       state: nextState,
     };
+  }
+
+  async exhaustRetries(
+    subscriptionId: string,
+  ): Promise<Subscription> {
+    const subscription =
+      this.subscriptionRepository.findById(subscriptionId);
+
+    if (!subscription) {
+      throw new Error('Subscription not found');
+    }
+
+    const nextState = transition(subscription.state, 'RETRIES_EXHAUSTED');
+
+    this.subscriptionRepository.updateState(subscription.id, nextState);
+
+    return { ...subscription, state: nextState };
   }
 
   async cancelSubscription(
@@ -163,8 +200,12 @@ export class SubscriptionService {
   async handleWebhook(
     event: PaymentWebhook,
   ): Promise<Subscription> {
+    return this.db.transaction(() => this.processWebhook(event))();
+  }
+
+  private processWebhook(event: PaymentWebhook): Subscription {
     // Idempotency:
-    // If we already received this event, do nothing.
+    // Replays update receipt metadata without repeating business writes.
     if (this.webhookEventRepository.exists(event.eventId)) {
       const existing =
         this.subscriptionRepository.findById(
@@ -175,6 +216,7 @@ export class SubscriptionService {
         throw new Error('Subscription not found');
       }
 
+      this.webhookEventRepository.incrementDelivery(event.eventId);
       return existing;
     }
 
@@ -185,6 +227,26 @@ export class SubscriptionService {
 
     if (!subscription) {
       throw new Error('Subscription not found');
+    }
+
+    // Refunds are audit events, not lifecycle transitions.
+    if (event.type === 'payment.refunded') {
+      this.paymentRepository.save({
+        id: `refund_${event.eventId}`,
+        subscriptionId: event.subscriptionId,
+        amount: event.amount,
+        status: 'refunded',
+        providerReference: event.invoiceId,
+      });
+
+      this.webhookEventRepository.save({
+        eventId: event.eventId,
+        subscriptionId: event.subscriptionId,
+        eventType: event.type,
+        processed: true,
+      });
+
+      return subscription;
     }
 
     const payment =

@@ -24,6 +24,11 @@ export class WebhookBuilder {
     return this;
   }
 
+  paymentRefunded(): this {
+    this.webhook.type = 'payment.refunded';
+    return this;
+  }
+
   forSubscription(subscriptionId: string): this {
     this.webhook.subscriptionId = subscriptionId;
     return this;

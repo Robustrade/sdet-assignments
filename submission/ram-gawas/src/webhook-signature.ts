@@ -1,24 +1,22 @@
 import crypto from 'crypto';
 
 export function generateWebhookSignature(
-  payload: unknown,
+  rawBody: Buffer | string,
   secret: string,
 ): string {
-  const body = JSON.stringify(payload);
-
   return crypto
     .createHmac('sha256', secret)
-    .update(body)
+    .update(rawBody)
     .digest('hex');
 }
 
 export function verifyWebhookSignature(
-  payload: unknown,
+  rawBody: Buffer | string,
   signature: string,
   secret: string,
 ): boolean {
   const expected =
-    generateWebhookSignature(payload, secret);
+    generateWebhookSignature(rawBody, secret);
 
   const expectedBuffer = Buffer.from(expected);
   const signatureBuffer = Buffer.from(signature);

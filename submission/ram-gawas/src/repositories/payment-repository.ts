@@ -4,7 +4,7 @@ export interface PaymentRecord {
   id: string;
   subscriptionId: string;
   amount: number;
-  status: 'success' | 'failed';
+  status: 'success' | 'failed' | 'refunded';
   providerReference?: string;
 }
 

@@ -1,7 +1,13 @@
 import express from 'express';
+import type { IncomingMessage } from 'http';
 import { SubscriptionService } from './subscription-service';
 import { verifyWebhookSignature } from './webhook-signature';
 import { getPlan } from './plans/plan-registry';
+import { CustomerValidationError } from './customer-validator';
+
+interface RawBodyRequest extends IncomingMessage {
+  rawBody?: Buffer;
+}
 
 export function createApp(
   subscriptionService: SubscriptionService,
@@ -9,7 +15,11 @@ export function createApp(
 ) {
   const app = express();
 
-  app.use(express.json());
+  app.use(express.json({
+    verify: (req, _res, buffer) => {
+      (req as RawBodyRequest).rawBody = buffer;
+    },
+  }));
 
   app.post('/subscriptions', async (req, res) => {
     try {
@@ -41,7 +51,11 @@ export function createApp(
         });
 
       return res.status(201).json(subscription);
-    } catch {
+    } catch (error) {
+      if (error instanceof CustomerValidationError) {
+        return res.status(400).json({ error: error.message });
+      }
+
       return res.status(500).json({
         error: 'Internal server error',
       });
@@ -112,8 +126,9 @@ export function createApp(
         });
       }
 
-      const isValid = verifyWebhookSignature(
-        req.body,
+      const rawBody = (req as RawBodyRequest).rawBody;
+      const isValid = rawBody !== undefined && verifyWebhookSignature(
+        rawBody,
         signature,
         webhookSecret,
       );
@@ -145,7 +160,7 @@ export function createApp(
       }
 
       if (
-        !['payment.succeeded', 'payment.failed'].includes(type)
+        !['payment.succeeded', 'payment.failed', 'payment.refunded'].includes(type)
       ) {
         return res.status(400).json({
           error: 'Invalid webhook payload',

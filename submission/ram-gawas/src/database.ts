@@ -28,6 +28,8 @@ export function createDatabase(): Database.Database {
       subscription_id TEXT NOT NULL,
       event_type TEXT NOT NULL,
       processed INTEGER NOT NULL,
+      delivery_count INTEGER NOT NULL DEFAULT 1,
+      last_received_at TEXT NOT NULL,
       created_at TEXT NOT NULL
     );
   `);
