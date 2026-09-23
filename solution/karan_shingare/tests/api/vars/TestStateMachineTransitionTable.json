@@ -1,0 +1,69 @@
+{
+  "trialing_payment_succeeded_activates": {
+    "current_status": "trialing",
+    "event_type": "payment_succeeded",
+    "expected_status": "active"
+  },
+  "trialing_payment_failed_goes_past_due": {
+    "current_status": "trialing",
+    "event_type": "payment_failed",
+    "expected_status": "past_due"
+  },
+  "trialing_cancel_cancels": {
+    "current_status": "trialing",
+    "event_type": "cancel",
+    "expected_status": "canceled"
+  },
+  "active_payment_failed_goes_past_due": {
+    "current_status": "active",
+    "event_type": "payment_failed",
+    "expected_status": "past_due"
+  },
+  "active_cancel_cancels": {
+    "current_status": "active",
+    "event_type": "cancel",
+    "expected_status": "canceled"
+  },
+  "active_payment_succeeded_is_a_noop": {
+    "current_status": "active",
+    "event_type": "payment_succeeded",
+    "expected_status": null
+  },
+  "past_due_payment_succeeded_reactivates": {
+    "current_status": "past_due",
+    "event_type": "payment_succeeded",
+    "expected_status": "active"
+  },
+  "past_due_payment_failed_stays_past_due_while_retries_remain": {
+    "current_status": "past_due",
+    "event_type": "payment_failed",
+    "retries_exhausted": false,
+    "expected_status": null
+  },
+  "past_due_payment_failed_cancels_once_retries_exhausted": {
+    "current_status": "past_due",
+    "event_type": "payment_failed",
+    "retries_exhausted": true,
+    "expected_status": "canceled"
+  },
+  "past_due_cancel_cancels": {
+    "current_status": "past_due",
+    "event_type": "cancel",
+    "expected_status": "canceled"
+  },
+  "canceled_payment_succeeded_is_a_noop": {
+    "current_status": "canceled",
+    "event_type": "payment_succeeded",
+    "expected_status": null
+  },
+  "canceled_payment_failed_is_a_noop": {
+    "current_status": "canceled",
+    "event_type": "payment_failed",
+    "expected_status": null
+  },
+  "canceled_cancel_is_a_noop": {
+    "current_status": "canceled",
+    "event_type": "cancel",
+    "expected_status": null
+  }
+}

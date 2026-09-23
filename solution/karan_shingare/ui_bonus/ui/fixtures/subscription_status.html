@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Subscription Status</title>
+</head>
+<body>
+  <h1>Your Subscription</h1>
+
+  <p>Plan: <span id="plan-name">Pro</span></p>
+  <p>Status: <span id="status-badge">Active</span></p>
+
+  <button id="cancel-button">Cancel Subscription</button>
+  <p id="cancel-confirmation" hidden>Your subscription has been canceled.</p>
+
+  <script>
+    document.getElementById("cancel-button").addEventListener("click", function () {
+      document.getElementById("status-badge").textContent = "Canceled";
+      document.getElementById("cancel-confirmation").hidden = false;
+      this.disabled = true;
+    });
+  </script>
+</body>
+</html>
