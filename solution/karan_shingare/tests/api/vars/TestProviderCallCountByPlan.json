@@ -1,0 +1,10 @@
+{
+  "trial_plan_defers_the_charge": {
+    "plan": "basic",
+    "expected_call_count": 0
+  },
+  "unknown_plan_never_reaches_the_provider": {
+    "plan": "does_not_exist",
+    "expected_call_count": 0
+  }
+}

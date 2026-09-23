@@ -1,0 +1,21 @@
+{
+  "valid_signature_is_accepted": {
+    "expected_status": 200
+  },
+  "wrong_signature_is_rejected": {
+    "secret_override": "wrong_secret",
+    "expected_status": 401
+  },
+  "no_signature_is_rejected": {
+    "signed": false,
+    "expected_status": 401
+  },
+  "malformed_json_body_is_rejected": {
+    "malformed_json": true,
+    "expected_status": 400
+  },
+  "missing_required_fields_is_rejected": {
+    "missing_fields": true,
+    "expected_status": 400
+  }
+}

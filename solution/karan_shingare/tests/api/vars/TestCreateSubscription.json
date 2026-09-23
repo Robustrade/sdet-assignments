@@ -1,0 +1,26 @@
+{
+  "trial_plan_creates_trialing_subscription": {
+    "plan": "basic",
+    "expected_body": {"status": "trialing", "plan": "basic"},
+    "expected_provider_calls": 0
+  },
+  "unknown_plan_is_rejected": {
+    "plan": "enterprise",
+    "expected_status": 400,
+    "expected_error_contains": "plan",
+    "expected_provider_calls": 0
+  },
+  "missing_payment_method_is_rejected": {
+    "payment_method_id": null,
+    "expected_status": 400
+  },
+  "unknown_customer_is_rejected": {
+    "customer_id": "cust_does_not_exist",
+    "expected_status": 400,
+    "expected_error_contains": "customer"
+  },
+  "invalid_payment_method_format_is_rejected": {
+    "payment_method_id": "not-a-payment-method",
+    "expected_status": 400
+  }
+}
