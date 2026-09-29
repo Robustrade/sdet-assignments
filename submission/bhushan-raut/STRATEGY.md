@@ -287,7 +287,7 @@ The commit history on this branch will show that sequence for the core behaviour
 ## 11. Known limitations (planned)
 
 - Single-process fixture. There is no real queue or scheduler; the billing run is triggered explicitly.
-- SQLite serialises writes, so the concurrency test (X1) proves application-level idempotency but not behaviour under true database-level races as in Postgres.
+- SQLite serialises writes, so the concurrency tests (X1) prove application-level idempotency but not behaviour under true database-level races as in Postgres. X1 does not rely on timing: `MockPaymentProvider.willSucceedWhenReleased()` holds a charge inside the provider, so the test acts while that charge is provably in flight.
 - No proration, plan changes mid-cycle, taxes or multi-currency. These are non-goals in the brief.
 - Provider timeouts are modelled as a thrown `ProviderTimeoutError`. Real-world network partial failures are approximated rather than reproduced.
 - If a subscription is canceled while a charge is in flight, and the provider later reports that charge as succeeded, the event is recorded as `ignored_invalid_transition` and the attempt stays `pending`. A production system would record the capture and issue a refund automatically. That is out of scope here.
