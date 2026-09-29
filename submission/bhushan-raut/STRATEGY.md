@@ -1,9 +1,9 @@
 # Test Strategy — Subscription & Billing Service
 
 **Author:** Bhushan Raut
-**Status:** Approach PR (documentation first). Code follows in later commits on this branch.
+**Status:** Implemented. This document was written first; it has since been updated so every file, class and method it names exists in the code.
 
-This document says how I plan to validate the Subscription & Billing Service before I write the automation. It covers the assumptions, what is real and what is mocked, the framework design and patterns, the persistence model, the invariants, and the scenario catalogue the tests will implement.
+This document says how I validate the Subscription & Billing Service before I write the automation. It covers the assumptions, what is real and what is mocked, the framework design and patterns, the persistence model, the invariants, and the scenario catalogue the tests implement.
 
 ---
 
@@ -104,7 +104,7 @@ active   --CANCEL_REQUESTED--------> canceled
 trialing --CANCEL_REQUESTED--------> canceled
 ```
 
-It is an **explicit transition table** (`Record<Status, Partial<Record<Trigger, Status>>>`). `SubscriptionStateMachine.apply(current, trigger)` returns either a frozen `Transition` or an `InvalidTransition` result. `Transition` is a **branded type**: only `apply()` can create one, and hand-building one is a compile error, which the spec proves with `@ts-expect-error`. The repository's `updateStatus` will accept only a `Transition`, so no call site can write a raw status string.
+It is an **explicit transition table** (`Record<Status, Partial<Record<Trigger, Status>>>`). `SubscriptionStateMachine.apply(current, trigger)` returns either a frozen `Transition` or an `InvalidTransition` result. `Transition` is a **branded type**: only `apply()` can create one, and hand-building one is a compile error, which the spec proves with `@ts-expect-error`. `SubscriptionRepository.applyTransition` accepts only a `Transition`, so no call site can write a raw status string.
 
 The spec keeps an **independent copy of the brief's diagram** as the source of expected results. It does not import the implementation's table, because a wrong entry there would then agree with itself. Tests are generated from that copy:
 
@@ -168,29 +168,32 @@ submission/bhushan-raut/
   src/                              # SUT fixture
     domain/     SubscriptionStateMachine.ts (transition table + branded Transition), PlanCatalog.ts
     provider/   PaymentProvider.ts            (interface only: the seam)
-    persistence/ schema.sql, *Repository.ts
+    persistence/ schema.ts, database.ts, *Repository.ts
     services/   SubscriptionService.ts, BillingService.ts, WebhookProcessor.ts
     http/       app.ts, webhookSignature.ts
     clock.ts, notifier.ts
   test/
     framework/
       env/        TestEnvironment.ts          (fixture factory: wires DB, mocks, app, clock)
+                  Given.ts                    (drives a subscription into a start state via the API)
       clients/    SubscriptionApiClient.ts, WebhookClient.ts
       doubles/    MockPaymentProvider.ts, WebhookSimulator.ts, SpyNotifier.ts, FakeClock.ts
       builders/   CustomerBuilder.ts, SubscriptionRequestBuilder.ts, WebhookEventBuilder.ts
-      verify/     DbInspector.ts, SubscriptionAssertions.ts, ProviderAssertions.ts, InvariantChecker.ts
+      verify/     DbInspector.ts, SubscriptionAssertions.ts, InvariantChecker.ts
     specs/
-      api/  lifecycle/  webhooks/  persistence/  provider/  e2e/
+      api/  lifecycle/  webhooks/  provider/  e2e/  concurrency/
 ```
 
 | Pattern | Where | Problem it solves |
 |---|---|---|
 | **State (transition table)** | `src/domain/SubscriptionStateMachine.ts` | Makes illegal transitions structurally impossible. The branded `Transition` type means persistence code cannot receive a status change that skipped the state machine. |
-| **Builder** | `test/framework/builders/*` | Scenarios read as intent, for example `aWebhook().paymentFailed().forInvoice(inv).withEventId(sameId).signed()`. This avoids repeating object literals and lets me build deliberately invalid payloads (`.unsigned()`, `.withTamperedBody()`, `.missing('invoice_id')`). |
+| **Builder** | `test/framework/builders/*` | Scenarios read as intent, for example `aWebhook().paymentFailed().forCharge(charge).withEventId(sameId).build()`. This avoids repeating object literals and lets me build deliberately invalid payloads (`.without('invoice_id')`, `.ofType('payment.unknown')`, `.with('amount', 1)`). Signing is a separate concern handled by `WebhookSimulator`. |
 | **Strategy / dependency injection** | `PaymentProvider` interface injected into `BillingService`; `MockPaymentProvider` in tests | Lets tests substitute scripted success, decline or timeout, and record arguments without any network. |
 | **Strategy** | `PlanCatalog` returns a `PlanPolicy` (`price`, `trialDays`) per plan | Keeps plan branching out of the service code, and gives INV-6 a single rule to check against. |
 | **Repository** | `src/persistence/*Repository.ts` in the SUT; `DbInspector` on the test side | No raw SQL scattered through services or specs. It also provides the independent read path from section 5. |
-| **Factory** | `TestEnvironment.create(options)` | One place wires DB, clock, mock provider, notifier and app for each test, so isolation is guaranteed rather than remembered. |
+| **Factory** | `TestEnvironment.create()`, registered per test by `useTestEnvironment()` | One place wires DB, clock, mock provider, notifier and app for each test, so isolation is guaranteed rather than remembered. The same hook runs the invariant check on teardown. |
+
+`Given` is a plain helper, not a named pattern. It reaches start states such as `pastDueSubscription()` through the public API and the mock provider, never by inserting rows, so every precondition is itself an invariant-checked path.
 
 I will only name a pattern in the PR if it is present in the code as described here.
 
@@ -202,13 +205,14 @@ I will only name a pattern in the PR if it is present in the code as described h
 
 **`MockPaymentProvider`** implements `PaymentProvider.charge({ customerId, paymentMethodId, amount, currency, idempotencyKey })`.
 
-- Outcomes are scripted per call: `.willSucceed()`, `.willDecline('card_declined')`, `.willTimeout()`, or a queue such as `.willRespond(['declined', 'succeeded'])`.
-- It records every call. `ProviderAssertions` checks the **exact arguments**, including amount, customer, payment method and idempotency key, not only that a call happened.
-- A negative assertion, `expectNoCharge()`, is used for rejected creations, replayed webhooks and billing runs on canceled subscriptions.
+- Outcomes are scripted per call and queued in order: `.willSucceed()`, `.willDecline('card_declined')`, `.willTimeout()`, and `.willSucceedWhenReleased()` (holds the charge in flight until the test releases it; used by X1).
+- An unscripted charge throws, and a scripted outcome left unused fails the test on teardown.
+- It records every call in `provider.calls`. Specs assert the **exact arguments** with `toEqual`, including amount, currency, customer, payment method, idempotency key and invoice metadata, not only that a call happened.
+- The negative case is `expect(provider.calls).toHaveLength(n)` with the count unchanged. It is used for rejected creations, replayed webhooks, billing before the trial ends, and billing runs on canceled subscriptions.
 
-**`WebhookSimulator`** signs the **raw body** with the shared test secret, which is the same HMAC scheme the SUT verifies. It can also produce:
+**`WebhookSimulator`** signs the **raw body** with the shared test secret, using the same HMAC-SHA256 scheme the SUT verifies. It has its own HMAC code rather than importing the SUT's signer, so a bug in the SUT's scheme cannot be mirrored by the tests. It can also produce:
 
-- missing, wrong or truncated signatures
+- a missing signature, or one made with the wrong secret
 - a body tampered with after signing
 - malformed JSON
 - a missing required field
@@ -237,11 +241,11 @@ I will only name a pattern in the PR if it is present in the code as described h
 
 | ID | Area | Scenario | Key assertions |
 |---|---|---|---|
-| A1 | Create | basic plan → `trialing`, trial_ends_at = now + 14d, no charge | API = DB, `expectNoCharge`, audit `∅→trialing` |
+| A1 | Create | basic plan → `trialing`, trial_ends_at = now + 14d, no charge | API = DB, no provider call, audit `∅→trialing` |
 | A2 | Create | pro plan + charge succeeds → `active` | provider called once with 4900/USD/pm/key, invoice paid, notifier ×1 |
 | A3 | Create | pro plan + decline → `past_due` | attempt failed, no paid invoice, INV-1 |
 | A4 | Create | pro plan + timeout → `trialing`, attempt pending; later `payment.succeeded` webhook → `active` | ambiguous outcome resolved by webhook |
-| B1–B5 | Validation | unknown plan, missing customer_id, unknown customer, missing/invalid payment_method_id, cancel twice | 4xx + error shape, **no rows written**, `expectNoCharge` |
+| B1–B5 | Validation | unknown plan, missing customer_id, unknown customer, missing/invalid payment_method_id, cancel twice | 4xx + error shape, **no rows written**, no provider call |
 | C1 | Payment failure | trial end + decline → `past_due` | failed attempt persisted, no success record |
 | C2 | Payment failure | active renewal decline → `past_due` | as above |
 | C3 | Retries | past_due retry succeeds → `active`; retry_count reset | attempt_no increments, new idempotency key |
@@ -253,7 +257,7 @@ I will only name a pattern in the PR if it is present in the code as described h
 | E2 | State machine | all 17 invalid pairs (generated) | rejected or ignored, status unchanged |
 | E3 | State machine | `payment.succeeded` on canceled subscription | stays canceled, outcome `ignored_invalid_transition` |
 | E4 | Out of order | `payment.failed` after `payment.succeeded` for the same invoice | stays active, outcome `ignored_stale` |
-| E5 | Cancel | cancel stops billing: billing run after cancel | `expectNoCharge`, 409/no-op |
+| E5 | Cancel | cancel stops billing: billing run after cancel | no provider call, 409 `subscription_canceled` |
 | F1–F3 | Webhook HTTP | bad signature / tampered body / malformed JSON | 401/401/400, **nothing persisted** (not even a webhook_events row) |
 | F4 | Refund | `payment.refunded` | invoice refunded, status unchanged, no audit entry |
 | G1 | E2E | full journey: create basic → trial end decline → retry success → renewal → cancel → stray success webhook | API = DB at **every** step, invariants hold |
@@ -269,7 +273,7 @@ For each behaviour, in priority order (state machine → idempotency → failure
 2. **Blue**: add the minimum fixture or SUT code needed to make it pass.
 3. **Green**: refactor builders and assertions for reuse, keeping everything green.
 
-The commit history on this branch will show that sequence for the core behaviours.
+The commit history on this branch shows that sequence for the core behaviours.
 
 **Stack:**
 
@@ -284,7 +288,7 @@ The commit history on this branch will show that sequence for the core behaviour
 
 ---
 
-## 11. Known limitations (planned)
+## 11. Known limitations
 
 - Single-process fixture. There is no real queue or scheduler; the billing run is triggered explicitly.
 - SQLite serialises writes, so the concurrency tests (X1) prove application-level idempotency but not behaviour under true database-level races as in Postgres. X1 does not rely on timing: `MockPaymentProvider.willSucceedWhenReleased()` holds a charge inside the provider, so the test acts while that charge is provably in flight.
