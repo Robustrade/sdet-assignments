@@ -42,8 +42,6 @@ export function inTransaction<T>(db: Db, fn: () => T): T {
   }
 }
 
-export type Row = Record<string, string | number | null>;
-
 /** node:sqlite returns null-prototype objects; callers get plain, typed rows. */
 export function one<T>(db: Db, sql: string, ...params: (string | number | null)[]): T | undefined {
   const row = db.prepare(sql).get(...params);

@@ -60,16 +60,15 @@ export class WebhookProcessor {
 
   process(event: ProviderEvent, rawBody: Buffer): WebhookAck {
     const now = this.clock.now();
-    let activated: string | undefined;
 
-    const ack = inTransaction(this.db, (): WebhookAck => {
+    const { ack, activated } = inTransaction(this.db, () => {
       const previous = this.events.findOutcome(event.event_id);
       if (previous) {
         this.events.recordRedelivery(event.event_id, now);
-        return { event_id: event.event_id, outcome: previous, duplicate: true };
+        return { ack: { event_id: event.event_id, outcome: previous, duplicate: true }, activated: false };
       }
 
-      const outcome = this.decide(event, now, (id) => (activated = id));
+      const { outcome, activated } = this.decide(event, now);
       this.events.insert(
         {
           eventId: event.event_id,
@@ -81,29 +80,31 @@ export class WebhookProcessor {
         outcome,
         now,
       );
-      return { event_id: event.event_id, outcome, duplicate: false };
+      return { ack: { event_id: event.event_id, outcome, duplicate: false }, activated };
     });
 
     // Side effects only after the transaction has committed.
-    if (activated) this.notifier.subscriptionActivated(activated);
+    if (activated) this.notifier.subscriptionActivated(event.subscription_id);
     return ack;
   }
 
-  private decide(event: ProviderEvent, now: Date, onActivated: (id: string) => void): WebhookOutcome {
+  private decide(event: ProviderEvent, now: Date): { outcome: WebhookOutcome; activated: boolean } {
+    const ignored = (outcome: WebhookOutcome) => ({ outcome, activated: false });
+
     const sub = this.subscriptions.find(event.subscription_id);
     const invoice = this.billing.findInvoice(event.invoice_id);
-    if (!sub || !invoice || invoice.subscriptionId !== sub.id) return 'ignored_unknown_reference';
-    if (invoice.amount !== event.amount || invoice.currency !== event.currency) return 'ignored_amount_mismatch';
+    if (!sub || !invoice || invoice.subscriptionId !== sub.id) return ignored('ignored_unknown_reference');
+    if (invoice.amount !== event.amount || invoice.currency !== event.currency) return ignored('ignored_amount_mismatch');
 
     if (event.type === 'payment.refunded') {
-      if (invoice.status !== 'paid') return 'ignored_stale';
+      if (invoice.status !== 'paid') return ignored('ignored_stale');
       this.billing.setInvoiceStatus(invoice.id, 'refunded', now);
-      return 'applied';
+      return { outcome: 'applied', activated: false };
     }
 
     // A webhook settles a charge we are waiting on. With nothing pending, its outcome is already known.
     const attempt = this.billing.pendingAttemptForInvoice(invoice.id);
-    if (!attempt) return 'ignored_stale';
+    if (!attempt) return ignored('ignored_stale');
 
     const providerRef = `evt:${event.event_id}`;
     const result = this.applier.apply(
@@ -115,7 +116,6 @@ export class WebhookProcessor {
         : { kind: 'failed', providerRef, declineCode: 'provider_reported_failure' },
       { source: 'webhook', reference: event.event_id, at: now },
     );
-    if (result.outcome === 'applied' && result.activated) onActivated(sub.id);
-    return result.outcome;
+    return result.outcome === 'applied' ? result : ignored(result.outcome);
   }
 }

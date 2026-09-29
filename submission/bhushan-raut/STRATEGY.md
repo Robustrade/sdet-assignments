@@ -68,7 +68,9 @@ A timeout leaves the outcome unknown, so the final result arrives by webhook. Th
 
 **Retries.** A `past_due` subscription is retried up to **3 times**. After the last failure it moves to `canceled` (retries exhausted).
 
-**`payment.refunded`.** This marks the payment and invoice as `refunded` and writes an audit entry. It does **not** change subscription status, because the brief's lifecycle diagram defines no transition for it.
+**`payment.refunded`.** This marks a `paid` invoice as `refunded`. It does **not** change subscription status, because the brief's lifecycle diagram defines no transition for it. The audit log records lifecycle transitions only, so a refund is traced through the invoice and its `webhook_events` row.
+
+**Webhooks settle pending charges.** A `payment.succeeded` or `payment.failed` webhook is applied only if it settles a charge still marked `pending` on that invoice. If nothing is pending, the outcome is already known locally and the event is recorded as `ignored_stale`. This one rule handles late, reordered and re-sent events.
 
 **Webhook response codes:**
 
@@ -77,6 +79,8 @@ A timeout leaves the outcome unknown, so the final result arrives by webhook. Th
 | Valid event | `200` | Applied |
 | Duplicate event | `200` | No-op |
 | Stale event, or event that would be an invalid transition | `200` | Ignored |
+| Invoice unknown, or belongs to a different subscription | `200` | Ignored (`ignored_unknown_reference`) |
+| Amount or currency differs from the invoice | `200` | Ignored (`ignored_amount_mismatch`) |
 | Bad signature | `401` | Nothing persisted |
 | Malformed body | `400` | Nothing persisted |
 
@@ -119,7 +123,7 @@ The spec keeps an **independent copy of the brief's diagram** as the source of e
 | `subscriptions` | id, customer_id, plan, status, trial_ends_at, retry_count, canceled_at, updated_at | Matches the API `GET` at every stage. `canceled_at` is set if and only if status = canceled. |
 | `invoices` | id, subscription_id, amount, currency, status (`open/paid/failed/refunded`), period | Amount and currency equal the plan price. At most one `paid` invoice per period. |
 | `payment_attempts` | id, invoice_id, attempt_no, idempotency_key **UNIQUE**, provider_ref, status, created_at | One row per genuine provider call. There are never two rows for the same idempotency key. |
-| `webhook_events` | event_id **PK**, type, subscription_id, invoice_id, delivery_count, outcome (`applied/duplicate/ignored_stale/ignored_invalid_transition`), first_received_at | One row per event_id. Redeliveries increment `delivery_count` rather than inserting rows. |
+| `webhook_events` | event_id **PK**, type, subscription_id, invoice_id, delivery_count, outcome (`applied`, `ignored_stale`, `ignored_invalid_transition`, `ignored_unknown_reference`, `ignored_amount_mismatch`), first_received_at | One row per event_id, keeping the outcome of its first processing. Redeliveries increment `delivery_count` rather than inserting rows. |
 | `subscription_audit_log` | id, subscription_id, from_status, to_status, trigger, source (`api/webhook/billing`), reference, at | Forms an unbroken chain: each `from_status` equals the previous `to_status`, and the last `to_status` equals the current status. |
 
 **Independent read path.** Tests verify persistence through a test-side `DbInspector` with its own SQL. They do not reuse the SUT's repositories. If the SUT's repository has a bug, tests that read through it would inherit the same bug and still pass.
@@ -141,10 +145,15 @@ An `InvariantChecker` runs in `afterEach` against the whole database. This means
 1. **INV-1**: No subscription is `active` without at least one `succeeded` payment attempt persisted.
 2. **INV-2**: No audit entry exists for a `canceled` subscription after its `canceled_at`. Canceled is terminal.
 3. **INV-3**: `payment_attempts.idempotency_key` is unique, so there are no duplicate charges. The mock provider's recorded call count equals the number of `payment_attempts` rows.
-4. **INV-4**: `webhook_events` has at most one row per `event_id`, and `applied` events are one-to-one with their audit entries.
+4. **INV-4**: Every audit entry caused by a webhook points to exactly one `event_id` recorded as `applied`, and no event produces more than one audit entry.
 5. **INV-5**: The audit chain is unbroken and ends at the current status.
 6. **INV-6**: Invoice amounts match the plan's price for the subscription's plan. The price rule used at creation and at billing is the same.
-7. **INV-7**: There are no contradictory records, such as a subscription that is `active` whose invoices are all `failed`.
+7. **INV-7**: There are no contradictory records:
+   - a `paid` or `refunded` invoice has exactly one succeeded attempt, and any other invoice has none
+   - a `past_due` subscription has at least one failed attempt
+   - an invoice never has more than one charge in flight at once
+
+`TestEnvironment` also fails a test if the mock provider received a charge that no test scripted, or if a scripted outcome was never used, so both unexpected and missing charges are caught.
 
 An eighth invariant is checked per test, because it needs the API response:
 
@@ -246,7 +255,7 @@ I will only name a pattern in the PR if it is present in the code as described h
 | E4 | Out of order | `payment.failed` after `payment.succeeded` for the same invoice | stays active, outcome `ignored_stale` |
 | E5 | Cancel | cancel stops billing: billing run after cancel | `expectNoCharge`, 409/no-op |
 | F1–F3 | Webhook HTTP | bad signature / tampered body / malformed JSON | 401/401/400, **nothing persisted** (not even a webhook_events row) |
-| F4 | Refund | `payment.refunded` | invoice refunded, status unchanged, audit entry |
+| F4 | Refund | `payment.refunded` | invoice refunded, status unchanged, no audit entry |
 | G1 | E2E | full journey: create basic → trial end decline → retry success → renewal → cancel → stray success webhook | API = DB at **every** step, invariants hold |
 | X1 (bonus) | Concurrency | two different events for the same subscription posted in parallel with `Promise.all` | one valid final state, audit chain intact |
 
@@ -281,3 +290,4 @@ The commit history on this branch will show that sequence for the core behaviour
 - SQLite serialises writes, so the concurrency test (X1) proves application-level idempotency but not behaviour under true database-level races as in Postgres.
 - No proration, plan changes mid-cycle, taxes or multi-currency. These are non-goals in the brief.
 - Provider timeouts are modelled as a thrown `ProviderTimeoutError`. Real-world network partial failures are approximated rather than reproduced.
+- If a subscription is canceled while a charge is in flight, and the provider later reports that charge as succeeded, the event is recorded as `ignored_invalid_transition` and the attempt stays `pending`. A production system would record the capture and issue a refund automatically. That is out of scope here.
