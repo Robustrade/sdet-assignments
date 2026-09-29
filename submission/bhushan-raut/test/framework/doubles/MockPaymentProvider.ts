@@ -7,6 +7,7 @@ import {
 
 type ScriptedOutcome =
   | { readonly kind: 'succeed' }
+  | { readonly kind: 'held'; readonly released: Promise<void> }
   | { readonly kind: 'decline'; readonly code: string }
   | { readonly kind: 'timeout' };
 
@@ -31,6 +32,18 @@ export class MockPaymentProvider implements PaymentProvider {
   willDecline(code = 'card_declined'): this {
     this.script.push({ kind: 'decline', code });
     return this;
+  }
+
+  /**
+   * The next charge blocks inside the provider until the returned function is called,
+   * then succeeds. Lets a test act while a charge is provably in flight, instead of
+   * hoping two concurrent requests happen to overlap.
+   */
+  willSucceedWhenReleased(): () => void {
+    let release!: () => void;
+    const released = new Promise<void>((resolve) => (release = resolve));
+    this.script.push({ kind: 'held', released });
+    return release;
   }
 
   willTimeout(): this {
@@ -61,6 +74,9 @@ export class MockPaymentProvider implements PaymentProvider {
     const providerRef = `ch_mock_${++this.refSeq}`;
     switch (next.kind) {
       case 'succeed':
+        return { status: 'succeeded', providerRef };
+      case 'held':
+        await next.released;
         return { status: 'succeeded', providerRef };
       case 'decline':
         return { status: 'declined', providerRef, declineCode: next.code };

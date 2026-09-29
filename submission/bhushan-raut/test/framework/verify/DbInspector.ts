@@ -48,6 +48,7 @@ export interface AuditRow {
   trigger: string;
   source: string;
   reference: string | null;
+  at: string;
 }
 
 const TABLES = ['subscriptions', 'invoices', 'payment_attempts', 'webhook_events', 'subscription_audit_log'] as const;

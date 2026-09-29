@@ -48,6 +48,27 @@ export class Given {
     return { subscription: run.body.subscription, charge: this.env.provider.lastCall() };
   }
 
+  /** Active subscription whose renewal charge (30 days on) times out: outcome to arrive by webhook. */
+  async activeWithPendingRenewal(): Promise<WithPendingCharge> {
+    const active = await this.activeSubscription();
+    this.env.clock.advanceDays(30);
+    this.env.provider.willTimeout();
+    const run = await this.env.api.runBilling(active.id);
+    expect(run.body.result, 'renewal should be left pending').toBe('pending');
+    return { subscription: run.body.subscription, charge: this.env.provider.lastCall() };
+  }
+
+  /** Past-due subscription that has already failed `failedRetries` retries. */
+  async pastDueAfterRetries(failedRetries: number): Promise<SubscriptionView> {
+    const sub = await this.pastDueSubscription();
+    for (let i = 0; i < failedRetries; i++) {
+      this.env.provider.willDecline();
+      const run = await this.env.api.runBilling(sub.id);
+      expect(run.body.subscription.status, `after failed retry ${i + 1}`).toBe('past_due');
+    }
+    return (await this.env.api.get(sub.id)).body;
+  }
+
   private async create(plan: PlanCode, expected: SubscriptionStatus): Promise<SubscriptionView> {
     const customer = this.env.seedCustomer();
     const res = await this.env.api.create(aSubscriptionRequest().forCustomer(customer).onPlan(plan).build());
