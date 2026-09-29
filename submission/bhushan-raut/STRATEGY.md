@@ -100,9 +100,9 @@ active   --CANCEL_REQUESTED--------> canceled
 trialing --CANCEL_REQUESTED--------> canceled
 ```
 
-It will be an **explicit transition table** (`Record<Status, Partial<Record<Trigger, Status>>>`). `SubscriptionStateMachine.apply(current, trigger)` returns either the next status or an `InvalidTransition` result. The repository's `updateStatus` accepts only a `Transition` value produced by the state machine, so no call site can write a raw status string.
+It is an **explicit transition table** (`Record<Status, Partial<Record<Trigger, Status>>>`). `SubscriptionStateMachine.apply(current, trigger)` returns either a frozen `Transition` or an `InvalidTransition` result. `Transition` is a **branded type**: only `apply()` can create one, and hand-building one is a compile error, which the spec proves with `@ts-expect-error`. The repository's `updateStatus` will accept only a `Transition`, so no call site can write a raw status string.
 
-Tests are **generated from the same table**:
+The spec keeps an **independent copy of the brief's diagram** as the source of expected results. It does not import the implementation's table, because a wrong entry there would then agree with itself. Tests are generated from that copy:
 
 - All 7 valid `(from, trigger)` pairs are exercised end to end.
 - Every pair not in the table is asserted invalid. This covers 17 invalid pairs (4 statuses × 6 triggers − 7 valid), well above the minimum of two. The highest-value ones also get full end-to-end tests:
@@ -157,7 +157,7 @@ An eighth invariant is checked per test, because it needs the API response:
 ```text
 submission/bhushan-raut/
   src/                              # SUT fixture
-    domain/     SubscriptionStateMachine.ts, transitions.ts, PlanCatalog.ts, plans/*.ts
+    domain/     SubscriptionStateMachine.ts (transition table + branded Transition), PlanCatalog.ts
     provider/   PaymentProvider.ts            (interface only: the seam)
     persistence/ schema.sql, *Repository.ts
     services/   SubscriptionService.ts, BillingService.ts, WebhookProcessor.ts
@@ -176,7 +176,7 @@ submission/bhushan-raut/
 
 | Pattern | Where | Problem it solves |
 |---|---|---|
-| **State (transition table)** | `SubscriptionStateMachine`, `transitions.ts` | Makes illegal transitions structurally impossible and gives the tests one source of truth to generate cases from. |
+| **State (transition table)** | `src/domain/SubscriptionStateMachine.ts` | Makes illegal transitions structurally impossible. The branded `Transition` type means persistence code cannot receive a status change that skipped the state machine. |
 | **Builder** | `test/framework/builders/*` | Scenarios read as intent, for example `aWebhook().paymentFailed().forInvoice(inv).withEventId(sameId).signed()`. This avoids repeating object literals and lets me build deliberately invalid payloads (`.unsigned()`, `.withTamperedBody()`, `.missing('invoice_id')`). |
 | **Strategy / dependency injection** | `PaymentProvider` interface injected into `BillingService`; `MockPaymentProvider` in tests | Lets tests substitute scripted success, decline or timeout, and record arguments without any network. |
 | **Strategy** | `PlanCatalog` returns a `PlanPolicy` (`price`, `trialDays`) per plan | Keeps plan branching out of the service code, and gives INV-6 a single rule to check against. |

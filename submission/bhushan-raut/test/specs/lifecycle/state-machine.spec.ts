@@ -4,6 +4,7 @@ import {
   TRIGGERS,
   SubscriptionStateMachine,
   type Status,
+  type Transition,
   type Trigger,
 } from '../../../src/domain/SubscriptionStateMachine';
 
@@ -87,5 +88,11 @@ describe('SubscriptionStateMachine', () => {
     if (!result.ok) throw new Error('expected a valid transition');
 
     expect(Object.isFrozen(result.transition)).toBe(true);
+  });
+
+  it('cannot be bypassed by hand-building a Transition (enforced by `npm run typecheck`)', () => {
+    // @ts-expect-error — a Transition literal is not assignable: only apply() issues one.
+    const forged: Transition = { from: 'canceled', trigger: 'RETRY_SUCCEEDED', to: 'active' };
+    expect(forged).toBeDefined();
   });
 });

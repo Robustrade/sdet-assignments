@@ -28,10 +28,18 @@ const TABLE: Record<Status, Partial<Record<Trigger, Status>>> = {
   canceled: {},
 };
 
+declare const issuedByStateMachine: unique symbol;
+
+/**
+ * Branded: only SubscriptionStateMachine.apply can produce one. Persistence code that
+ * accepts a Transition (rather than a raw Status) therefore cannot be handed an
+ * unvalidated status change — illegal transitions are unrepresentable, not just unchecked.
+ */
 export interface Transition {
   readonly from: Status;
   readonly trigger: Trigger;
   readonly to: Status;
+  readonly [issuedByStateMachine]: true;
 }
 
 export interface InvalidTransition {
@@ -50,7 +58,7 @@ export class SubscriptionStateMachine {
     if (to === undefined) {
       return { ok: false, error: { name: 'InvalidTransition', from, trigger } };
     }
-    return { ok: true, transition: Object.freeze({ from, trigger, to }) };
+    return { ok: true, transition: Object.freeze({ from, trigger, to }) as Transition };
   }
 
   static isTerminal(status: Status): boolean {
