@@ -1,0 +1,18 @@
+{
+  "name": "subscription-billing-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Object-oriented test fixture for subscription billing workflows",
+  "scripts": {
+    "test": "jest --runInBand",
+    "build": "tsc --noEmit",
+    "validate": "npm run build && npm test"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.0",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.14",
+    "typescript": "^5.9.3"
+  }
+}
