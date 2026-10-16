@@ -1,0 +1,1 @@
+export interface Customer { id: string; email: string; paymentMethodId: string; }
