@@ -1,0 +1,23 @@
+{
+  "name": "kulu-sdet-billing-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright API test suite for a Subscription & Billing Service fixture",
+  "scripts": {
+    "test": "playwright test",
+    "test:report": "playwright show-report",
+    "lint": "eslint ."
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.64.1",
+    "eslint": "^9.39.5",
+    "globals": "^17.13.0"
+  }
+}
