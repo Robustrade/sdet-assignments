@@ -1,0 +1,31 @@
+{
+  "name": "naveen-lal-ghodkar-katika",
+  "version": "1.0.0",
+  "description": "SDET automation for a Subscription & Billing Service (TypeScript, Jest, Supertest)",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --runInBand",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.5",
+    "@types/supertest": "^7.2.1",
+    "jest": "^30.5.2",
+    "supertest": "^7.3.1",
+    "ts-jest": "^29.4.15",
+    "typescript": "~5.9.3"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
