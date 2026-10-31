@@ -1,11 +1,6 @@
 
 import { randomUUID } from 'node:crypto';
-import type {
-  Invoice,
-  Plan,
-  PlanName,
-  Subscription,
-} from './models.js';
+import type { Invoice, PlanName, Subscription } from './models.js';
 import { InMemoryRepository } from './repository.js';
 import { SubscriptionStateMachine } from './state-machine.js';
 import type { PaymentProvider } from './payment-provider.js';
@@ -17,17 +12,19 @@ export class SubscriptionService {
     private readonly stateMachine = new SubscriptionStateMachine(),
   ) {}
 
-  createSubscription(input: {
+  async createSubscription(input: {
     customerId: string;
     plan: PlanName;
     paymentMethodId: string;
-  }): Subscription {
+  }): Promise<Subscription> {
     const customer = this.repository.getCustomer(input.customerId);
+
     if (!customer) {
       throw new Error('Unknown customer');
     }
 
     const plan = this.repository.getPlan(input.plan);
+
     if (!plan) {
       throw new Error('Unknown plan');
     }
@@ -37,12 +34,13 @@ export class SubscriptionService {
     }
 
     const now = new Date().toISOString();
+
     const subscription: Subscription = {
       id: `sub_${randomUUID()}`,
       customerId: customer.id,
       plan: plan.name,
       paymentMethodId: input.paymentMethodId,
-      status: plan.chargeImmediately ? 'active' : 'trialing',
+      status: 'trialing',
       createdAt: now,
       updatedAt: now,
       trialEndsAt: plan.chargeImmediately
@@ -51,11 +49,17 @@ export class SubscriptionService {
     };
 
     this.repository.saveSubscription(subscription);
-    return subscription;
+
+    if (plan.chargeImmediately) {
+      await this.chargeSubscription(subscription.id);
+    }
+
+    return this.repository.getSubscription(subscription.id)!;
   }
 
   async chargeSubscription(subscriptionId: string): Promise<Invoice> {
     const subscription = this.repository.getSubscription(subscriptionId);
+
     if (!subscription) {
       throw new Error('Unknown subscription');
     }
@@ -65,13 +69,14 @@ export class SubscriptionService {
     }
 
     const plan = this.repository.getPlan(subscription.plan);
+
     if (!plan) {
       throw new Error('Unknown plan');
     }
 
     const invoice: Invoice = {
       id: `inv_${randomUUID()}`,
-      subscriptionId,
+      subscriptionId: subscription.id,
       amount: plan.price,
       currency: plan.currency,
       status: 'pending',
@@ -97,45 +102,93 @@ export class SubscriptionService {
 
     this.repository.saveInvoice(updatedInvoice);
 
-    if (result.success && subscription.status !== 'active') {
-      const updatedSubscription = {
-        ...subscription,
-        status: this.stateMachine.transition(subscription.status, 'active'),
-        updatedAt: new Date().toISOString(),
-      };
+    const currentSubscription =
+      this.repository.getSubscription(subscriptionId)!;
 
-      this.repository.saveSubscription(updatedSubscription);
-    } else if (!result.success && subscription.status === 'trialing') {
+    if (result.success && currentSubscription.status !== 'active') {
+      const newStatus = this.stateMachine.transition(
+        currentSubscription.status,
+        'active',
+      );
+
       this.repository.saveSubscription({
-        ...subscription,
-        status: this.stateMachine.transition('trialing', 'past_due'),
+        ...currentSubscription,
+        status: newStatus,
         updatedAt: new Date().toISOString(),
       });
-    } else if (!result.success && subscription.status === 'active') {
-      this.repository.saveSubscription({
-        ...subscription,
-        status: this.stateMachine.transition('active', 'past_due'),
-        updatedAt: new Date().toISOString(),
-      });
+    } else if (!result.success) {
+      if (
+        currentSubscription.status === 'trialing' ||
+        currentSubscription.status === 'active'
+      ) {
+        const newStatus = this.stateMachine.transition(
+          currentSubscription.status,
+          'past_due',
+        );
+
+        this.repository.saveSubscription({
+          ...currentSubscription,
+          status: newStatus,
+          updatedAt: new Date().toISOString(),
+        });
+      }
     }
 
     return updatedInvoice;
   }
 
-  cancelSubscription(subscriptionId: string): Subscription {
+  changePlan(
+    subscriptionId: string,
+    newPlanName: PlanName,
+  ): Subscription {
     const subscription = this.repository.getSubscription(subscriptionId);
+
     if (!subscription) {
       throw new Error('Unknown subscription');
     }
 
-    const canceled = {
+    if (subscription.status === 'canceled') {
+      throw new Error('Cannot change plan for a canceled subscription');
+    }
+
+    const newPlan = this.repository.getPlan(newPlanName);
+
+    if (!newPlan) {
+      throw new Error('Unknown plan');
+    }
+
+    const updatedSubscription: Subscription = {
       ...subscription,
-      status: this.stateMachine.transition(subscription.status, 'canceled'),
+      plan: newPlan.name,
       updatedAt: new Date().toISOString(),
     };
 
-    this.repository.saveSubscription(canceled);
-    return canceled;
+    this.repository.saveSubscription(updatedSubscription);
+
+    return updatedSubscription;
+  }
+
+  cancelSubscription(subscriptionId: string): Subscription {
+    const subscription = this.repository.getSubscription(subscriptionId);
+
+    if (!subscription) {
+      throw new Error('Unknown subscription');
+    }
+
+    const newStatus = this.stateMachine.transition(
+      subscription.status,
+      'canceled',
+    );
+
+    const updatedSubscription: Subscription = {
+      ...subscription,
+      status: newStatus,
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.repository.saveSubscription(updatedSubscription);
+
+    return updatedSubscription;
   }
 
   getSubscription(subscriptionId: string): Subscription | undefined {

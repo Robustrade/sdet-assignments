@@ -1,4 +1,3 @@
-
 import { beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app.js';
@@ -113,5 +112,72 @@ describe('Subscription API', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Unknown subscription');
+  });
+
+  it('changes an existing subscription plan', async () => {
+    const created = await request(app)
+      .post('/subscriptions')
+      .send({
+        customerId: 'customer_1',
+        plan: 'basic',
+        paymentMethodId: 'pm_test_123',
+      });
+
+    const response = await request(app)
+      .patch(`/subscriptions/${created.body.id}/plan`)
+      .send({ plan: 'pro' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.plan).toBe('pro');
+    expect(response.body.status).toBe('trialing');
+  });
+
+  it('returns 404 when changing plan for an unknown subscription', async () => {
+    const response = await request(app)
+      .patch('/subscriptions/unknown_id/plan')
+      .send({ plan: 'pro' });
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Unknown subscription');
+  });
+
+  it('returns 400 when changing to an unknown plan', async () => {
+    const created = await request(app)
+      .post('/subscriptions')
+      .send({
+        customerId: 'customer_1',
+        plan: 'basic',
+        paymentMethodId: 'pm_test_123',
+      });
+
+    const response = await request(app)
+      .patch(`/subscriptions/${created.body.id}/plan`)
+      .send({ plan: 'unknown' });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Unknown plan');
+  });
+
+  it('returns 409 when changing plan for a canceled subscription', async () => {
+    const created = await request(app)
+      .post('/subscriptions')
+      .send({
+        customerId: 'customer_1',
+        plan: 'basic',
+        paymentMethodId: 'pm_test_123',
+      });
+
+    await request(app).post(
+      `/subscriptions/${created.body.id}/cancel`,
+    );
+
+    const response = await request(app)
+      .patch(`/subscriptions/${created.body.id}/plan`)
+      .send({ plan: 'pro' });
+
+    expect(response.status).toBe(409);
+    expect(response.body.error).toBe(
+      'Cannot change plan for a canceled subscription',
+    );
   });
 });

@@ -118,7 +118,6 @@ describe('Payment webhook signature validation and processing', () => {
     expect(repository.getPaymentEventsForSubscription('sub_1')).toHaveLength(1);
   });
 
-  
   it('marks the invoice failed when payment fails', async () => {
     const payload = {
       eventId: 'evt_failure',
@@ -161,5 +160,107 @@ describe('Payment webhook signature validation and processing', () => {
       .send({ eventId: 'evt_missing' });
 
     expect(response.status).toBe(401);
+  });
+
+  it('does not regress subscription after success followed by failure', async () => {
+    const successPayload = {
+      eventId: 'evt_success_first',
+      subscriptionId: 'sub_1',
+      invoiceId: 'inv_1',
+      type: 'payment.succeeded',
+    };
+
+    const failurePayload = {
+      eventId: 'evt_failure_later',
+      subscriptionId: 'sub_1',
+      invoiceId: 'inv_1',
+      type: 'payment.failed',
+    };
+
+    await request(app)
+      .post('/webhooks/payment')
+      .set('x-webhook-signature', signPayload(successPayload))
+      .send(successPayload);
+
+    const failureResponse = await request(app)
+      .post('/webhooks/payment')
+      .set('x-webhook-signature', signPayload(failurePayload))
+      .send(failurePayload);
+
+    expect(failureResponse.status).toBe(200);
+    expect(repository.getInvoice('inv_1')?.status).toBe('paid');
+    expect(repository.getSubscription('sub_1')?.status).toBe('active');
+  });
+
+  it('does not reactivate a canceled subscription', async () => {
+    repository.saveSubscription({
+      ...repository.getSubscription('sub_1')!,
+      status: 'canceled',
+    });
+
+    const payload = {
+      eventId: 'evt_after_cancel',
+      subscriptionId: 'sub_1',
+      invoiceId: 'inv_1',
+      type: 'payment.succeeded',
+    };
+
+    const response = await request(app)
+      .post('/webhooks/payment')
+      .set('x-webhook-signature', signPayload(payload))
+      .send(payload);
+
+    expect(response.status).toBe(200);
+    expect(repository.getSubscription('sub_1')?.status).toBe('canceled');
+  });
+
+  it('rejects a malformed webhook payload', async () => {
+    const payload = {
+      eventId: 'evt_malformed',
+      subscriptionId: 'sub_1',
+      invoiceId: 'inv_1',
+      type: 'unknown.event',
+    };
+
+    const response = await request(app)
+      .post('/webhooks/payment')
+      .set('x-webhook-signature', signPayload(payload))
+      .send(payload);
+
+    expect(response.status).toBe(400);
+  });
+
+  it('does not change a refunded invoice back to paid after a late success event', async () => {
+    const refundPayload = {
+      eventId: 'evt_refund_first',
+      subscriptionId: 'sub_1',
+      invoiceId: 'inv_1',
+      type: 'payment.refunded',
+    };
+
+    const successPayload = {
+      eventId: 'evt_success_later',
+      subscriptionId: 'sub_1',
+      invoiceId: 'inv_1',
+      type: 'payment.succeeded',
+    };
+
+    const refundResponse = await request(app)
+      .post('/webhooks/payment')
+      .set('x-webhook-signature', signPayload(refundPayload))
+      .send(refundPayload);
+
+    const successResponse = await request(app)
+      .post('/webhooks/payment')
+      .set('x-webhook-signature', signPayload(successPayload))
+      .send(successPayload);
+
+    expect(refundResponse.status).toBe(200);
+    expect(successResponse.status).toBe(200);
+
+    expect(repository.getInvoice('inv_1')?.status).toBe('refunded');
+    expect(repository.getSubscription('sub_1')?.status).toBe('trialing');
+
+    expect(repository.getPaymentEventsForSubscription('sub_1')).toHaveLength(2);
   });
 });

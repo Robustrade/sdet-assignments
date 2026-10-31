@@ -1,33 +1,45 @@
+
 # Test Approach — Subscription & Billing Service
 
 ## 1. Objective
 
-The objective is to build a maintainable automated test framework that validates the Subscription & Billing Service API, subscription lifecycle, database persistence, and payment provider interactions.
+The objective of this project is to build a maintainable automated test framework for a Subscription & Billing Service.
 
-The focus is on business correctness, webhook idempotency, and reliable verification of persisted state.
+The framework validates:
+
+- Subscription lifecycle and state transitions.
+- REST API behavior and request validation.
+- Invoice and payment persistence.
+- Payment provider interactions through a mock implementation.
+- Webhook signature validation and idempotent processing.
+- Consistency between API responses and persisted state.
+
+The primary focus is business correctness, reliability, and prevention of duplicate or invalid billing side effects.
 
 ## 2. Assumptions
 
-- No existing service implementation has been identified yet.
-- A minimal service fixture will be built if no service is provided.
-- The service will expose subscription creation, retrieval, cancellation, and payment webhook endpoints.
-- Subscription states include `trialing`, `active`, `past_due`, and `canceled`.
-- The payment provider will be mocked; no real payments will be made.
-- Persistence will use a lightweight database or in-memory store.
-- Invalid lifecycle transitions must be rejected or safely ignored.
-- Duplicate webhook events must not produce duplicate business side effects.
+- A minimal service implementation is included as part of the assignment.
+- The service supports subscription creation, retrieval, plan changes, cancellation, and payment webhooks.
+- Subscription states are `trialing`, `active`, `past_due`, and `canceled`.
+- The payment provider is mocked; no real payments are made.
+- Persistence uses a queryable in-memory repository.
+- Invalid lifecycle transitions must be rejected.
+- Duplicate webhook event IDs must not repeat business side effects.
+- Canceled subscriptions must not become active again through later payment webhooks.
 
 ## 3. Scope
 
 ### In Scope
 
-- Subscription creation, retrieval, and cancellation.
-- Request validation and API response verification.
+- Subscription creation and retrieval.
+- Subscription plan changes and cancellation.
+- API request validation and response verification.
 - Subscription lifecycle transitions.
-- Payment success, failure, and timeout scenarios.
-- Webhook signature validation and malformed payload handling.
+- Payment success, failure, decline, and timeout scenarios.
+- Webhook signature validation.
+- Malformed payload and invalid event handling.
 - Duplicate and out-of-order webhook processing.
-- Database persistence and audit history.
+- Invoice, subscription, and webhook event persistence.
 - Mock payment provider interaction verification.
 
 ### Out of Scope
@@ -36,119 +48,174 @@ The focus is on business correctness, webhook idempotency, and reliable verifica
 - Frontend testing.
 - Production-scale performance testing.
 - Tax calculations and complex billing proration.
+- Production database durability and distributed transaction guarantees.
 
 ## 4. API Contracts
 
-The following endpoints are proposed for the test fixture and will be adjusted if the implementation requires different contracts.
+The implemented API endpoints are:
 
 | Method | Endpoint | Purpose |
 |---|---|---|
 | POST | `/subscriptions` | Create a subscription |
 | GET | `/subscriptions/:id` | Retrieve a subscription |
+| PATCH | `/subscriptions/:id/plan` | Change a subscription plan |
 | POST | `/subscriptions/:id/cancel` | Cancel a subscription |
-| POST | `/webhooks/payment-provider` | Process payment provider events |
+| POST | `/webhooks/payment` | Process payment provider events |
 
-Creation requests will include a customer ID, plan, and payment method ID.
-
-Tests will verify successful responses, response schemas, validation errors, unknown resources, and webhook signature handling.
-
-Exact HTTP status codes and response payloads will be finalized when the service contract is implemented.
+API tests validate successful responses, invalid requests, unknown resources, canceled subscription behavior, and webhook signature handling.
 
 ## 5. Test Architecture
 
-The framework will separate responsibilities into reusable components:
+The framework separates responsibilities into reusable components:
 
-- **Test fixtures:** Create isolated test environments and seed test data.
-- **API client:** Encapsulate HTTP requests.
-- **Test data builders:** Build customers, subscriptions, and webhook payloads.
-- **Payment provider mock:** Simulate success, decline, and timeout outcomes while recording calls.
-- **Repository:** Provide controlled access to persisted test data.
-- **Verification helpers:** Check API results, database records, and provider interactions.
-- **Test specifications:** Group scenarios by API, lifecycle, persistence, and webhooks.
+- **Test fixtures:** Reset the repository and seed isolated test data.
+- **HTTP testing:** Supertest sends requests to the Express application.
+- **Test data builders:** CustomerBuilder and PlanBuilder create reusable test data.
+- **Payment provider mock:** Simulates success, decline, and timeout outcomes while recording calls.
+- **Repository:** InMemoryRepository provides queryable persistence for customers, plans, subscriptions, invoices, and payment events.
+- **Test specifications:** Organize scenarios by API, lifecycle, provider behavior, and webhooks.
 
 ## 6. Design Patterns
 
-- **State Machine:** Define permitted subscription transitions and prevent invalid state changes.
-- **Builder:** Construct reusable test data and readable webhook scenarios.
-- **Strategy / Dependency Injection:** Substitute the payment provider with a configurable mock.
-- **Repository:** Centralize persistence access and avoid database queries scattered across tests.
+- **State Machine:** Defines permitted subscription transitions and rejects invalid transitions.
+- **Builder:** Provides reusable and readable test data construction.
+- **Dependency Injection / Strategy:** Allows the payment provider to be replaced with a configurable mock.
+- **Repository:** Centralizes persistence access and keeps storage operations separate from business logic.
 
-Each pattern will be implemented only where it provides a clear benefit.
+These patterns improve testability, maintainability, and separation of concerns.
 
-## 7. Database Validation
+## 7. Persistence Validation
 
-The persistence layer will track the following entities:
+The in-memory repository tracks:
 
-- `subscriptions`: Current subscription state, customer, plan, and relevant timestamps.
-- `invoices` or `payments`: Billing attempts, amounts, outcomes, and references.
-- `webhook_events`: Received event IDs and processing outcomes.
-- `audit_events`: Subscription lifecycle history, if modeled separately.
+- Customers.
+- Plans.
+- Subscriptions.
+- Invoices.
+- Payment events / webhook events.
 
-Tests will verify that database state agrees with the API response and business rules.
+Tests query persisted records directly to verify business outcomes.
 
-Each test will use isolated data or a resettable test store to avoid false positives from stale records.
+Important validations include:
+
+- Subscription status matches the expected API state.
+- Invoice status reflects payment success, failure, or refund.
+- Webhook event IDs are stored and duplicate events are not processed twice.
+- A failed payment does not incorrectly activate a subscription.
+- A refunded invoice is not changed back to paid by a late success event.
+- Canceled subscriptions are not reactivated by later webhooks.
+
+The repository is reset before each test to prevent state leakage between test cases.
 
 ## 8. Webhook and Idempotency Strategy
 
-Tests will construct webhook payloads and submit them to the webhook endpoint.
+Webhook requests are validated using an HMAC SHA-256 signature.
 
-Coverage will include:
+The test suite covers:
 
-- Valid and invalid signatures.
-- Malformed payloads.
+- Valid webhook signatures.
+- Invalid and missing signatures.
+- Malformed webhook payloads.
 - Duplicate delivery of the same event ID.
-- Success followed by failure for the same invoice.
-- Payment success received after cancellation.
-- Payment failure and retry success.
-- Verification that duplicate events do not create duplicate records or repeat side effects.
+- Payment success followed by failure for the same invoice.
+- Payment success received after subscription cancellation.
+- Refund followed by a late payment success event.
+- Persistence of successfully processed unique webhook events.
 
-Webhook processing will be checked through API-visible state, persisted records, and event history.
+The implementation checks previously processed event IDs before applying business changes.
 
-## 9. Key Invariants
+Out-of-order event scenarios verify that an older or conflicting event does not incorrectly reverse an already established invoice or subscription state.
+
+## 9. Key Business Invariants
 
 - A subscription must not become active without a successful persisted payment when a charge is required.
-- A canceled subscription must not become active again through later webhooks.
-- A duplicate webhook must not repeat business side effects.
-- Invalid transitions must not silently change subscription state.
-- Rejected requests must not create invalid records or trigger unnecessary provider calls.
-- Provider calls must use the correct customer, amount, payment method, and reference.
-- Persisted subscription state must agree with the externally observed API state.
+- A canceled subscription must never transition back to active through a payment webhook.
+- Duplicate webhook events must not repeat business side effects.
+- Invalid state transitions must be rejected.
+- A failed payment must not overwrite an already paid or refunded invoice.
+- A refunded invoice must not become paid due to a late success event.
+- Provider calls must use the expected customer, amount, payment method, and idempotency key.
+- Persisted subscription state must agree with the API-visible state.
 - Plan pricing and trial configuration must be applied consistently.
 
 ## 10. Reliability Scenarios
 
-The test suite will cover duplicate and out-of-order webhook delivery, provider declines and timeouts, invalid signatures, malformed payloads, invalid state transitions, and persistence inconsistencies.
+The test suite includes:
 
-Concurrent webhook processing is a bonus scenario if time permits.
+- Duplicate webhook delivery.
+- Out-of-order webhook events.
+- Invalid signatures.
+- Malformed payloads.
+- Payment success and failure.
+- Refund processing.
+- Late success after refund.
+- Canceled subscription webhook handling.
+- Provider decline and timeout scenarios.
+- Invalid subscription state transitions.
+
+Concurrent webhook processing and production database transaction guarantees are not claimed by this in-memory implementation.
 
 ## 11. Test-First Workflow
 
-The implementation will follow the assignment's Red, Blue, Green discipline:
+The implementation follows the Red, Blue, Green approach:
 
-1. **Red:** Write a test for an important behavior and confirm it fails.
-2. **Blue:** Implement the minimum support code required to pass.
-3. **Green:** Refactor the implementation and framework while keeping tests green.
+1. **Red:** Write a test for an expected behavior and confirm it fails.
+2. **Blue:** Implement the minimum code required to satisfy the test.
+3. **Green:** Refactor while keeping the complete test suite passing.
 
-## 12. Technology Choices
+The late-success-after-refund scenario was added as a regression test. It initially failed because the invoice was incorrectly changed to paid. The webhook implementation was then updated to preserve the refunded state.
 
-The planned stack is:
+## 12. Technology Stack
 
-- TypeScript and Node.js.
-- Vitest as the test runner.
-- Supertest for HTTP-level API testing.
-- A mockable payment provider interface.
-- A lightweight, queryable persistence layer.
+- TypeScript
+- Node.js
+- Express
+- Vitest
+- Supertest
+- InMemoryRepository
+- MockPaymentProvider
 
-These choices will be confirmed against the repository and runtime setup before implementation.
+The in-memory repository provides queryable persistence without requiring an external database setup.
 
 ## 13. Limitations and Tradeoffs
 
-- The fixture is not intended to be a complete production billing platform.
-- Mocked provider tests validate our service's interaction with the dependency, not the real provider's behavior.
-- An in-memory store is suitable for focused tests but does not prove production database durability or transaction behavior.
-- API status codes and detailed response schemas remain provisional until the service contract is implemented.
-- Concurrency guarantees require additional tests if concurrent webhook processing is implemented.
+- The implementation is a testable service fixture, not a complete production billing platform.
+- The in-memory repository does not prove production database durability, transaction isolation, or crash recovery.
+- Mock provider tests validate service-side interactions, not the behavior of a real payment provider.
+- Webhook signature validation currently uses the JSON-serialized request body.
+- Concurrent webhook processing and distributed idempotency guarantees require additional infrastructure and tests.
+- Tax calculations, billing proration, and production payment integrations are outside the current scope.
 
 ## 14. Responsible AI Usage
 
-AI assistance may be used to help structure documentation, explore test scenarios, and review implementation ideas. All generated code and design decisions will be reviewed, executed, and validated before submission. The final pull request will accurately describe the assistance used and the checks personally performed.
+AI assistance was used to help explore test scenarios, structure documentation, and review implementation approaches.
+
+Generated code and design suggestions were reviewed and validated through local execution.
+
+The final submission describes the implemented behavior and test results rather than treating unverified suggestions as completed work.
+
+## 15. Test Execution
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the complete test suite:
+
+```bash
+npm test
+```
+
+Run TypeScript compilation checks:
+
+```bash
+npx tsc --noEmit
+```
+
+The current local validation result is:
+
+- 6 test files passed.
+- 47 tests passed.
+- TypeScript compilation passed.
