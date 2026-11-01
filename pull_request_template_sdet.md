@@ -39,7 +39,7 @@ Explain how the suite is structured (fixtures, API client, mock provider, assert
 List the commands or workflows you ran to validate the solution (e.g. `npm test`, `npm run lint`, `npm run build`, `npm run validate-schema`).
 
 ## Known Limitations / Next Steps
-List tradeoffs, simplifying assumptions, or improvements you would make with more time.
+List tradeoffs, simplifying assumptions or improvements you would make with more time.
 
 ## Responsible AI Usage
 - Did you use AI tools?
