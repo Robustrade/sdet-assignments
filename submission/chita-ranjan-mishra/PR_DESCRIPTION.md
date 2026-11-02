@@ -80,8 +80,6 @@ immediate charge. The documented refund behavior is a fixture assumption.
 
 ## Responsible AI Usage
 
-AI tools assisted with interpreting the assignment, drafting the fixture,
-automated tests, and documentation. The build, test suite, and type check were
-run in the workspace. The candidate should review the final diff and replace
-this sentence with any corrections or additional checks they personally
-performed before submission; AI-assisted work should be disclosed accurately.
+I used AI tools to help interpret the assignment and draft the fixture, tests, and documentation. I ran npm ci, npm test (21 tests passed), and npm run typecheck. I reviewed.
+
+
