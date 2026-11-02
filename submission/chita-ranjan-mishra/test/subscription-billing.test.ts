@@ -119,6 +119,40 @@ test("plan change updates future billing configuration without charging or reset
   );
 });
 
+test("payment webhook for an in-flight invoice uses its recorded plan price after a plan change", async (context) => {
+  const fixture = await fixtureForTest(context);
+  const subscription = await createSubscription(fixture.api, "basic");
+  const createdAt = subscription.createdAt;
+  fixture.repository.addInvoice({
+    id: "inv_in_flight",
+    subscriptionId: subscription.id,
+    amount: 4900,
+    currency: "USD",
+    status: "pending",
+    attemptCount: 1,
+    createdAt,
+    updatedAt: createdAt,
+  });
+
+  const planChange = await fixture.api.changePlan(subscription.id, "pro");
+  assert.equal(planChange.status, 200);
+
+  const payment = await fixture.api.sendWebhook(
+    webhookPayload(subscription.id, {
+      eventId: "evt_in_flight",
+      invoiceId: "inv_in_flight",
+      amount: 4900,
+      type: "payment.succeeded",
+    }),
+  );
+
+  assert.equal(payment.status, 200);
+  assert.deepEqual(payment.body, { duplicate: false, outcome: "processed" });
+  assert.equal(fixture.repository.getInvoice("inv_in_flight")?.status, "paid");
+  assert.equal(fixture.repository.getSubscription(subscription.id)?.planId, "pro");
+  assert.equal(fixture.repository.getSubscription(subscription.id)?.status, "active");
+});
+
 test("invalid plan changes do not mutate a subscription or call the provider", async (context) => {
   const fixture = await fixtureForTest(context);
   const subscription = await createSubscription(fixture.api);
@@ -512,4 +546,26 @@ test("refund is persisted without changing the subscription lifecycle", async (c
   assert.equal(refund.status, 200);
   assert.equal(fixture.repository.getSubscription(subscription.id)?.status, "active");
   assert.equal(invoiceFor(fixture.repository.getInvoices(), "inv_refund").status, "refunded");
+});
+
+test("refund for a missing or unpaid invoice is ignored without creating records", async (context) => {
+  const fixture = await fixtureForTest(context);
+  const subscription = await createSubscription(fixture.api);
+
+  const refund = await fixture.api.sendWebhook(
+    webhookPayload(subscription.id, {
+      eventId: "evt_refund_without_payment",
+      invoiceId: "inv_not_paid",
+      type: "payment.refunded",
+    }),
+  );
+
+  assert.equal(refund.status, 200);
+  assert.deepEqual(refund.body, { duplicate: false, outcome: "ignored" });
+  assert.equal(fixture.repository.getInvoice("inv_not_paid"), undefined);
+  assert.equal(
+    fixture.repository.getSubscription(subscription.id)?.status,
+    "trialing",
+  );
+  assert.equal(fixture.repository.getAuditRecords(subscription.id).length, 1);
 });

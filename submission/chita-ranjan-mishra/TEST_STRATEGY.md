@@ -31,8 +31,9 @@ persisted records, and interactions with a mocked payment provider.
   proration or an immediate charge. It preserves current lifecycle and trial
   end date; `past_due` and `canceled` subscriptions cannot change plans.
 - Webhook signatures use `sha256=<hex HMAC-SHA256>` over the exact raw request
-  body. A refund marks its invoice `refunded` and records an audit event without
-  changing the subscription lifecycle.
+  body. A refund is applied only to a successfully paid invoice; it marks that
+  invoice `refunded` and records an audit event without changing the subscription
+  lifecycle.
 
 ## Scope
 

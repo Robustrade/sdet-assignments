@@ -184,13 +184,15 @@ export class BillingService {
     if (!plan) {
       throw new BillingError(500, "Subscription references an unknown plan");
     }
-    if (event.amount !== plan.amount || event.currency !== plan.currency) {
-      throw new BillingError(422, "Webhook amount or currency does not match the plan");
-    }
-
     const existingInvoice = this.repository.getInvoice(event.invoiceId);
     if (existingInvoice && existingInvoice.subscriptionId !== event.subscriptionId) {
       throw new BillingError(409, "Invoice belongs to a different subscription");
+    }
+
+    const expectedAmount = existingInvoice?.amount ?? plan.amount;
+    const expectedCurrency = existingInvoice?.currency ?? plan.currency;
+    if (event.amount !== expectedAmount || event.currency !== expectedCurrency) {
+      throw new BillingError(422, "Webhook amount or currency does not match the invoice");
     }
 
     const receivedAt = this.now();
@@ -241,6 +243,19 @@ export class BillingService {
     let invoice = this.repository.getInvoice(event.invoiceId);
     if (subscription.status === "canceled") {
       return "ignored";
+    }
+
+    if (event.type === "payment.refunded") {
+      if (!invoice || invoice.status !== "paid") {
+        return "ignored";
+      }
+      invoice.status = "refunded";
+      invoice.updatedAt = now;
+      this.repository.saveInvoice(invoice);
+      this.audit(subscription.id, event.type, now, {
+        referenceId: event.invoiceId,
+      });
+      return "processed";
     }
 
     if (!invoice) {
@@ -307,19 +322,7 @@ export class BillingService {
       return "processed";
     }
 
-    if (invoice.status === "paid") {
-      invoice.status = "refunded";
-      invoice.updatedAt = now;
-      this.repository.saveInvoice(invoice);
-    } else if (invoice.status !== "refunded") {
-      invoice.status = "refunded";
-      invoice.updatedAt = now;
-      this.repository.saveInvoice(invoice);
-    }
-    this.audit(subscription.id, event.type, now, {
-      referenceId: event.invoiceId,
-    });
-    return "processed";
+    return "ignored";
   }
 
   private loadSubscription(subscriptionId: string): Subscription {

@@ -67,7 +67,7 @@ an isolated repository and ephemeral HTTP server.
 ## Validation
 
 - `npm ci`
-- `npm test` — passed; 21 tests including nested provider outcome cases.
+- `npm test` — passed; 23 tests including nested provider outcome cases.
 - `npm run typecheck` — passed.
 - No lint or external schema-validation script is configured.
 
@@ -80,6 +80,4 @@ immediate charge. The documented refund behavior is a fixture assumption.
 
 ## Responsible AI Usage
 
-I used AI tools to help interpret the assignment and draft the fixture, tests, and documentation. I ran npm ci, npm test (21 tests passed), and npm run typecheck. I reviewed.
-
-
+I used AI tools to help interpret the assignment and draft the fixture, tests, and documentation. I ran `npm ci`, `npm test` (23 tests passed), and `npm run typecheck`. I reviewed [expand this with the parts you personally reviewed before submission].
