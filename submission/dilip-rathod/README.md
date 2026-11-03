@@ -22,7 +22,11 @@ npm test                # vitest run — 142 tests, ~5 s
 npm run lint            # eslint
 npm run build           # tsc --noEmit
 npm run validate-schema # builds the schema in a scratch DB and checks tables/indexes/triggers vs. the state machine
+npm run test:report     # runs the tests and writes an HTML report to reports/test-report.html
 ```
+
+`test:report` writes the report even when tests fail (failed tests open automatically with their error
+message) and exits with the test run's exit code. `reports/` is git-ignored.
 
 ## Persistence setup and seed data
 

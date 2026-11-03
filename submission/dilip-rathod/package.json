@@ -7,6 +7,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:report": "tsx scripts/test-report.ts",
     "lint": "eslint .",
     "build": "tsc --noEmit",
     "validate-schema": "tsx scripts/validate-schema.ts",
