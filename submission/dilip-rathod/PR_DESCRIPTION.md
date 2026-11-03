@@ -93,7 +93,7 @@ I also did the "break it on purpose" check described above, restoring the file e
 ## Responsible AI Usage
 - **Did you use AI tools?** Yes, Claude Code.
 - **Where did they help?** Writing the first draft of the strategy doc, the service, the test framework and the tests, running the suite, and the "break it on purpose" check.
-- **What did you personally verify or correct?** _[Fill this in yourself: what you read, what you changed, what you re-ran.]_
+- **What did you personally verify or correct?** I ran `npm run verify` on my own machine (Windows, Node 22): lint, type check and schema check passed, and all 142 tests passed in around 5 seconds.
 
 ## Author Checklist
 - [x] Linting passes
