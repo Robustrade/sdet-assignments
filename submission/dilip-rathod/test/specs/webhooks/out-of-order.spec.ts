@@ -103,6 +103,24 @@ describe('Out-of-order, stale and mismatched webhooks', () => {
       expect(env().db.attemptsFor(request.reference)).toMatchObject([{ status: 'succeeded', resolved_by: 'webhook' }]);
     });
 
+    it.each([
+      ['succeed', { kind: 'succeed' }],
+      ['decline', { kind: 'decline', code: 'card_declined' }],
+    ] as const)('cancellation lands while the charge is in flight; the late %s response cannot move it', async (_label, outcome) => {
+      const sub = await env().given.trialing();
+      env().clock.setTo(sub.trial_ends_at!);
+      const held = env().provider.holdNextCharge();
+
+      const billing = env().api.runBilling();
+      await held.called;
+      await env().api.cancel(sub.id);
+      held.respondWith(outcome);
+      const [result] = await billing;
+
+      expect(result.outcome).toBe('ignored');
+      await expectSubscriptionState(env(), sub.id, { status: 'canceled', invoices: ['void'], history: ['∅->trialing', 'trialing->canceled'] });
+    });
+
     it('a billing run while a charge is in flight does not charge again', async () => {
       const sub = await env().given.trialing();
       env().clock.setTo(sub.trial_ends_at!);
