@@ -105,7 +105,6 @@ npm test           # 55 tests, 9 files — all pass
   scheduler (kept deterministic on purpose).
 
 ## Responsible AI Usage
-<!-- DRAFT — please review and edit to match your own experience before submitting. -->
 I used an AI coding assistant (Claude Code) while building this. It helped
 scaffold the project, draft boilerplate (repositories, builders, serializers),
 and accelerate writing the spec files. I directed the design decisions — the
