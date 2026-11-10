@@ -1,254 +1,146 @@
-// Demo "Subscription & Billing" app used as the system under test.
-// It is intentionally small: the assignment is about the TESTS, not the app.
+// Demo "Subscription & Billing" app: the system under test.
 import express from 'express';
+import { DatabaseSync } from 'node:sqlite';
 import { randomUUID } from 'node:crypto';
-import { createFreshDatabase, runInTransaction } from './database.js';
-import { chargeCard, gatewayCalls } from './fakePaymentGateway.js';
-import { PLANS, MAX_FAILED_PAYMENTS } from './plans.js';
-import { signBody } from './signature.js';
-import { canChangeStatus } from './statusRules.js';
+import { rmSync } from 'node:fs';
 
-const PORT = Number(process.env.PORT ?? 4000);
-const db = createFreshDatabase();
-const app = express();
+const PRICES = { basic: 1900, pro: 4900 }; // in cents. basic = free trial, pro = pay now
 
-const now = () => new Date().toISOString();
+// ---------- Database: starts empty every time the app starts ----------
+const DB_FILE = 'demo-app/demo.db';
+for (const file of [DB_FILE, `${DB_FILE}-wal`, `${DB_FILE}-shm`]) rmSync(file, { force: true });
+const db = new DatabaseSync(DB_FILE);
+db.exec('PRAGMA journal_mode = WAL'); // lets the tests read the database while the app is writing
+db.exec(`
+  CREATE TABLE customers      (id TEXT PRIMARY KEY, card TEXT);
+  CREATE TABLE subscriptions  (id TEXT PRIMARY KEY, customer_id TEXT, plan TEXT, status TEXT, idempotency_key TEXT UNIQUE);
+  CREATE TABLE payments       (id TEXT PRIMARY KEY, subscription_id TEXT, amount INTEGER, status TEXT);
+  CREATE TABLE webhook_events (event_id TEXT PRIMARY KEY, result TEXT);
+`);
+
+const findOne = (sql, ...params) => db.prepare(sql).get(...params);
+const findAll = (sql, ...params) => db.prepare(sql).all(...params);
+const save = (sql, ...params) => db.prepare(sql).run(...params);
 const newId = (prefix) => `${prefix}_${randomUUID().slice(0, 8)}`;
-const sendError = (res, httpStatus, message) => res.status(httpStatus).json({ error: message });
+const getSubscription = (id) => findOne('SELECT * FROM subscriptions WHERE id = ?', id);
 
-// ---------- small database helpers ----------
-
-const findCustomer = (id) => db.prepare('SELECT * FROM customers WHERE id = ?').get(id);
-const findSubscription = (id) => db.prepare('SELECT * FROM subscriptions WHERE id = ?').get(id);
-const findPayments = (subscriptionId) =>
-  db.prepare('SELECT * FROM payments WHERE subscription_id = ? ORDER BY attempt_no').all(subscriptionId);
-
-// The ONLY place a subscription's status is changed. It refuses changes the rules don't allow.
-function changeStatus(subscription, newStatus, reason) {
-  if (!canChangeStatus(subscription.status, newStatus)) {
-    throw new Error(`Status change ${subscription.status} -> ${newStatus} is not allowed`);
-  }
-  db.prepare('UPDATE subscriptions SET status = ?, updated_at = ? WHERE id = ?').run(newStatus, now(), subscription.id);
-  db.prepare(
-    'INSERT INTO status_history (subscription_id, from_status, to_status, reason, created_at) VALUES (?, ?, ?, ?, ?)',
-  ).run(subscription.id, subscription.status, newStatus, reason, now());
-}
-
-// After a failed payment: past_due, or canceled once the customer has failed too many times.
-function handleFailedPayment(subscription) {
-  const failedCount = findPayments(subscription.id).filter((p) => p.status === 'failed').length;
-  if (failedCount >= MAX_FAILED_PAYMENTS) {
-    changeStatus(subscription, 'canceled', 'too many failed payments');
-  } else if (subscription.status !== 'past_due') {
-    changeStatus(subscription, 'past_due', 'payment failed');
-  }
-}
-
-// ---------- charging a subscription ----------
-
-async function chargeSubscription(subscription) {
-  const customer = findCustomer(subscription.customer_id);
-  const payments = findPayments(subscription.id);
-
-  // If the last payment's result is still unknown, charging again could charge the customer twice.
-  if (payments.some((p) => p.status === 'pending')) {
-    return { httpStatus: 409, body: { error: 'A payment is already pending for this subscription' } };
-  }
-
-  // Step 1: save the payment as "pending" BEFORE calling the gateway,
-  // so we never lose track of money even if something breaks halfway.
-  const payment = {
-    id: newId('pay'),
-    amount: PLANS[subscription.plan].price,
-    attemptNo: payments.length + 1,
-  };
-  db.prepare(
-    "INSERT INTO payments (id, subscription_id, amount, status, attempt_no, created_at) VALUES (?, ?, ?, 'pending', ?, ?)",
-  ).run(payment.id, subscription.id, payment.amount, payment.attemptNo, now());
-
-  // Step 2: call the payment gateway.
-  let result;
+// Saves the payment result and the subscription status together: both or neither.
+function savePaymentResult(subscriptionId, paymentId, paymentStatus, subscriptionStatus) {
+  db.exec('BEGIN');
   try {
-    result = await chargeCard({
-      subscriptionId: subscription.id,
-      customerId: customer.id,
-      card: customer.card,
-      amount: payment.amount,
-      idempotencyKey: `${subscription.id}-attempt-${payment.attemptNo}`,
-    });
-  } catch {
-    result = 'unknown'; // timeout: we don't know if money was taken, so leave the payment pending
+    save('UPDATE payments SET status = ? WHERE id = ?', paymentStatus, paymentId);
+    save('UPDATE subscriptions SET status = ? WHERE id = ?', subscriptionStatus, subscriptionId);
+    db.exec('COMMIT');
+  } catch (error) {
+    db.exec('ROLLBACK'); // something failed: undo both
+    throw error;
   }
-
-  // Step 3: save the result. Payment row and status change are saved together.
-  runInTransaction(db, () => {
-    const latest = findSubscription(subscription.id); // re-read: a webhook may have arrived meanwhile
-    const current = db.prepare('SELECT status FROM payments WHERE id = ?').get(payment.id);
-    if (current.status !== 'pending' || result === 'unknown') return; // already settled by a webhook, or still unknown
-
-    if (result === 'success') {
-      db.prepare("UPDATE payments SET status = 'success' WHERE id = ?").run(payment.id);
-      if (latest.status !== 'active') changeStatus(latest, 'active', 'payment succeeded');
-    } else {
-      db.prepare("UPDATE payments SET status = 'failed' WHERE id = ?").run(payment.id);
-      handleFailedPayment(latest);
-    }
-  });
-
-  return { httpStatus: 200, body: { subscription: findSubscription(subscription.id), payments: findPayments(subscription.id) } };
 }
 
-// ---------- webhook handling ----------
-
-function handleWebhook(rawBody, signature) {
-  // 1. Is it really from the payment gateway?
-  if (!signature || signature !== signBody(rawBody)) {
-    return { httpStatus: 401, body: { error: 'Invalid signature' } };
-  }
-
-  // 2. Is the body usable?
-  let event;
-  try {
-    event = JSON.parse(rawBody);
-  } catch {
-    return { httpStatus: 400, body: { error: 'Body is not valid JSON' } };
-  }
-  if (!event.eventId || !event.type || !event.subscriptionId || !event.paymentId) {
-    return { httpStatus: 400, body: { error: 'eventId, type, subscriptionId and paymentId are required' } };
-  }
-
-  // 3. Everything below is saved together, or not at all.
-  return runInTransaction(db, () => {
-    const alreadySeen = db.prepare('SELECT * FROM webhook_events WHERE event_id = ?').get(event.eventId);
-    if (alreadySeen) {
-      // Duplicate delivery: just count it, do nothing else.
-      db.prepare('UPDATE webhook_events SET received_count = received_count + 1 WHERE event_id = ?').run(event.eventId);
-      return { httpStatus: 200, body: { result: 'duplicate' } };
-    }
-
-    const reasonToIgnore = applyWebhook(event);
-    db.prepare(
-      'INSERT INTO webhook_events (event_id, type, subscription_id, result, reason, created_at) VALUES (?, ?, ?, ?, ?, ?)',
-    ).run(event.eventId, event.type, event.subscriptionId, reasonToIgnore ? 'ignored' : 'processed', reasonToIgnore, now());
-
-    return { httpStatus: 200, body: reasonToIgnore ? { result: 'ignored', reason: reasonToIgnore } : { result: 'processed' } };
-  });
+// ---------- Fake payment gateway: the card decides the result ----------
+function fakePaymentGateway(card) {
+  if (card === 'card_ok') return 'success';
+  if (card === 'card_declined') return 'failed';
+  return 'timeout'; // card_timeout: the gateway did not answer
 }
 
-// Applies the event and returns null, or returns the reason it was ignored.
-function applyWebhook(event) {
-  const subscription = findSubscription(event.subscriptionId);
-  if (!subscription) return 'unknown subscription';
-  if (subscription.status === 'canceled') return 'subscription is canceled';
+function chargeSubscription(subscription) {
+  const customer = findOne('SELECT * FROM customers WHERE id = ?', subscription.customer_id);
 
-  const payment = db.prepare('SELECT * FROM payments WHERE id = ? AND subscription_id = ?').get(event.paymentId, subscription.id);
-  if (!payment) return 'unknown payment';
-  if (payment.status !== 'pending') return `payment is already ${payment.status}`; // late or out-of-order event
+  // 1. Save the payment as "pending" BEFORE calling the gateway, so it is never lost.
+  const paymentId = newId('pay');
+  save("INSERT INTO payments VALUES (?, ?, ?, 'pending')", paymentId, subscription.id, PRICES[subscription.plan]);
 
-  if (event.type === 'payment.succeeded') {
-    db.prepare("UPDATE payments SET status = 'success' WHERE id = ?").run(payment.id);
-    if (subscription.status !== 'active') changeStatus(subscription, 'active', 'payment confirmed by webhook');
-    return null;
-  }
-  if (event.type === 'payment.failed') {
-    db.prepare("UPDATE payments SET status = 'failed' WHERE id = ?").run(payment.id);
-    handleFailedPayment(subscription);
-    return null;
-  }
-  return 'unsupported event type';
+  // 2. Ask the gateway, then save the result.
+  //    On a timeout we don't know the result yet, so we change nothing (the webhook will tell us).
+  const result = fakePaymentGateway(customer.card);
+  if (result === 'success') savePaymentResult(subscription.id, paymentId, 'success', 'active');
+  if (result === 'failed') savePaymentResult(subscription.id, paymentId, 'failed', 'past_due');
 }
 
-// ---------- routes ----------
-
-// Webhooks need the raw body to check the signature, so this route is registered before express.json().
-app.post('/webhooks/payment', express.raw({ type: () => true }), (req, res) => {
-  const rawBody = Buffer.isBuffer(req.body) ? req.body.toString('utf8') : '';
-  const { httpStatus, body } = handleWebhook(rawBody, req.get('x-signature'));
-  res.status(httpStatus).json(body);
-});
-
+// ---------- API ----------
+const app = express();
 app.use(express.json());
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
 app.post('/customers', (req, res) => {
-  const { name, card } = req.body ?? {};
-  if (!name || !card) return sendError(res, 400, 'name and card are required');
-  const customer = { id: newId('cus'), name, card, created_at: now() };
-  db.prepare('INSERT INTO customers (id, name, card, created_at) VALUES (?, ?, ?, ?)').run(
-    customer.id, customer.name, customer.card, customer.created_at,
-  );
+  const customer = { id: newId('cus'), card: req.body.card };
+  save('INSERT INTO customers VALUES (?, ?)', customer.id, customer.card);
   res.status(201).json(customer);
 });
 
-// Customer updates their card (used before retrying a declined payment).
 app.put('/customers/:id/card', (req, res) => {
-  if (!findCustomer(req.params.id)) return sendError(res, 404, 'Customer not found');
-  db.prepare('UPDATE customers SET card = ? WHERE id = ?').run(req.body?.card, req.params.id);
-  res.json(findCustomer(req.params.id));
+  save('UPDATE customers SET card = ? WHERE id = ?', req.body.card, req.params.id);
+  res.json({ id: req.params.id, card: req.body.card });
 });
 
-app.post('/subscriptions', async (req, res) => {
-  const { customerId, plan } = req.body ?? {};
-  const idempotencyKey = req.get('idempotency-key') ?? null;
+app.post('/subscriptions', (req, res) => {
+  const { customerId, plan } = req.body;
+  const idempotencyKey = req.get('Idempotency-Key');
 
-  // Same Idempotency-Key as an earlier request -> return the earlier result, don't create or charge again.
-  if (idempotencyKey) {
-    const existing = db.prepare('SELECT * FROM subscriptions WHERE idempotency_key = ?').get(idempotencyKey);
-    if (existing) return res.status(200).json(existing);
-  }
+  // Same Idempotency-Key as before? Return the first result. Don't create or charge again.
+  const earlier = findOne('SELECT * FROM subscriptions WHERE idempotency_key = ?', idempotencyKey);
+  if (earlier) return res.status(200).json(earlier);
 
-  if (!customerId || !plan) return sendError(res, 400, 'customerId and plan are required');
-  if (!PLANS[plan]) return sendError(res, 400, `Unknown plan: ${plan}`);
-  if (!findCustomer(customerId)) return sendError(res, 404, 'Customer not found');
+  if (!PRICES[plan]) return res.status(400).json({ error: `Unknown plan: ${plan}` });
 
-  const subscription = { id: newId('sub'), status: 'trialing' };
-  runInTransaction(db, () => {
-    db.prepare(
-      'INSERT INTO subscriptions (id, customer_id, plan, status, idempotency_key, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    ).run(subscription.id, customerId, plan, 'trialing', idempotencyKey, now(), now());
-    db.prepare(
-      "INSERT INTO status_history (subscription_id, from_status, to_status, reason, created_at) VALUES (?, NULL, 'trialing', 'created', ?)",
-    ).run(subscription.id, now());
-  });
-
-  if (PLANS[plan].chargeAtSignup) await chargeSubscription(findSubscription(subscription.id));
-  res.status(201).json(findSubscription(subscription.id));
+  const id = newId('sub');
+  const status = plan === 'basic' ? 'trialing' : 'pending'; // pro waits for its first payment
+  save('INSERT INTO subscriptions VALUES (?, ?, ?, ?, ?)', id, customerId, plan, status, idempotencyKey);
+  if (plan === 'pro') chargeSubscription(getSubscription(id));
+  res.status(201).json(getSubscription(id));
 });
 
 app.get('/subscriptions/:id', (req, res) => {
-  const subscription = findSubscription(req.params.id);
-  if (!subscription) return sendError(res, 404, 'Subscription not found');
+  const subscription = getSubscription(req.params.id);
+  if (!subscription) return res.status(404).json({ error: 'Subscription not found' });
   res.json(subscription);
 });
 
 app.get('/subscriptions/:id/payments', (req, res) => {
-  if (!findSubscription(req.params.id)) return sendError(res, 404, 'Subscription not found');
-  res.json(findPayments(req.params.id));
+  res.json(findAll('SELECT * FROM payments WHERE subscription_id = ?', req.params.id));
 });
 
-// Charge now: used at the end of a trial, or to retry a failed payment. (In real life a billing job calls this.)
-app.post('/subscriptions/:id/charge', async (req, res) => {
-  const subscription = findSubscription(req.params.id);
-  if (!subscription) return sendError(res, 404, 'Subscription not found');
-  if (subscription.status === 'active') return sendError(res, 409, 'Subscription is already paid');
-  if (subscription.status === 'canceled') return sendError(res, 409, 'Subscription is canceled');
-  const { httpStatus, body } = await chargeSubscription(subscription);
-  res.status(httpStatus).json(body);
+// Retry a failed payment. Only allowed when the subscription is past_due.
+app.post('/subscriptions/:id/charge', (req, res) => {
+  const subscription = getSubscription(req.params.id);
+  if (subscription.status !== 'past_due') {
+    return res.status(409).json({ error: `Cannot charge a subscription that is ${subscription.status}` });
+  }
+  chargeSubscription(subscription);
+  res.json(getSubscription(subscription.id));
 });
 
 app.post('/subscriptions/:id/cancel', (req, res) => {
-  const subscription = findSubscription(req.params.id);
-  if (!subscription) return sendError(res, 404, 'Subscription not found');
-  if (!canChangeStatus(subscription.status, 'canceled')) return sendError(res, 409, 'Subscription is already canceled');
-  changeStatus(subscription, 'canceled', 'canceled by customer');
-  res.json(findSubscription(subscription.id));
+  const subscription = getSubscription(req.params.id);
+  if (subscription.status === 'canceled') return res.status(409).json({ error: 'Already canceled' });
+  save("UPDATE subscriptions SET status = 'canceled' WHERE id = ?", subscription.id);
+  res.json(getSubscription(subscription.id));
 });
 
-// TEST-ONLY endpoint: lets tests check what was sent to the fake payment gateway.
-app.get('/test-support/gateway-calls', (req, res) => {
-  const { subscriptionId, customerId } = req.query;
-  res.json(gatewayCalls.filter((call) => call.subscriptionId === subscriptionId || call.customerId === customerId));
+// ---------- Webhook: the payment gateway tells us the final result of a payment ----------
+app.post('/webhooks/payment', (req, res) => {
+  const { eventId, type, subscriptionId, paymentId } = req.body;
+
+  // 1. Seen this event before? Do nothing again.
+  if (findOne('SELECT * FROM webhook_events WHERE event_id = ?', eventId)) {
+    return res.json({ result: 'duplicate' });
+  }
+
+  // 2. Ignore events that come too late or in the wrong order.
+  const subscription = getSubscription(subscriptionId);
+  const payment = findOne('SELECT * FROM payments WHERE id = ?', paymentId);
+  let result = 'processed';
+  if (subscription.status === 'canceled') result = 'ignored: subscription is canceled';
+  else if (payment.status !== 'pending') result = `ignored: payment is already ${payment.status}`;
+
+  // 3. Apply it, then remember the event. (If applying fails, the event is not remembered,
+  //    so the gateway's retry of the same event will still be processed.)
+  if (result === 'processed' && type === 'payment.succeeded') savePaymentResult(subscriptionId, paymentId, 'success', 'active');
+  if (result === 'processed' && type === 'payment.failed') savePaymentResult(subscriptionId, paymentId, 'failed', 'past_due');
+  save('INSERT INTO webhook_events VALUES (?, ?)', eventId, result);
+  res.json({ result });
 });
 
-app.listen(PORT, () => console.log(`Demo billing app running on http://localhost:${PORT}`));
+app.listen(4000, () => console.log('Demo billing app running on http://localhost:4000'));

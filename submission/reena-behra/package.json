@@ -2,17 +2,14 @@
   "name": "subscription-billing-assignment",
   "version": "1.0.0",
   "private": true,
-  "description": "SDET assignment: end-to-end API + DB + workflow tests for a small subscription billing demo app (plus a Sauce Demo UI bonus)",
+  "description": "SDET assignment: end-to-end API + database tests for a small subscription billing demo app",
   "type": "module",
   "engines": {
     "node": ">=22.13.0"
   },
   "scripts": {
-    "start:app": "node --no-warnings demo-app/server.js",
-    "test": "playwright test --project=api",
-    "test:ui": "playwright test --project=ui",
-    "test:all": "playwright test",
-    "report": "playwright show-report"
+    "test": "playwright test",
+    "start:app": "node --no-warnings demo-app/server.js"
   },
   "dependencies": {
     "express": "5.1.0"
