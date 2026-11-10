@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  testDir: 'tests/api',
+  testDir: 'tests',
   use: { baseURL: 'http://localhost:4000' },
 
   // Starts the demo app before the tests and stops it after.

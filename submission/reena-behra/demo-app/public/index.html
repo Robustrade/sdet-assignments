@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Subscribe</title>
+</head>
+<body>
+  <h1>Subscribe to a plan</h1>
+
+  <label>Plan
+    <select data-testid="plan">
+      <option value="basic">Basic (free trial)</option>
+      <option value="pro">Pro ($49)</option>
+    </select>
+  </label>
+
+  <label>Card
+    <select data-testid="card">
+      <option value="card_ok">Card that works</option>
+      <option value="card_declined">Card that is declined</option>
+    </select>
+  </label>
+
+  <button data-testid="subscribe">Subscribe</button>
+
+  <div data-testid="result" hidden>
+    <p>Subscription: <span data-testid="subscription-id"></span></p>
+    <p>Status: <span data-testid="status"></span></p>
+    <button data-testid="cancel">Cancel subscription</button>
+  </div>
+
+  <script>
+    const byTestId = (id) => document.querySelector(`[data-testid="${id}"]`);
+
+    async function postJson(url, data = {}) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return response.json();
+    }
+
+    function show(subscription) {
+      byTestId('subscription-id').textContent = subscription.id;
+      byTestId('status').textContent = subscription.status;
+      byTestId('result').hidden = false;
+    }
+
+    byTestId('subscribe').addEventListener('click', async () => {
+      const customer = await postJson('/customers', { card: byTestId('card').value });
+      show(await postJson('/subscriptions', { customerId: customer.id, plan: byTestId('plan').value }));
+    });
+
+    byTestId('cancel').addEventListener('click', async () => {
+      show(await postJson(`/subscriptions/${byTestId('subscription-id').textContent}/cancel`));
+    });
+  </script>
+</body>
+</html>

@@ -61,6 +61,7 @@ function chargeSubscription(subscription) {
 // ---------- API ----------
 const app = express();
 app.use(express.json());
+app.use(express.static('demo-app/public')); // the web page used by the end-to-end tests
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
@@ -77,7 +78,7 @@ app.put('/customers/:id/card', (req, res) => {
 
 app.post('/subscriptions', (req, res) => {
   const { customerId, plan } = req.body;
-  const idempotencyKey = req.get('Idempotency-Key');
+  const idempotencyKey = req.get('Idempotency-Key') ?? null; // optional header
 
   // Same Idempotency-Key as before? Return the first result. Don't create or charge again.
   const earlier = findOne('SELECT * FROM subscriptions WHERE idempotency_key = ?', idempotencyKey);

@@ -11,18 +11,20 @@ npm ci
 npm test
 ```
 
-`npm test` starts the demo app on port 4000, runs the 11 tests, and stops the app. If you started the app yourself (`npm run start:app`), stop it first.
+`npm test` starts the demo app on port 4000, runs the 14 tests (11 API + 3 browser), and stops the app. The browser tests use Chromium; if it isn't installed yet, run `npx playwright install chromium` once. If you started the app yourself (`npm run start:app`), stop it first.
 
 ## Files
 
 ```
-demo-app/server.js        the app under test: API + SQLite database + fake payment gateway
-tests/helpers.js          helpers: call the API, read the database, send webhooks, compare API with DB
-tests/api/
-  1-create-subscription   basic trial, pro payment, unknown plan
-  2-duplicate-requests    same request twice, same webhook twice
-  3-payment-failures      declined card, retry, gateway timeout
-  4-webhooks              late webhook, out-of-order webhook, cancel twice
+demo-app/server.js          the app under test: API + SQLite database + fake payment gateway
+demo-app/public/index.html  a small "Subscribe" web page, used by the end-to-end tests
+pages/SubscriptionPage.js   page object: all locators for the web page
+api/subscriptionApi.js      all API calls (create, subscribe, retry, cancel, send webhook)
+db/dbHelper.js              reads the database directly (read-only)
+test-data/testData.js       test cards, plan names, expected price
+tests/subscription.spec.js  all 14 tests, in 5 groups:
+                              create subscription · duplicate requests · payment failures and retry ·
+                              late and wrong-order webhooks · end-to-end (UI → API → database)
 ```
 
 ## The system under test
@@ -44,7 +46,7 @@ There was no service to test, so I built a small one in `demo-app/server.js`:
 
 ## Test approach
 
-**Main idea: the API and the database must agree.** The tests don't trust the API response alone. `expectApiMatchesDb()` reads the database directly and checks that it matches what the API returned. The tests also check the business result, for example "exactly one payment of 4900".
+**Main idea: the API and the database must agree.** The tests don't trust the API response alone. `expectApiMatchesDb()` (top of the test file) reads the database directly and checks that it matches what the API returned. The tests also check the business result, for example "exactly one payment of 4900".
 
 | Area | Test | What it proves |
 |---|---|---|
@@ -59,6 +61,9 @@ There was no service to test, so I built a small one in `demo-app/server.js`:
 | Webhooks | success webhook after cancel → ignored | canceled stays canceled |
 | Webhooks | "failed" after "succeeded" → ignored | a paid payment is never undone |
 | Cancel | cancel twice → 409 | a canceled subscription can't be canceled again |
+| End-to-end | subscribe in the browser with a working card → page, API and DB all say `active` | the whole flow works from the user's click to the database |
+| End-to-end | subscribe in the browser with a declined card → page shows `past_due`, failed payment saved | failures show correctly to the user and in the DB |
+| End-to-end | cancel in the browser → `canceled` in page and DB | user actions are really saved |
 
 ### How the app handles the hard cases
 - **Duplicate request:** the `Idempotency-Key` header. The same key returns the first result.
