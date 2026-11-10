@@ -3,7 +3,10 @@ import { DatabaseSync } from 'node:sqlite';
 import { existsSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const DB_FILE = fileURLToPath(new URL('./demo.db', import.meta.url));
+// One database file per port, so a copy of the app started for the tests never
+// deletes or reads the database of another copy you started by hand.
+const PORT = process.env.PORT ?? 4000;
+export const DB_FILE = fileURLToPath(new URL(`./demo-${PORT}.db`, import.meta.url));
 
 export function createFreshDatabase() {
   // Start every run with an empty database so old data can't affect results.

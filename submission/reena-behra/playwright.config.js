@@ -3,7 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 // node:sqlite prints an "experimental" warning on every process; hide it to keep output readable.
 process.env.NODE_NO_WARNINGS = '1';
 
-const PORT = process.env.PORT ?? 4000;
+const PORT = process.env.PORT ?? '4000';
+process.env.PORT = PORT; // test workers use this to find the matching database file
 export const APP_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({

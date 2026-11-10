@@ -3,7 +3,9 @@
 import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
 
-const DB_FILE = fileURLToPath(new URL('../../demo-app/demo.db', import.meta.url));
+// Same file name rule as demo-app/database.js: one database file per port.
+const PORT = process.env.PORT ?? 4000;
+const DB_FILE = fileURLToPath(new URL(`../../demo-app/demo-${PORT}.db`, import.meta.url));
 
 function query(sql, ...params) {
   const db = new DatabaseSync(DB_FILE, { readOnly: true });
