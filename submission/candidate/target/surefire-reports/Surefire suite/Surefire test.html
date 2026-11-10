@@ -1,0 +1,489 @@
+<html>
+<head>
+<title>TestNG:  Surefire test</title>
+<link href="../testng.css" rel="stylesheet" type="text/css" />
+<link href="../my-testng.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+.log { display: none;} 
+.stack-trace { display: none;} 
+</style>
+<script type="text/javascript">
+<!--
+function flip(e) {
+  current = e.style.display;
+  if (current == 'block') {
+    e.style.display = 'none';
+    return 0;
+  }
+  else {
+    e.style.display = 'block';
+    return 1;
+  }
+}
+
+function toggleBox(szDivId, elem, msg1, msg2)
+{
+  var res = -1;  if (document.getElementById) {
+    res = flip(document.getElementById(szDivId));
+  }
+  else if (document.all) {
+    // this is the way old msie versions work
+    res = flip(document.all[szDivId]);
+  }
+  if(elem) {
+    if(res == 0) elem.innerHTML = msg1; else elem.innerHTML = msg2;
+  }
+
+}
+
+function toggleAllBoxes() {
+  if (document.getElementsByTagName) {
+    d = document.getElementsByTagName('div');
+    for (i = 0; i < d.length; i++) {
+      if (d[i].className == 'log') {
+        flip(d[i]);
+      }
+    }
+  }
+}
+
+// -->
+</script>
+
+</head>
+<body>
+<h2 align='center'>Surefire test</h2><table border='1' align="center">
+<tr>
+<td>Tests passed/Failed/Skipped:</td><td>74/0/0</td>
+</tr><tr>
+<td>Started on:</td><td>Tue Nov 10 09:57:40 IST 2026</td>
+</tr>
+<tr><td>Total time:</td><td>11 seconds (11389 ms)</td>
+</tr><tr>
+<td>Included groups:</td><td></td>
+</tr><tr>
+<td>Excluded groups:</td><td></td>
+</tr>
+</table><p/>
+<small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-passed'>
+<tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.canceledDoesNotMoveToPastDueOnPaymentFailed()'><b>canceledDoesNotMoveToPastDueOnPaymentFailed</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: canceled -> past_due via payment.failed is silently ignored</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerNotCalledOnReplayedWebhook()'><b>providerNotCalledOnReplayedWebhook</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider is not called when a webhook is replayed</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerCallCountResetsOnReset()'><b>providerCallCountResetsOnReset</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider call count resets correctly between tests</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.duplicateWebhookDoesNotDuplicateInvoice()'><b>duplicateWebhookDoesNotDuplicateInvoice</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: duplicate webhook does not create a duplicate invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.retryExhaustionCancelsSubscription()'><b>retryExhaustionCancelsSubscription</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: past_due -> canceled after three distinct failed payment attempts</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.unresolvedTimeoutWaitsForWebhookReconciliation()'><b>unresolvedTimeoutWaitsForWebhookReconciliation</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: retry does not charge again while a provider timeout is unresolved</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.refundCannotChangeAnotherSubscriptionsInvoice()'><b>refundCannotChangeAnotherSubscriptionsInvoice</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: refund webhook cannot refund another subscription's invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.webhookValidRequest()'><b>webhookValidRequest</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 200 for a valid signed webhook</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.pastDueSubscriptionHasNoPaidInvoice()'><b>pastDueSubscriptionHasNoPaidInvoice</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: past_due subscription has no PAID invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.invalidSignatureWebhookDoesNotChangeState()'><b>invalidSignatureWebhookDoesNotChangeState</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: invalid signature webhook does not change subscription state</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.createMissingPaymentMethod()'><b>createMissingPaymentMethod</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 400 when payment_method_id is missing</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.successWebhookWithMismatchedAmountIsIgnored()'><b>successWebhookWithMismatchedAmountIsIgnored</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: success webhook with an amount different from the plan price is ignored</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.webhookUnsupportedEventType()'><b>webhookUnsupportedEventType</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 400 for an unsupported webhook event type</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.failedInvoiceWrittenOnFailure()'><b>failedInvoiceWrittenOnFailure</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: FAILED invoice is written when payment.failed webhook is processed</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.webhookMissingRequiredField()'><b>webhookMissingRequiredField</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 400 when a required webhook field is missing</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.retryAfterDeclineCanSucceed()'><b>retryAfterDeclineCanSucceed</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: retry after a confirmed decline can recover the subscription</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.trialingToActive()'><b>trialingToActive</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: trialing -> active via payment.succeeded webhook</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.trialingToCanceled()'><b>trialingToCanceled</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: trialing -> canceled via API cancel</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.fullHappyPath()'><b>fullHappyPath</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: full happy path: create -> payment.succeeded -> cancel -> stray webhook ignored</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.createUnknownCustomer()'><b>createUnknownCustomer</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 404 and does not create a subscription for an unknown customer</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.lateFailedWebhookDoesNotRemovePaidInvoice()'><b>lateFailedWebhookDoesNotRemovePaidInvoice</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: late payment.failed after payment.succeeded does not remove the paid invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.concurrentCancelAndSuccessKeepsSubscriptionCanceled()'><b>concurrentCancelAndSuccessKeepsSubscriptionCanceled</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: concurrent cancellation and success webhook leave subscription canceled</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.retryExhaustionStopsFurtherCharges()'><b>retryExhaustionStopsFurtherCharges</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: retry attempts stop charging when the third consecutive attempt fails</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.subscriptionPersistedOnCreation()'><b>subscriptionPersistedOnCreation</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: subscription is persisted with correct initial status on creation</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.refundWebhookWithMismatchedAmountIsIgnored()'><b>refundWebhookWithMismatchedAmountIsIgnored</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: refund webhook with an amount different from the invoice is ignored</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.createProSubscription()'><b>createProSubscription</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 201 with id and status for a valid pro subscription</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.paymentFailureThenRetrySucceeds()'><b>paymentFailureThenRetrySucceeds</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: payment failure then retry succeeds: ends active with 2 invoices</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.subscriptionPlanAndCustomerPersisted()'><b>subscriptionPlanAndCustomerPersisted</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: subscription plan and customer are stored correctly</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerRecordsCorrectArguments()'><b>providerRecordsCorrectArguments</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider records correct customer, payment method, and amount</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.createMissingCustomerId()'><b>createMissingCustomerId</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 400 when customer_id is missing</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.proPlanHasCorrectPriceAndStartsTrialing()'><b>proPlanHasCorrectPriceAndStartsTrialing</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: pro plan starts trialing with correct price of 4900 cents</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.refundUpdatesInvoiceAndRecordsEvent()'><b>refundUpdatesInvoiceAndRecordsEvent</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: refund updates the invoice and is retained in webhook audit history</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.canceledDoesNotReactivateOnPaymentSucceeded()'><b>canceledDoesNotReactivateOnPaymentSucceeded</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: canceled -> active via payment.succeeded is silently ignored</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.paidInvoiceWrittenOnSuccess()'><b>paidInvoiceWrittenOnSuccess</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: PAID invoice is written when payment.succeeded webhook is processed</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerDeclineReturnsFailedResult()'><b>providerDeclineReturnsFailedResult</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider returns failed result on decline with no chargeId</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.triplicateWebhookIdempotency()'><b>triplicateWebhookIdempotency</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: triplicate webhook delivery produces exactly one state change and one invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerNotCalledForUnknownCustomer()'><b>providerNotCalledForUnknownCustomer</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider is not called when the customer does not exist</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.concurrentSuccessAndFailureLeaveInvoicePaid()'><b>concurrentSuccessAndFailureLeaveInvoicePaid</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: concurrent success and failure for one invoice leave it paid</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.immediateChargeTimeoutIsPersisted()'><b>immediateChargeTimeoutIsPersisted</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider timeout remains pending for reconciliation</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.immediateChargeSuccessIsIntegratedWithSubscriptionCreation()'><b>immediateChargeSuccessIsIntegratedWithSubscriptionCreation</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: immediate plan creation calls provider once and persists a paid invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.webhookMalformedPayload()'><b>webhookMalformedPayload</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 400 for malformed JSON payload with valid signature</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerNotCalledOnValidationFailure()'><b>providerNotCalledOnValidationFailure</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider is not called for an invalid subscription creation</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.getUnknownSubscription()'><b>getUnknownSubscription</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 404 for an unknown subscription id</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.activeToPastDue()'><b>activeToPastDue</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: active -> past_due via payment.failed webhook</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerNotCalledForTrialingSubscription()'><b>providerNotCalledForTrialingSubscription</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider is not called when creating a trialing subscription</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.basicPlanHasCorrectPriceAndStartsTrialing()'><b>basicPlanHasCorrectPriceAndStartsTrialing</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: basic plan starts trialing with correct price of 1900 cents</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.cancelSubscription()'><b>cancelSubscription</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 200 with canceled status after cancel</td>
+<td></td>
+<td>5</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.createUnknownPlan()'><b>createUnknownPlan</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 400 for an unknown plan name</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.failedWebhookWithMismatchedAmountIsIgnored()'><b>failedWebhookWithMismatchedAmountIsIgnored</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: failed webhook with an amount different from the plan price is ignored</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.failedWebhookResolvesTimeoutBeforeRetry()'><b>failedWebhookResolvesTimeoutBeforeRetry</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: failed webhook resolves a timeout and permits a later retry</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.trialingToPastDue()'><b>trialingToPastDue</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: trialing -> past_due via payment.failed webhook</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.createBasicSubscription()'><b>createBasicSubscription</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 201 with id and status for a valid basic subscription</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerThrowsOnTimeout()'><b>providerThrowsOnTimeout</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider throws the typed timeout exception</td>
+<td><div><pre>com.billing.service.PaymentProviderTimeoutException: Payment provider timeout
+	at com.billing.mocks.MockPaymentProvider.charge(MockPaymentProvider.java:35)
+	at com.billing.specs.MockProviderTest.providerThrowsOnTimeout(MockProviderTest.java:218)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 30 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace196668120", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace196668120'><pre>com.billing.service.PaymentProviderTimeoutException: Payment provider timeout
+	at com.billing.mocks.MockPaymentProvider.charge(MockPaymentProvider.java:35)
+	at com.billing.specs.MockProviderTest.providerThrowsOnTimeout(MockProviderTest.java:218)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.testng.TestRunner.privateRun(TestRunner.java:739)
+	at org.testng.TestRunner.run(TestRunner.java:614)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+	at org.testng.TestNG.runSuites(TestNG.java:1112)
+	at org.testng.TestNG.run(TestNG.java:1079)
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:155)
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:169)
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:88)
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:137)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+</pre></div></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.activeRecurringPaymentSuccessPersistsInvoice()'><b>activeRecurringPaymentSuccessPersistsInvoice</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: successful recurring payment records an invoice without changing active state</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.pastDueToCanceled()'><b>pastDueToCanceled</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: past_due -> canceled via API cancel</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.webhookCannotReassignAnotherSubscriptionsInvoice()'><b>webhookCannotReassignAnotherSubscriptionsInvoice</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: webhook cannot reuse an invoice belonging to another subscription</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.webhookNonIntegerAmount()'><b>webhookNonIntegerAmount</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 400 when webhook amount is not an integer</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.successfulRetryResetsFailureCount()'><b>successfulRetryResetsFailureCount</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: successful retry resets the failed-attempt count</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.persistedStatusMatchesApiStatusAtEveryStage()'><b>persistedStatusMatchesApiStatusAtEveryStage</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: persisted status matches API-visible status at trialing, active, and canceled stages</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.lateFailureForSameInvoiceDoesNotRegressState()'><b>lateFailureForSameInvoiceDoesNotRegressState</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: late failure for a paid invoice is ignored without regressing active state</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.providerSucceedReturnsChargeId()'><b>providerSucceedReturnsChargeId</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider returns success result with chargeId</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.activeToCanceled()'><b>activeToCanceled</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: active -> canceled via API cancel</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.StateMachineTest.pastDueToActive()'><b>pastDueToActive</b><br>Test class: com.billing.specs.StateMachineTest<br>Test method: past_due -> active via payment.succeeded webhook on retry</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.StateMachineTest@7ed7259e</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.webhookInvalidSignature()'><b>webhookInvalidSignature</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 401 when signature is invalid</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.duplicateWebhookStoredOnce()'><b>duplicateWebhookStoredOnce</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: duplicate webhook event is stored only once</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.webhookMissingSignature()'><b>webhookMissingSignature</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 401 when X-Provider-Signature header is missing</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.webhookInvalidAmount()'><b>webhookInvalidAmount</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 400 when webhook amount is not positive</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.MockProviderTest.immediateChargeDeclineIsPersisted()'><b>immediateChargeDeclineIsPersisted</b><br>Test class: com.billing.specs.MockProviderTest<br>Test method: provider decline creates a past_due subscription and failed invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.MockProviderTest@3d51f06e</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.outOfOrderWebhookPreservesPaidInvoice()'><b>outOfOrderWebhookPreservesPaidInvoice</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: late payment.failed does not remove the original paid invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.cancelUnknownSubscription()'><b>cancelUnknownSubscription</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 404 when canceling an unknown subscription</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.ApiContractTest.getExistingSubscription()'><b>getExistingSubscription</b><br>Test class: com.billing.specs.ApiContractTest<br>Test method: returns 200 with subscription data for an existing id</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.ApiContractTest@4a22f9e2</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.webhookEventRecorded()'><b>webhookEventRecorded</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: webhook event is recorded in the webhook_events store</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+<tr>
+<td title='com.billing.specs.EndToEndFlowTest.concurrentDuplicateWebhookIsProcessedOnce()'><b>concurrentDuplicateWebhookIsProcessedOnce</b><br>Test class: com.billing.specs.EndToEndFlowTest<br>Test method: concurrent duplicate deliveries produce one invoice and one event</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.EndToEndFlowTest@481a996b</td></tr>
+<tr>
+<td title='com.billing.specs.DatabaseVerificationTest.activeSubscriptionAlwaysHasPaidInvoice()'><b>activeSubscriptionAlwaysHasPaidInvoice</b><br>Test class: com.billing.specs.DatabaseVerificationTest<br>Test method: active subscription always has at least one PAID invoice</td>
+<td></td>
+<td>0</td>
+<td>com.billing.specs.DatabaseVerificationTest@27ce24aa</td></tr>
+</table><p>
+</body>
+</html>

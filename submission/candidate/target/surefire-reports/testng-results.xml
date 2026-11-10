@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="74" passed="74" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-11-10T09:57:40 IST" name="Surefire suite" finished-at="2026-11-10T09:57:51 IST" duration-ms="11389">
+    <groups>
+    </groups>
+    <test started-at="2026-11-10T09:57:40 IST" name="Surefire test" finished-at="2026-11-10T09:57:51 IST" duration-ms="11389">
+      <class name="com.billing.specs.EndToEndFlowTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="basicPlanHasCorrectPriceAndStartsTrialing()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:48 IST" name="basicPlanHasCorrectPriceAndStartsTrialing" description="basic plan starts trialing with correct price of 1900 cents" finished-at="2026-11-10T09:57:49 IST" duration-ms="32" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- basicPlanHasCorrectPriceAndStartsTrialing -->
+        <test-method signature="concurrentCancelAndSuccessKeepsSubscriptionCanceled()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="concurrentCancelAndSuccessKeepsSubscriptionCanceled" description="concurrent cancellation and success webhook leave subscription canceled" finished-at="2026-11-10T09:57:49 IST" duration-ms="77" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- concurrentCancelAndSuccessKeepsSubscriptionCanceled -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="concurrentDuplicateWebhookIsProcessedOnce()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="concurrentDuplicateWebhookIsProcessedOnce" description="concurrent duplicate deliveries produce one invoice and one event" finished-at="2026-11-10T09:57:49 IST" duration-ms="126" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- concurrentDuplicateWebhookIsProcessedOnce -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="concurrentSuccessAndFailureLeaveInvoicePaid()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="concurrentSuccessAndFailureLeaveInvoicePaid" description="concurrent success and failure for one invoice leave it paid" finished-at="2026-11-10T09:57:49 IST" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- concurrentSuccessAndFailureLeaveInvoicePaid -->
+        <test-method signature="failedWebhookWithMismatchedAmountIsIgnored()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="failedWebhookWithMismatchedAmountIsIgnored" description="failed webhook with an amount different from the plan price is ignored" finished-at="2026-11-10T09:57:49 IST" duration-ms="93" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- failedWebhookWithMismatchedAmountIsIgnored -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="fullHappyPath()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="fullHappyPath" description="full happy path: create -&gt; payment.succeeded -&gt; cancel -&gt; stray webhook ignored" finished-at="2026-11-10T09:57:49 IST" duration-ms="99" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- fullHappyPath -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="invalidSignatureWebhookDoesNotChangeState()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="invalidSignatureWebhookDoesNotChangeState" description="invalid signature webhook does not change subscription state" finished-at="2026-11-10T09:57:49 IST" duration-ms="48" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- invalidSignatureWebhookDoesNotChangeState -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="outOfOrderWebhookPreservesPaidInvoice()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="outOfOrderWebhookPreservesPaidInvoice" description="late payment.failed does not remove the original paid invoice" finished-at="2026-11-10T09:57:49 IST" duration-ms="75" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- outOfOrderWebhookPreservesPaidInvoice -->
+        <test-method signature="paymentFailureThenRetrySucceeds()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="paymentFailureThenRetrySucceeds" description="payment failure then retry succeeds: ends active with 2 invoices" finished-at="2026-11-10T09:57:49 IST" duration-ms="79" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- paymentFailureThenRetrySucceeds -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="proPlanHasCorrectPriceAndStartsTrialing()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="proPlanHasCorrectPriceAndStartsTrialing" description="pro plan starts trialing with correct price of 4900 cents" finished-at="2026-11-10T09:57:49 IST" duration-ms="32" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- proPlanHasCorrectPriceAndStartsTrialing -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="refundCannotChangeAnotherSubscriptionsInvoice()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="refundCannotChangeAnotherSubscriptionsInvoice" description="refund webhook cannot refund another subscription&#039;s invoice" finished-at="2026-11-10T09:57:49 IST" duration-ms="233" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- refundCannotChangeAnotherSubscriptionsInvoice -->
+        <test-method signature="refundUpdatesInvoiceAndRecordsEvent()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="refundUpdatesInvoiceAndRecordsEvent" description="refund updates the invoice and is retained in webhook audit history" finished-at="2026-11-10T09:57:50 IST" duration-ms="76" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- refundUpdatesInvoiceAndRecordsEvent -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:49 IST" name="setUp" finished-at="2026-11-10T09:57:49 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="refundWebhookWithMismatchedAmountIsIgnored()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:50 IST" name="refundWebhookWithMismatchedAmountIsIgnored" description="refund webhook with an amount different from the invoice is ignored" finished-at="2026-11-10T09:57:50 IST" duration-ms="90" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- refundWebhookWithMismatchedAmountIsIgnored -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="successWebhookWithMismatchedAmountIsIgnored()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:50 IST" name="successWebhookWithMismatchedAmountIsIgnored" description="success webhook with an amount different from the plan price is ignored" finished-at="2026-11-10T09:57:50 IST" duration-ms="51" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- successWebhookWithMismatchedAmountIsIgnored -->
+        <test-method signature="triplicateWebhookIdempotency()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:50 IST" name="triplicateWebhookIdempotency" description="triplicate webhook delivery produces exactly one state change and one invoice" finished-at="2026-11-10T09:57:50 IST" duration-ms="88" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- triplicateWebhookIdempotency -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="webhookCannotReassignAnotherSubscriptionsInvoice()[pri:0, instance:com.billing.specs.EndToEndFlowTest@481a996b]" started-at="2026-11-10T09:57:50 IST" name="webhookCannotReassignAnotherSubscriptionsInvoice" description="webhook cannot reuse an invoice belonging to another subscription" finished-at="2026-11-10T09:57:50 IST" duration-ms="93" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookCannotReassignAnotherSubscriptionsInvoice -->
+      </class> <!-- com.billing.specs.EndToEndFlowTest -->
+      <class name="com.billing.specs.StateMachineTest">
+        <test-method signature="activeRecurringPaymentSuccessPersistsInvoice()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:50 IST" name="activeRecurringPaymentSuccessPersistsInvoice" description="successful recurring payment records an invoice without changing active state" finished-at="2026-11-10T09:57:50 IST" duration-ms="45" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- activeRecurringPaymentSuccessPersistsInvoice -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="activeToCanceled()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:50 IST" name="activeToCanceled" description="active -&gt; canceled via API cancel" finished-at="2026-11-10T09:57:50 IST" duration-ms="52" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- activeToCanceled -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="activeToPastDue()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:50 IST" name="activeToPastDue" description="active -&gt; past_due via payment.failed webhook" finished-at="2026-11-10T09:57:51 IST" duration-ms="47" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- activeToPastDue -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="canceledDoesNotMoveToPastDueOnPaymentFailed()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="canceledDoesNotMoveToPastDueOnPaymentFailed" description="canceled -&gt; past_due via payment.failed is silently ignored" finished-at="2026-11-10T09:57:51 IST" duration-ms="135" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- canceledDoesNotMoveToPastDueOnPaymentFailed -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="canceledDoesNotReactivateOnPaymentSucceeded()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="canceledDoesNotReactivateOnPaymentSucceeded" description="canceled -&gt; active via payment.succeeded is silently ignored" finished-at="2026-11-10T09:57:51 IST" duration-ms="92" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- canceledDoesNotReactivateOnPaymentSucceeded -->
+        <test-method signature="lateFailedWebhookDoesNotRemovePaidInvoice()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="lateFailedWebhookDoesNotRemovePaidInvoice" description="late payment.failed after payment.succeeded does not remove the paid invoice" finished-at="2026-11-10T09:57:51 IST" duration-ms="60" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- lateFailedWebhookDoesNotRemovePaidInvoice -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="lateFailureForSameInvoiceDoesNotRegressState()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="lateFailureForSameInvoiceDoesNotRegressState" description="late failure for a paid invoice is ignored without regressing active state" finished-at="2026-11-10T09:57:51 IST" duration-ms="75" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- lateFailureForSameInvoiceDoesNotRegressState -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="pastDueToActive()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="pastDueToActive" description="past_due -&gt; active via payment.succeeded webhook on retry" finished-at="2026-11-10T09:57:51 IST" duration-ms="43" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- pastDueToActive -->
+        <test-method signature="pastDueToCanceled()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="pastDueToCanceled" description="past_due -&gt; canceled via API cancel" finished-at="2026-11-10T09:57:51 IST" duration-ms="53" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- pastDueToCanceled -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="retryExhaustionCancelsSubscription()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="retryExhaustionCancelsSubscription" description="past_due -&gt; canceled after three distinct failed payment attempts" finished-at="2026-11-10T09:57:51 IST" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- retryExhaustionCancelsSubscription -->
+        <test-method signature="successfulRetryResetsFailureCount()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="successfulRetryResetsFailureCount" description="successful retry resets the failed-attempt count" finished-at="2026-11-10T09:57:51 IST" duration-ms="87" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- successfulRetryResetsFailureCount -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="trialingToActive()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="trialingToActive" description="trialing -&gt; active via payment.succeeded webhook" finished-at="2026-11-10T09:57:51 IST" duration-ms="38" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- trialingToActive -->
+        <test-method signature="trialingToCanceled()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="trialingToCanceled" description="trialing -&gt; canceled via API cancel" finished-at="2026-11-10T09:57:51 IST" duration-ms="30" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- trialingToCanceled -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="setUp" finished-at="2026-11-10T09:57:51 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="trialingToPastDue()[pri:0, instance:com.billing.specs.StateMachineTest@7ed7259e]" started-at="2026-11-10T09:57:51 IST" name="trialingToPastDue" description="trialing -&gt; past_due via payment.failed webhook" finished-at="2026-11-10T09:57:51 IST" duration-ms="30" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- trialingToPastDue -->
+      </class> <!-- com.billing.specs.StateMachineTest -->
+      <class name="com.billing.specs.MockProviderTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="failedWebhookResolvesTimeoutBeforeRetry()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="failedWebhookResolvesTimeoutBeforeRetry" description="failed webhook resolves a timeout and permits a later retry" finished-at="2026-11-10T09:57:50 IST" duration-ms="39" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- failedWebhookResolvesTimeoutBeforeRetry -->
+        <test-method signature="immediateChargeDeclineIsPersisted()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="immediateChargeDeclineIsPersisted" description="provider decline creates a past_due subscription and failed invoice" finished-at="2026-11-10T09:57:50 IST" duration-ms="44" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- immediateChargeDeclineIsPersisted -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="immediateChargeSuccessIsIntegratedWithSubscriptionCreation()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="immediateChargeSuccessIsIntegratedWithSubscriptionCreation" description="immediate plan creation calls provider once and persists a paid invoice" finished-at="2026-11-10T09:57:50 IST" duration-ms="42" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- immediateChargeSuccessIsIntegratedWithSubscriptionCreation -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="immediateChargeTimeoutIsPersisted()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="immediateChargeTimeoutIsPersisted" description="provider timeout remains pending for reconciliation" finished-at="2026-11-10T09:57:50 IST" duration-ms="35" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- immediateChargeTimeoutIsPersisted -->
+        <test-method signature="providerCallCountResetsOnReset()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerCallCountResetsOnReset" description="provider call count resets correctly between tests" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerCallCountResetsOnReset -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="providerDeclineReturnsFailedResult()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerDeclineReturnsFailedResult" description="provider returns failed result on decline with no chargeId" finished-at="2026-11-10T09:57:50 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerDeclineReturnsFailedResult -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="providerNotCalledForTrialingSubscription()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerNotCalledForTrialingSubscription" description="provider is not called when creating a trialing subscription" finished-at="2026-11-10T09:57:50 IST" duration-ms="15" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerNotCalledForTrialingSubscription -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="providerNotCalledForUnknownCustomer()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerNotCalledForUnknownCustomer" description="provider is not called when the customer does not exist" finished-at="2026-11-10T09:57:50 IST" duration-ms="18" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerNotCalledForUnknownCustomer -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="providerNotCalledOnReplayedWebhook()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerNotCalledOnReplayedWebhook" description="provider is not called when a webhook is replayed" finished-at="2026-11-10T09:57:50 IST" duration-ms="63" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerNotCalledOnReplayedWebhook -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="providerNotCalledOnValidationFailure()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerNotCalledOnValidationFailure" description="provider is not called for an invalid subscription creation" finished-at="2026-11-10T09:57:50 IST" duration-ms="20" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerNotCalledOnValidationFailure -->
+        <test-method signature="providerRecordsCorrectArguments()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerRecordsCorrectArguments" description="provider records correct customer, payment method, and amount" finished-at="2026-11-10T09:57:50 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerRecordsCorrectArguments -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="providerSucceedReturnsChargeId()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerSucceedReturnsChargeId" description="provider returns success result with chargeId" finished-at="2026-11-10T09:57:50 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerSucceedReturnsChargeId -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="providerThrowsOnTimeout()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="providerThrowsOnTimeout" description="provider throws the typed timeout exception" finished-at="2026-11-10T09:57:50 IST" duration-ms="3" status="PASS">
+          <exception class="com.billing.service.PaymentProviderTimeoutException">
+            <message>
+              <![CDATA[Payment provider timeout]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[com.billing.service.PaymentProviderTimeoutException: Payment provider timeout
+at com.billing.mocks.MockPaymentProvider.charge(MockPaymentProvider.java:35)
+at com.billing.specs.MockProviderTest.providerThrowsOnTimeout(MockProviderTest.java:218)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:155)
+at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:169)
+at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:88)
+at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:137)
+at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+]]>
+            </full-stacktrace>
+          </exception> <!-- com.billing.service.PaymentProviderTimeoutException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- providerThrowsOnTimeout -->
+        <test-method signature="retryAfterDeclineCanSucceed()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="retryAfterDeclineCanSucceed" description="retry after a confirmed decline can recover the subscription" finished-at="2026-11-10T09:57:50 IST" duration-ms="35" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- retryAfterDeclineCanSucceed -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="retryExhaustionStopsFurtherCharges()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="retryExhaustionStopsFurtherCharges" description="retry attempts stop charging when the third consecutive attempt fails" finished-at="2026-11-10T09:57:50 IST" duration-ms="59" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- retryExhaustionStopsFurtherCharges -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="unresolvedTimeoutWaitsForWebhookReconciliation()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="unresolvedTimeoutWaitsForWebhookReconciliation" description="retry does not charge again while a provider timeout is unresolved" finished-at="2026-11-10T09:57:50 IST" duration-ms="40" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- unresolvedTimeoutWaitsForWebhookReconciliation -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.MockProviderTest@3d51f06e]" started-at="2026-11-10T09:57:50 IST" name="setUp" finished-at="2026-11-10T09:57:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+      </class> <!-- com.billing.specs.MockProviderTest -->
+      <class name="com.billing.specs.DatabaseVerificationTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="activeSubscriptionAlwaysHasPaidInvoice()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="activeSubscriptionAlwaysHasPaidInvoice" description="active subscription always has at least one PAID invoice" finished-at="2026-11-10T09:57:48 IST" duration-ms="86" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- activeSubscriptionAlwaysHasPaidInvoice -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="duplicateWebhookDoesNotDuplicateInvoice()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="duplicateWebhookDoesNotDuplicateInvoice" description="duplicate webhook does not create a duplicate invoice" finished-at="2026-11-10T09:57:48 IST" duration-ms="82" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- duplicateWebhookDoesNotDuplicateInvoice -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="duplicateWebhookStoredOnce()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="duplicateWebhookStoredOnce" description="duplicate webhook event is stored only once" finished-at="2026-11-10T09:57:48 IST" duration-ms="86" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- duplicateWebhookStoredOnce -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="failedInvoiceWrittenOnFailure()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="failedInvoiceWrittenOnFailure" description="FAILED invoice is written when payment.failed webhook is processed" finished-at="2026-11-10T09:57:48 IST" duration-ms="74" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- failedInvoiceWrittenOnFailure -->
+        <test-method signature="paidInvoiceWrittenOnSuccess()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="paidInvoiceWrittenOnSuccess" description="PAID invoice is written when payment.succeeded webhook is processed" finished-at="2026-11-10T09:57:48 IST" duration-ms="71" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- paidInvoiceWrittenOnSuccess -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="pastDueSubscriptionHasNoPaidInvoice()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="pastDueSubscriptionHasNoPaidInvoice" description="past_due subscription has no PAID invoice" finished-at="2026-11-10T09:57:48 IST" duration-ms="58" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- pastDueSubscriptionHasNoPaidInvoice -->
+        <test-method signature="persistedStatusMatchesApiStatusAtEveryStage()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="persistedStatusMatchesApiStatusAtEveryStage" description="persisted status matches API-visible status at trialing, active, and canceled stages" finished-at="2026-11-10T09:57:48 IST" duration-ms="190" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- persistedStatusMatchesApiStatusAtEveryStage -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="subscriptionPersistedOnCreation()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="subscriptionPersistedOnCreation" description="subscription is persisted with correct initial status on creation" finished-at="2026-11-10T09:57:48 IST" duration-ms="24" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- subscriptionPersistedOnCreation -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="subscriptionPlanAndCustomerPersisted()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="subscriptionPlanAndCustomerPersisted" description="subscription plan and customer are stored correctly" finished-at="2026-11-10T09:57:48 IST" duration-ms="33" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- subscriptionPlanAndCustomerPersisted -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="webhookEventRecorded()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="webhookEventRecorded" description="webhook event is recorded in the webhook_events store" finished-at="2026-11-10T09:57:48 IST" duration-ms="45" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookEventRecorded -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.DatabaseVerificationTest@27ce24aa]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+      </class> <!-- com.billing.specs.DatabaseVerificationTest -->
+      <class name="com.billing.specs.ApiContractTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:40 IST" name="setUp" finished-at="2026-11-10T09:57:42 IST" duration-ms="1521" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="cancelSubscription()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:42 IST" name="cancelSubscription" description="returns 200 with canceled status after cancel" finished-at="2026-11-10T09:57:47 IST" duration-ms="5225" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- cancelSubscription -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="cancelUnknownSubscription()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="cancelUnknownSubscription" description="returns 404 when canceling an unknown subscription" finished-at="2026-11-10T09:57:47 IST" duration-ms="36" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- cancelUnknownSubscription -->
+        <test-method signature="createBasicSubscription()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="createBasicSubscription" description="returns 201 with id and status for a valid basic subscription" finished-at="2026-11-10T09:57:47 IST" duration-ms="63" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createBasicSubscription -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="createMissingCustomerId()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="createMissingCustomerId" description="returns 400 when customer_id is missing" finished-at="2026-11-10T09:57:47 IST" duration-ms="54" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createMissingCustomerId -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="createMissingPaymentMethod()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="createMissingPaymentMethod" description="returns 400 when payment_method_id is missing" finished-at="2026-11-10T09:57:47 IST" duration-ms="49" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createMissingPaymentMethod -->
+        <test-method signature="createProSubscription()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="createProSubscription" description="returns 201 with id and status for a valid pro subscription" finished-at="2026-11-10T09:57:47 IST" duration-ms="73" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createProSubscription -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="createUnknownCustomer()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="createUnknownCustomer" description="returns 404 and does not create a subscription for an unknown customer" finished-at="2026-11-10T09:57:47 IST" duration-ms="34" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createUnknownCustomer -->
+        <test-method signature="createUnknownPlan()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="createUnknownPlan" description="returns 400 for an unknown plan name" finished-at="2026-11-10T09:57:47 IST" duration-ms="36" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createUnknownPlan -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="getExistingSubscription()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="getExistingSubscription" description="returns 200 with subscription data for an existing id" finished-at="2026-11-10T09:57:47 IST" duration-ms="111" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getExistingSubscription -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="getUnknownSubscription()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="getUnknownSubscription" description="returns 404 for an unknown subscription id" finished-at="2026-11-10T09:57:47 IST" duration-ms="43" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getUnknownSubscription -->
+        <test-method signature="webhookInvalidAmount()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="webhookInvalidAmount" description="returns 400 when webhook amount is not positive" finished-at="2026-11-10T09:57:47 IST" duration-ms="52" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookInvalidAmount -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="webhookInvalidSignature()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="webhookInvalidSignature" description="returns 401 when signature is invalid" finished-at="2026-11-10T09:57:47 IST" duration-ms="63" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookInvalidSignature -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="webhookMalformedPayload()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="webhookMalformedPayload" description="returns 400 for malformed JSON payload with valid signature" finished-at="2026-11-10T09:57:47 IST" duration-ms="24" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookMalformedPayload -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="webhookMissingRequiredField()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="webhookMissingRequiredField" description="returns 400 when a required webhook field is missing" finished-at="2026-11-10T09:57:47 IST" duration-ms="42" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookMissingRequiredField -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="setUp" finished-at="2026-11-10T09:57:47 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="webhookMissingSignature()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:47 IST" name="webhookMissingSignature" description="returns 401 when X-Provider-Signature header is missing" finished-at="2026-11-10T09:57:48 IST" duration-ms="67" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookMissingSignature -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="webhookNonIntegerAmount()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:48 IST" name="webhookNonIntegerAmount" description="returns 400 when webhook amount is not an integer" finished-at="2026-11-10T09:57:48 IST" duration-ms="26" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookNonIntegerAmount -->
+        <test-method signature="webhookUnsupportedEventType()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:48 IST" name="webhookUnsupportedEventType" description="returns 400 for an unsupported webhook event type" finished-at="2026-11-10T09:57:48 IST" duration-ms="64" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookUnsupportedEventType -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:48 IST" name="setUp" finished-at="2026-11-10T09:57:48 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="webhookValidRequest()[pri:0, instance:com.billing.specs.ApiContractTest@4a22f9e2]" started-at="2026-11-10T09:57:48 IST" name="webhookValidRequest" description="returns 200 for a valid signed webhook" finished-at="2026-11-10T09:57:48 IST" duration-ms="87" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- webhookValidRequest -->
+      </class> <!-- com.billing.specs.ApiContractTest -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>

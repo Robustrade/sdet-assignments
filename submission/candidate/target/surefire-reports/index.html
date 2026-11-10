@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+  <meta charset='utf-8'>
+  <title>TestNG reports</title>
+
+    <link type="text/css" href="testng-reports1.css" rel="stylesheet" id="ultra" />
+    <link type="text/css" href="testng-reports.css" rel="stylesheet" id="retro" disabled="false"/>
+    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="testng-reports.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {packages:['table']});
+      google.setOnLoadCallback(drawTable);
+      var suiteTableInitFunctions = new Array();
+      var suiteTableData = new Array();
+    </script>
+    <!--
+      <script type="text/javascript" src="jquery-ui/js/jquery-ui-1.8.16.custom.min.js"></script>
+     -->
+  </head>
+
+  <body>    <div class="top-banner-root">
+      <span class="top-banner-title-font">Test results</span>
+      <button id="button" class="button">Switch Retro Theme</button> <!-- button -->
+      <br/>
+      <span class="top-banner-font-1">1 suite</span>
+    </div> <!-- top-banner-root -->
+    <div class="navigator-root">
+      <div class="navigator-suite-header">
+        <span>All suites</span>
+        <a href="#" title="Collapse/expand all the suites" class="collapse-all-link">
+          <img src="collapseall.gif" class="collapse-all-icon">
+          </img> <!-- collapse-all-icon -->
+        </a> <!-- collapse-all-link -->
+      </div> <!-- navigator-suite-header -->
+      <div class="suite">
+        <div class="rounded-window">
+          <div class="suite-header light-rounded-window-top">
+            <a href="#" panel-name="suite-Surefire_suite" class="navigator-link">
+              <span class="suite-name border-passed">Surefire suite</span>
+            </a> <!-- navigator-link -->
+          </div> <!-- suite-header light-rounded-window-top -->
+          <div class="navigator-suite-content">
+            <div class="suite-section-title">
+              <span>Info</span>
+            </div> <!-- suite-section-title -->
+            <div class="suite-section-content">
+              <ul>
+                <li>
+                  <a href="#" panel-name="test-xml-Surefire_suite" class="navigator-link ">
+                    <span>[unset file name]</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="testlist-Surefire_suite" class="navigator-link ">
+                    <span class="test-stats">1 test</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="group-Surefire_suite" class="navigator-link ">
+                    <span>0 groups</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="times-Surefire_suite" class="navigator-link ">
+                    <span>Times</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="reporter-Surefire_suite" class="navigator-link ">
+                    <span>Reporter output</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="ignored-methods-Surefire_suite" class="navigator-link ">
+                    <span>Ignored methods</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="chronological-Surefire_suite" class="navigator-link ">
+                    <span>Chronological view</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+              </ul>
+            </div> <!-- suite-section-content -->
+            <div class="result-section">
+              <div class="suite-section-title">
+                <span>Results</span>
+              </div> <!-- suite-section-title -->
+              <div class="suite-section-content">
+                <ul>
+                  <li>
+                    <span class="method-stats">74 methods,   74 passed</span>
+                  </li>
+                  <li>
+                    <span class="method-list-title passed">Passed methods</span>
+                    <span class="show-or-hide-methods passed">
+                      <a href="#" panel-name="suite-Surefire_suite" class="hide-methods passed suite-Surefire_suite"> (hide)</a> <!-- hide-methods passed suite-Surefire_suite -->
+                      <a href="#" panel-name="suite-Surefire_suite" class="show-methods passed suite-Surefire_suite"> (show)</a> <!-- show-methods passed suite-Surefire_suite -->
+                    </span>
+                    <div class="method-list-content passed suite-Surefire_suite">
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="activeRecurringPaymentSuccessPersistsInvoice">activeRecurringPaymentSuccessPersistsInvoice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="activeSubscriptionAlwaysHasPaidInvoice">activeSubscriptionAlwaysHasPaidInvoice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="activeToCanceled">activeToCanceled</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="activeToPastDue">activeToPastDue</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="basicPlanHasCorrectPriceAndStartsTrialing">basicPlanHasCorrectPriceAndStartsTrialing</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="cancelSubscription">cancelSubscription</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="cancelUnknownSubscription">cancelUnknownSubscription</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="canceledDoesNotMoveToPastDueOnPaymentFailed">canceledDoesNotMoveToPastDueOnPaymentFailed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="canceledDoesNotReactivateOnPaymentSucceeded">canceledDoesNotReactivateOnPaymentSucceeded</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="concurrentCancelAndSuccessKeepsSubscriptionCanceled">concurrentCancelAndSuccessKeepsSubscriptionCanceled</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="concurrentDuplicateWebhookIsProcessedOnce">concurrentDuplicateWebhookIsProcessedOnce</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="concurrentSuccessAndFailureLeaveInvoicePaid">concurrentSuccessAndFailureLeaveInvoicePaid</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="createBasicSubscription">createBasicSubscription</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="createMissingCustomerId">createMissingCustomerId</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="createMissingPaymentMethod">createMissingPaymentMethod</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="createProSubscription">createProSubscription</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="createUnknownCustomer">createUnknownCustomer</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="createUnknownPlan">createUnknownPlan</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="duplicateWebhookDoesNotDuplicateInvoice">duplicateWebhookDoesNotDuplicateInvoice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="duplicateWebhookStoredOnce">duplicateWebhookStoredOnce</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="failedInvoiceWrittenOnFailure">failedInvoiceWrittenOnFailure</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="failedWebhookResolvesTimeoutBeforeRetry">failedWebhookResolvesTimeoutBeforeRetry</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="failedWebhookWithMismatchedAmountIsIgnored">failedWebhookWithMismatchedAmountIsIgnored</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="fullHappyPath">fullHappyPath</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="getExistingSubscription">getExistingSubscription</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="getUnknownSubscription">getUnknownSubscription</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="immediateChargeDeclineIsPersisted">immediateChargeDeclineIsPersisted</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="immediateChargeSuccessIsIntegratedWithSubscriptionCreation">immediateChargeSuccessIsIntegratedWithSubscriptionCreation</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="immediateChargeTimeoutIsPersisted">immediateChargeTimeoutIsPersisted</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="invalidSignatureWebhookDoesNotChangeState">invalidSignatureWebhookDoesNotChangeState</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="lateFailedWebhookDoesNotRemovePaidInvoice">lateFailedWebhookDoesNotRemovePaidInvoice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="lateFailureForSameInvoiceDoesNotRegressState">lateFailureForSameInvoiceDoesNotRegressState</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="outOfOrderWebhookPreservesPaidInvoice">outOfOrderWebhookPreservesPaidInvoice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="paidInvoiceWrittenOnSuccess">paidInvoiceWrittenOnSuccess</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="pastDueSubscriptionHasNoPaidInvoice">pastDueSubscriptionHasNoPaidInvoice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="pastDueToActive">pastDueToActive</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="pastDueToCanceled">pastDueToCanceled</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="paymentFailureThenRetrySucceeds">paymentFailureThenRetrySucceeds</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="persistedStatusMatchesApiStatusAtEveryStage">persistedStatusMatchesApiStatusAtEveryStage</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="proPlanHasCorrectPriceAndStartsTrialing">proPlanHasCorrectPriceAndStartsTrialing</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerCallCountResetsOnReset">providerCallCountResetsOnReset</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerDeclineReturnsFailedResult">providerDeclineReturnsFailedResult</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerNotCalledForTrialingSubscription">providerNotCalledForTrialingSubscription</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerNotCalledForUnknownCustomer">providerNotCalledForUnknownCustomer</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerNotCalledOnReplayedWebhook">providerNotCalledOnReplayedWebhook</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerNotCalledOnValidationFailure">providerNotCalledOnValidationFailure</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerRecordsCorrectArguments">providerRecordsCorrectArguments</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerSucceedReturnsChargeId">providerSucceedReturnsChargeId</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="providerThrowsOnTimeout">providerThrowsOnTimeout</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="refundCannotChangeAnotherSubscriptionsInvoice">refundCannotChangeAnotherSubscriptionsInvoice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="refundUpdatesInvoiceAndRecordsEvent">refundUpdatesInvoiceAndRecordsEvent</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="refundWebhookWithMismatchedAmountIsIgnored">refundWebhookWithMismatchedAmountIsIgnored</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="retryAfterDeclineCanSucceed">retryAfterDeclineCanSucceed</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="retryExhaustionCancelsSubscription">retryExhaustionCancelsSubscription</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="retryExhaustionStopsFurtherCharges">retryExhaustionStopsFurtherCharges</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="subscriptionPersistedOnCreation">subscriptionPersistedOnCreation</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="subscriptionPlanAndCustomerPersisted">subscriptionPlanAndCustomerPersisted</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="successWebhookWithMismatchedAmountIsIgnored">successWebhookWithMismatchedAmountIsIgnored</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="successfulRetryResetsFailureCount">successfulRetryResetsFailureCount</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="trialingToActive">trialingToActive</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="trialingToCanceled">trialingToCanceled</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.StateMachineTest" class="method navigator-link" hash-for-method="trialingToPastDue">trialingToPastDue</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="triplicateWebhookIdempotency">triplicateWebhookIdempotency</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.MockProviderTest" class="method navigator-link" hash-for-method="unresolvedTimeoutWaitsForWebhookReconciliation">unresolvedTimeoutWaitsForWebhookReconciliation</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.EndToEndFlowTest" class="method navigator-link" hash-for-method="webhookCannotReassignAnotherSubscriptionsInvoice">webhookCannotReassignAnotherSubscriptionsInvoice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.DatabaseVerificationTest" class="method navigator-link" hash-for-method="webhookEventRecorded">webhookEventRecorded</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="webhookInvalidAmount">webhookInvalidAmount</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="webhookInvalidSignature">webhookInvalidSignature</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="webhookMalformedPayload">webhookMalformedPayload</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="webhookMissingRequiredField">webhookMissingRequiredField</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="webhookMissingSignature">webhookMissingSignature</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="webhookNonIntegerAmount">webhookNonIntegerAmount</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="webhookUnsupportedEventType">webhookUnsupportedEventType</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Surefire_suite" title="com.billing.specs.ApiContractTest" class="method navigator-link" hash-for-method="webhookValidRequest">webhookValidRequest</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content passed suite-Surefire_suite -->
+                  </li>
+                </ul>
+              </div> <!-- suite-section-content -->
+            </div> <!-- result-section -->
+          </div> <!-- navigator-suite-content -->
+        </div> <!-- rounded-window -->
+      </div> <!-- suite -->
+    </div> <!-- navigator-root -->
+    <div class="wrapper">
+      <div class="main-panel-root">
+        <div panel-name="suite-Surefire_suite" class="panel Surefire_suite">
+          <div class="suite-Surefire_suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">com.billing.specs.StateMachineTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="activeRecurringPaymentSuccessPersistsInvoice">
+                  </a> <!-- activeRecurringPaymentSuccessPersistsInvoice -->
+                  <span class="method-name">activeRecurringPaymentSuccessPersistsInvoice</span>
+                  <em>
+(successful recurring payment records an invoice without changing active state)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="activeToCanceled">
+                  </a> <!-- activeToCanceled -->
+                  <span class="method-name">activeToCanceled</span>
+                  <em>
+(active -> canceled via API cancel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="activeToPastDue">
+                  </a> <!-- activeToPastDue -->
+                  <span class="method-name">activeToPastDue</span>
+                  <em>
+(active -> past_due via payment.failed webhook)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="canceledDoesNotMoveToPastDueOnPaymentFailed">
+                  </a> <!-- canceledDoesNotMoveToPastDueOnPaymentFailed -->
+                  <span class="method-name">canceledDoesNotMoveToPastDueOnPaymentFailed</span>
+                  <em>
+(canceled -> past_due via payment.failed is silently ignored)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="canceledDoesNotReactivateOnPaymentSucceeded">
+                  </a> <!-- canceledDoesNotReactivateOnPaymentSucceeded -->
+                  <span class="method-name">canceledDoesNotReactivateOnPaymentSucceeded</span>
+                  <em>
+(canceled -> active via payment.succeeded is silently ignored)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="lateFailedWebhookDoesNotRemovePaidInvoice">
+                  </a> <!-- lateFailedWebhookDoesNotRemovePaidInvoice -->
+                  <span class="method-name">lateFailedWebhookDoesNotRemovePaidInvoice</span>
+                  <em>
+(late payment.failed after payment.succeeded does not remove the paid invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="lateFailureForSameInvoiceDoesNotRegressState">
+                  </a> <!-- lateFailureForSameInvoiceDoesNotRegressState -->
+                  <span class="method-name">lateFailureForSameInvoiceDoesNotRegressState</span>
+                  <em>
+(late failure for a paid invoice is ignored without regressing active state)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="pastDueToActive">
+                  </a> <!-- pastDueToActive -->
+                  <span class="method-name">pastDueToActive</span>
+                  <em>
+(past_due -> active via payment.succeeded webhook on retry)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="pastDueToCanceled">
+                  </a> <!-- pastDueToCanceled -->
+                  <span class="method-name">pastDueToCanceled</span>
+                  <em>
+(past_due -> canceled via API cancel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="retryExhaustionCancelsSubscription">
+                  </a> <!-- retryExhaustionCancelsSubscription -->
+                  <span class="method-name">retryExhaustionCancelsSubscription</span>
+                  <em>
+(past_due -> canceled after three distinct failed payment attempts)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="successfulRetryResetsFailureCount">
+                  </a> <!-- successfulRetryResetsFailureCount -->
+                  <span class="method-name">successfulRetryResetsFailureCount</span>
+                  <em>
+(successful retry resets the failed-attempt count)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="trialingToActive">
+                  </a> <!-- trialingToActive -->
+                  <span class="method-name">trialingToActive</span>
+                  <em>
+(trialing -> active via payment.succeeded webhook)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="trialingToCanceled">
+                  </a> <!-- trialingToCanceled -->
+                  <span class="method-name">trialingToCanceled</span>
+                  <em>
+(trialing -> canceled via API cancel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="trialingToPastDue">
+                  </a> <!-- trialingToPastDue -->
+                  <span class="method-name">trialingToPastDue</span>
+                  <em>
+(trialing -> past_due via payment.failed webhook)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Surefire_suite-class-passed -->
+          <div class="suite-Surefire_suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">com.billing.specs.DatabaseVerificationTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="activeSubscriptionAlwaysHasPaidInvoice">
+                  </a> <!-- activeSubscriptionAlwaysHasPaidInvoice -->
+                  <span class="method-name">activeSubscriptionAlwaysHasPaidInvoice</span>
+                  <em>
+(active subscription always has at least one PAID invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="duplicateWebhookDoesNotDuplicateInvoice">
+                  </a> <!-- duplicateWebhookDoesNotDuplicateInvoice -->
+                  <span class="method-name">duplicateWebhookDoesNotDuplicateInvoice</span>
+                  <em>
+(duplicate webhook does not create a duplicate invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="duplicateWebhookStoredOnce">
+                  </a> <!-- duplicateWebhookStoredOnce -->
+                  <span class="method-name">duplicateWebhookStoredOnce</span>
+                  <em>
+(duplicate webhook event is stored only once)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="failedInvoiceWrittenOnFailure">
+                  </a> <!-- failedInvoiceWrittenOnFailure -->
+                  <span class="method-name">failedInvoiceWrittenOnFailure</span>
+                  <em>
+(FAILED invoice is written when payment.failed webhook is processed)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="paidInvoiceWrittenOnSuccess">
+                  </a> <!-- paidInvoiceWrittenOnSuccess -->
+                  <span class="method-name">paidInvoiceWrittenOnSuccess</span>
+                  <em>
+(PAID invoice is written when payment.succeeded webhook is processed)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="pastDueSubscriptionHasNoPaidInvoice">
+                  </a> <!-- pastDueSubscriptionHasNoPaidInvoice -->
+                  <span class="method-name">pastDueSubscriptionHasNoPaidInvoice</span>
+                  <em>
+(past_due subscription has no PAID invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="persistedStatusMatchesApiStatusAtEveryStage">
+                  </a> <!-- persistedStatusMatchesApiStatusAtEveryStage -->
+                  <span class="method-name">persistedStatusMatchesApiStatusAtEveryStage</span>
+                  <em>
+(persisted status matches API-visible status at trialing, active, and canceled stages)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="subscriptionPersistedOnCreation">
+                  </a> <!-- subscriptionPersistedOnCreation -->
+                  <span class="method-name">subscriptionPersistedOnCreation</span>
+                  <em>
+(subscription is persisted with correct initial status on creation)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="subscriptionPlanAndCustomerPersisted">
+                  </a> <!-- subscriptionPlanAndCustomerPersisted -->
+                  <span class="method-name">subscriptionPlanAndCustomerPersisted</span>
+                  <em>
+(subscription plan and customer are stored correctly)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookEventRecorded">
+                  </a> <!-- webhookEventRecorded -->
+                  <span class="method-name">webhookEventRecorded</span>
+                  <em>
+(webhook event is recorded in the webhook_events store)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Surefire_suite-class-passed -->
+          <div class="suite-Surefire_suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">com.billing.specs.MockProviderTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="failedWebhookResolvesTimeoutBeforeRetry">
+                  </a> <!-- failedWebhookResolvesTimeoutBeforeRetry -->
+                  <span class="method-name">failedWebhookResolvesTimeoutBeforeRetry</span>
+                  <em>
+(failed webhook resolves a timeout and permits a later retry)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="immediateChargeDeclineIsPersisted">
+                  </a> <!-- immediateChargeDeclineIsPersisted -->
+                  <span class="method-name">immediateChargeDeclineIsPersisted</span>
+                  <em>
+(provider decline creates a past_due subscription and failed invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="immediateChargeSuccessIsIntegratedWithSubscriptionCreation">
+                  </a> <!-- immediateChargeSuccessIsIntegratedWithSubscriptionCreation -->
+                  <span class="method-name">immediateChargeSuccessIsIntegratedWithSubscriptionCreation</span>
+                  <em>
+(immediate plan creation calls provider once and persists a paid invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="immediateChargeTimeoutIsPersisted">
+                  </a> <!-- immediateChargeTimeoutIsPersisted -->
+                  <span class="method-name">immediateChargeTimeoutIsPersisted</span>
+                  <em>
+(provider timeout remains pending for reconciliation)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerCallCountResetsOnReset">
+                  </a> <!-- providerCallCountResetsOnReset -->
+                  <span class="method-name">providerCallCountResetsOnReset</span>
+                  <em>
+(provider call count resets correctly between tests)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerDeclineReturnsFailedResult">
+                  </a> <!-- providerDeclineReturnsFailedResult -->
+                  <span class="method-name">providerDeclineReturnsFailedResult</span>
+                  <em>
+(provider returns failed result on decline with no chargeId)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerNotCalledForTrialingSubscription">
+                  </a> <!-- providerNotCalledForTrialingSubscription -->
+                  <span class="method-name">providerNotCalledForTrialingSubscription</span>
+                  <em>
+(provider is not called when creating a trialing subscription)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerNotCalledForUnknownCustomer">
+                  </a> <!-- providerNotCalledForUnknownCustomer -->
+                  <span class="method-name">providerNotCalledForUnknownCustomer</span>
+                  <em>
+(provider is not called when the customer does not exist)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerNotCalledOnReplayedWebhook">
+                  </a> <!-- providerNotCalledOnReplayedWebhook -->
+                  <span class="method-name">providerNotCalledOnReplayedWebhook</span>
+                  <em>
+(provider is not called when a webhook is replayed)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerNotCalledOnValidationFailure">
+                  </a> <!-- providerNotCalledOnValidationFailure -->
+                  <span class="method-name">providerNotCalledOnValidationFailure</span>
+                  <em>
+(provider is not called for an invalid subscription creation)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerRecordsCorrectArguments">
+                  </a> <!-- providerRecordsCorrectArguments -->
+                  <span class="method-name">providerRecordsCorrectArguments</span>
+                  <em>
+(provider records correct customer, payment method, and amount)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerSucceedReturnsChargeId">
+                  </a> <!-- providerSucceedReturnsChargeId -->
+                  <span class="method-name">providerSucceedReturnsChargeId</span>
+                  <em>
+(provider returns success result with chargeId)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="providerThrowsOnTimeout">
+                  </a> <!-- providerThrowsOnTimeout -->
+                  <span class="method-name">providerThrowsOnTimeout</span>
+                  <em>
+(provider throws the typed timeout exception)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="retryAfterDeclineCanSucceed">
+                  </a> <!-- retryAfterDeclineCanSucceed -->
+                  <span class="method-name">retryAfterDeclineCanSucceed</span>
+                  <em>
+(retry after a confirmed decline can recover the subscription)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="retryExhaustionStopsFurtherCharges">
+                  </a> <!-- retryExhaustionStopsFurtherCharges -->
+                  <span class="method-name">retryExhaustionStopsFurtherCharges</span>
+                  <em>
+(retry attempts stop charging when the third consecutive attempt fails)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="unresolvedTimeoutWaitsForWebhookReconciliation">
+                  </a> <!-- unresolvedTimeoutWaitsForWebhookReconciliation -->
+                  <span class="method-name">unresolvedTimeoutWaitsForWebhookReconciliation</span>
+                  <em>
+(retry does not charge again while a provider timeout is unresolved)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Surefire_suite-class-passed -->
+          <div class="suite-Surefire_suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">com.billing.specs.ApiContractTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="cancelSubscription">
+                  </a> <!-- cancelSubscription -->
+                  <span class="method-name">cancelSubscription</span>
+                  <em>
+(returns 200 with canceled status after cancel)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="cancelUnknownSubscription">
+                  </a> <!-- cancelUnknownSubscription -->
+                  <span class="method-name">cancelUnknownSubscription</span>
+                  <em>
+(returns 404 when canceling an unknown subscription)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="createBasicSubscription">
+                  </a> <!-- createBasicSubscription -->
+                  <span class="method-name">createBasicSubscription</span>
+                  <em>
+(returns 201 with id and status for a valid basic subscription)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="createMissingCustomerId">
+                  </a> <!-- createMissingCustomerId -->
+                  <span class="method-name">createMissingCustomerId</span>
+                  <em>
+(returns 400 when customer_id is missing)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="createMissingPaymentMethod">
+                  </a> <!-- createMissingPaymentMethod -->
+                  <span class="method-name">createMissingPaymentMethod</span>
+                  <em>
+(returns 400 when payment_method_id is missing)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="createProSubscription">
+                  </a> <!-- createProSubscription -->
+                  <span class="method-name">createProSubscription</span>
+                  <em>
+(returns 201 with id and status for a valid pro subscription)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="createUnknownCustomer">
+                  </a> <!-- createUnknownCustomer -->
+                  <span class="method-name">createUnknownCustomer</span>
+                  <em>
+(returns 404 and does not create a subscription for an unknown customer)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="createUnknownPlan">
+                  </a> <!-- createUnknownPlan -->
+                  <span class="method-name">createUnknownPlan</span>
+                  <em>
+(returns 400 for an unknown plan name)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="getExistingSubscription">
+                  </a> <!-- getExistingSubscription -->
+                  <span class="method-name">getExistingSubscription</span>
+                  <em>
+(returns 200 with subscription data for an existing id)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="getUnknownSubscription">
+                  </a> <!-- getUnknownSubscription -->
+                  <span class="method-name">getUnknownSubscription</span>
+                  <em>
+(returns 404 for an unknown subscription id)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookInvalidAmount">
+                  </a> <!-- webhookInvalidAmount -->
+                  <span class="method-name">webhookInvalidAmount</span>
+                  <em>
+(returns 400 when webhook amount is not positive)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookInvalidSignature">
+                  </a> <!-- webhookInvalidSignature -->
+                  <span class="method-name">webhookInvalidSignature</span>
+                  <em>
+(returns 401 when signature is invalid)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookMalformedPayload">
+                  </a> <!-- webhookMalformedPayload -->
+                  <span class="method-name">webhookMalformedPayload</span>
+                  <em>
+(returns 400 for malformed JSON payload with valid signature)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookMissingRequiredField">
+                  </a> <!-- webhookMissingRequiredField -->
+                  <span class="method-name">webhookMissingRequiredField</span>
+                  <em>
+(returns 400 when a required webhook field is missing)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookMissingSignature">
+                  </a> <!-- webhookMissingSignature -->
+                  <span class="method-name">webhookMissingSignature</span>
+                  <em>
+(returns 401 when X-Provider-Signature header is missing)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookNonIntegerAmount">
+                  </a> <!-- webhookNonIntegerAmount -->
+                  <span class="method-name">webhookNonIntegerAmount</span>
+                  <em>
+(returns 400 when webhook amount is not an integer)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookUnsupportedEventType">
+                  </a> <!-- webhookUnsupportedEventType -->
+                  <span class="method-name">webhookUnsupportedEventType</span>
+                  <em>
+(returns 400 for an unsupported webhook event type)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookValidRequest">
+                  </a> <!-- webhookValidRequest -->
+                  <span class="method-name">webhookValidRequest</span>
+                  <em>
+(returns 200 for a valid signed webhook)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Surefire_suite-class-passed -->
+          <div class="suite-Surefire_suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">com.billing.specs.EndToEndFlowTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="basicPlanHasCorrectPriceAndStartsTrialing">
+                  </a> <!-- basicPlanHasCorrectPriceAndStartsTrialing -->
+                  <span class="method-name">basicPlanHasCorrectPriceAndStartsTrialing</span>
+                  <em>
+(basic plan starts trialing with correct price of 1900 cents)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="concurrentCancelAndSuccessKeepsSubscriptionCanceled">
+                  </a> <!-- concurrentCancelAndSuccessKeepsSubscriptionCanceled -->
+                  <span class="method-name">concurrentCancelAndSuccessKeepsSubscriptionCanceled</span>
+                  <em>
+(concurrent cancellation and success webhook leave subscription canceled)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="concurrentDuplicateWebhookIsProcessedOnce">
+                  </a> <!-- concurrentDuplicateWebhookIsProcessedOnce -->
+                  <span class="method-name">concurrentDuplicateWebhookIsProcessedOnce</span>
+                  <em>
+(concurrent duplicate deliveries produce one invoice and one event)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="concurrentSuccessAndFailureLeaveInvoicePaid">
+                  </a> <!-- concurrentSuccessAndFailureLeaveInvoicePaid -->
+                  <span class="method-name">concurrentSuccessAndFailureLeaveInvoicePaid</span>
+                  <em>
+(concurrent success and failure for one invoice leave it paid)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="failedWebhookWithMismatchedAmountIsIgnored">
+                  </a> <!-- failedWebhookWithMismatchedAmountIsIgnored -->
+                  <span class="method-name">failedWebhookWithMismatchedAmountIsIgnored</span>
+                  <em>
+(failed webhook with an amount different from the plan price is ignored)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="fullHappyPath">
+                  </a> <!-- fullHappyPath -->
+                  <span class="method-name">fullHappyPath</span>
+                  <em>
+(full happy path: create -> payment.succeeded -> cancel -> stray webhook ignored)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invalidSignatureWebhookDoesNotChangeState">
+                  </a> <!-- invalidSignatureWebhookDoesNotChangeState -->
+                  <span class="method-name">invalidSignatureWebhookDoesNotChangeState</span>
+                  <em>
+(invalid signature webhook does not change subscription state)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="outOfOrderWebhookPreservesPaidInvoice">
+                  </a> <!-- outOfOrderWebhookPreservesPaidInvoice -->
+                  <span class="method-name">outOfOrderWebhookPreservesPaidInvoice</span>
+                  <em>
+(late payment.failed does not remove the original paid invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="paymentFailureThenRetrySucceeds">
+                  </a> <!-- paymentFailureThenRetrySucceeds -->
+                  <span class="method-name">paymentFailureThenRetrySucceeds</span>
+                  <em>
+(payment failure then retry succeeds: ends active with 2 invoices)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="proPlanHasCorrectPriceAndStartsTrialing">
+                  </a> <!-- proPlanHasCorrectPriceAndStartsTrialing -->
+                  <span class="method-name">proPlanHasCorrectPriceAndStartsTrialing</span>
+                  <em>
+(pro plan starts trialing with correct price of 4900 cents)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="refundCannotChangeAnotherSubscriptionsInvoice">
+                  </a> <!-- refundCannotChangeAnotherSubscriptionsInvoice -->
+                  <span class="method-name">refundCannotChangeAnotherSubscriptionsInvoice</span>
+                  <em>
+(refund webhook cannot refund another subscription's invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="refundUpdatesInvoiceAndRecordsEvent">
+                  </a> <!-- refundUpdatesInvoiceAndRecordsEvent -->
+                  <span class="method-name">refundUpdatesInvoiceAndRecordsEvent</span>
+                  <em>
+(refund updates the invoice and is retained in webhook audit history)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="refundWebhookWithMismatchedAmountIsIgnored">
+                  </a> <!-- refundWebhookWithMismatchedAmountIsIgnored -->
+                  <span class="method-name">refundWebhookWithMismatchedAmountIsIgnored</span>
+                  <em>
+(refund webhook with an amount different from the invoice is ignored)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="successWebhookWithMismatchedAmountIsIgnored">
+                  </a> <!-- successWebhookWithMismatchedAmountIsIgnored -->
+                  <span class="method-name">successWebhookWithMismatchedAmountIsIgnored</span>
+                  <em>
+(success webhook with an amount different from the plan price is ignored)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="triplicateWebhookIdempotency">
+                  </a> <!-- triplicateWebhookIdempotency -->
+                  <span class="method-name">triplicateWebhookIdempotency</span>
+                  <em>
+(triplicate webhook delivery produces exactly one state change and one invoice)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="webhookCannotReassignAnotherSubscriptionsInvoice">
+                  </a> <!-- webhookCannotReassignAnotherSubscriptionsInvoice -->
+                  <span class="method-name">webhookCannotReassignAnotherSubscriptionsInvoice</span>
+                  <em>
+(webhook cannot reuse an invoice belonging to another subscription)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Surefire_suite-class-passed -->
+        </div> <!-- panel Surefire_suite -->
+        <div panel-name="test-xml-Surefire_suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE suite SYSTEM &quot;https://testng.org/testng-1.0.dtd&quot;&gt;
+&lt;suite name=&quot;Surefire suite&quot; verbose=&quot;0&quot;&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;Surefire test&quot; verbose=&quot;0&quot;&gt;
+    &lt;classes&gt;
+      &lt;class name=&quot;com.billing.specs.ApiContractTest&quot;/&gt;
+      &lt;class name=&quot;com.billing.specs.BaseTest&quot;/&gt;
+      &lt;class name=&quot;com.billing.specs.DatabaseVerificationTest&quot;/&gt;
+      &lt;class name=&quot;com.billing.specs.EndToEndFlowTest&quot;/&gt;
+      &lt;class name=&quot;com.billing.specs.MockProviderTest&quot;/&gt;
+      &lt;class name=&quot;com.billing.specs.StateMachineTest&quot;/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt; &lt;!-- Surefire test --&gt;
+&lt;/suite&gt; &lt;!-- Surefire suite --&gt;
+            </pre>
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="testlist-Surefire_suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Tests for Surefire suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <ul>
+              <li>
+                <span class="test-name">Surefire test (6 classes)</span>
+              </li>
+            </ul>
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="group-Surefire_suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Groups for Surefire suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="times-Surefire_suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Times for Surefire suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="times-div">
+              <script type="text/javascript">
+suiteTableInitFunctions.push('tableData_Surefire_suite');
+function tableData_Surefire_suite() {
+var data = new google.visualization.DataTable();
+data.addColumn('number', 'Number');
+data.addColumn('string', 'Method');
+data.addColumn('string', 'Class');
+data.addColumn('number', 'Time (ms)');
+data.addRows(74);
+data.setCell(0, 0, 0)
+data.setCell(0, 1, 'cancelSubscription')
+data.setCell(0, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(0, 3, 5225);
+data.setCell(1, 0, 1)
+data.setCell(1, 1, 'refundCannotChangeAnotherSubscriptionsInvoice')
+data.setCell(1, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(1, 3, 233);
+data.setCell(2, 0, 2)
+data.setCell(2, 1, 'persistedStatusMatchesApiStatusAtEveryStage')
+data.setCell(2, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(2, 3, 190);
+data.setCell(3, 0, 3)
+data.setCell(3, 1, 'canceledDoesNotMoveToPastDueOnPaymentFailed')
+data.setCell(3, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(3, 3, 135);
+data.setCell(4, 0, 4)
+data.setCell(4, 1, 'concurrentDuplicateWebhookIsProcessedOnce')
+data.setCell(4, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(4, 3, 126);
+data.setCell(5, 0, 5)
+data.setCell(5, 1, 'getExistingSubscription')
+data.setCell(5, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(5, 3, 111);
+data.setCell(6, 0, 6)
+data.setCell(6, 1, 'fullHappyPath')
+data.setCell(6, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(6, 3, 99);
+data.setCell(7, 0, 7)
+data.setCell(7, 1, 'failedWebhookWithMismatchedAmountIsIgnored')
+data.setCell(7, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(7, 3, 93);
+data.setCell(8, 0, 8)
+data.setCell(8, 1, 'webhookCannotReassignAnotherSubscriptionsInvoice')
+data.setCell(8, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(8, 3, 93);
+data.setCell(9, 0, 9)
+data.setCell(9, 1, 'canceledDoesNotReactivateOnPaymentSucceeded')
+data.setCell(9, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(9, 3, 92);
+data.setCell(10, 0, 10)
+data.setCell(10, 1, 'refundWebhookWithMismatchedAmountIsIgnored')
+data.setCell(10, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(10, 3, 90);
+data.setCell(11, 0, 11)
+data.setCell(11, 1, 'triplicateWebhookIdempotency')
+data.setCell(11, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(11, 3, 88);
+data.setCell(12, 0, 12)
+data.setCell(12, 1, 'webhookValidRequest')
+data.setCell(12, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(12, 3, 87);
+data.setCell(13, 0, 13)
+data.setCell(13, 1, 'successfulRetryResetsFailureCount')
+data.setCell(13, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(13, 3, 87);
+data.setCell(14, 0, 14)
+data.setCell(14, 1, 'duplicateWebhookStoredOnce')
+data.setCell(14, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(14, 3, 86);
+data.setCell(15, 0, 15)
+data.setCell(15, 1, 'activeSubscriptionAlwaysHasPaidInvoice')
+data.setCell(15, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(15, 3, 86);
+data.setCell(16, 0, 16)
+data.setCell(16, 1, 'duplicateWebhookDoesNotDuplicateInvoice')
+data.setCell(16, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(16, 3, 82);
+data.setCell(17, 0, 17)
+data.setCell(17, 1, 'paymentFailureThenRetrySucceeds')
+data.setCell(17, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(17, 3, 79);
+data.setCell(18, 0, 18)
+data.setCell(18, 1, 'concurrentCancelAndSuccessKeepsSubscriptionCanceled')
+data.setCell(18, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(18, 3, 77);
+data.setCell(19, 0, 19)
+data.setCell(19, 1, 'refundUpdatesInvoiceAndRecordsEvent')
+data.setCell(19, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(19, 3, 76);
+data.setCell(20, 0, 20)
+data.setCell(20, 1, 'lateFailureForSameInvoiceDoesNotRegressState')
+data.setCell(20, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(20, 3, 75);
+data.setCell(21, 0, 21)
+data.setCell(21, 1, 'outOfOrderWebhookPreservesPaidInvoice')
+data.setCell(21, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(21, 3, 75);
+data.setCell(22, 0, 22)
+data.setCell(22, 1, 'failedInvoiceWrittenOnFailure')
+data.setCell(22, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(22, 3, 74);
+data.setCell(23, 0, 23)
+data.setCell(23, 1, 'createProSubscription')
+data.setCell(23, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(23, 3, 73);
+data.setCell(24, 0, 24)
+data.setCell(24, 1, 'paidInvoiceWrittenOnSuccess')
+data.setCell(24, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(24, 3, 71);
+data.setCell(25, 0, 25)
+data.setCell(25, 1, 'retryExhaustionCancelsSubscription')
+data.setCell(25, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(25, 3, 67);
+data.setCell(26, 0, 26)
+data.setCell(26, 1, 'concurrentSuccessAndFailureLeaveInvoicePaid')
+data.setCell(26, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(26, 3, 67);
+data.setCell(27, 0, 27)
+data.setCell(27, 1, 'webhookMissingSignature')
+data.setCell(27, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(27, 3, 67);
+data.setCell(28, 0, 28)
+data.setCell(28, 1, 'webhookUnsupportedEventType')
+data.setCell(28, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(28, 3, 64);
+data.setCell(29, 0, 29)
+data.setCell(29, 1, 'providerNotCalledOnReplayedWebhook')
+data.setCell(29, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(29, 3, 63);
+data.setCell(30, 0, 30)
+data.setCell(30, 1, 'createBasicSubscription')
+data.setCell(30, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(30, 3, 63);
+data.setCell(31, 0, 31)
+data.setCell(31, 1, 'webhookInvalidSignature')
+data.setCell(31, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(31, 3, 63);
+data.setCell(32, 0, 32)
+data.setCell(32, 1, 'lateFailedWebhookDoesNotRemovePaidInvoice')
+data.setCell(32, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(32, 3, 60);
+data.setCell(33, 0, 33)
+data.setCell(33, 1, 'retryExhaustionStopsFurtherCharges')
+data.setCell(33, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(33, 3, 59);
+data.setCell(34, 0, 34)
+data.setCell(34, 1, 'pastDueSubscriptionHasNoPaidInvoice')
+data.setCell(34, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(34, 3, 58);
+data.setCell(35, 0, 35)
+data.setCell(35, 1, 'createMissingCustomerId')
+data.setCell(35, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(35, 3, 54);
+data.setCell(36, 0, 36)
+data.setCell(36, 1, 'pastDueToCanceled')
+data.setCell(36, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(36, 3, 53);
+data.setCell(37, 0, 37)
+data.setCell(37, 1, 'activeToCanceled')
+data.setCell(37, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(37, 3, 52);
+data.setCell(38, 0, 38)
+data.setCell(38, 1, 'webhookInvalidAmount')
+data.setCell(38, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(38, 3, 52);
+data.setCell(39, 0, 39)
+data.setCell(39, 1, 'successWebhookWithMismatchedAmountIsIgnored')
+data.setCell(39, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(39, 3, 51);
+data.setCell(40, 0, 40)
+data.setCell(40, 1, 'createMissingPaymentMethod')
+data.setCell(40, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(40, 3, 49);
+data.setCell(41, 0, 41)
+data.setCell(41, 1, 'invalidSignatureWebhookDoesNotChangeState')
+data.setCell(41, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(41, 3, 48);
+data.setCell(42, 0, 42)
+data.setCell(42, 1, 'activeToPastDue')
+data.setCell(42, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(42, 3, 47);
+data.setCell(43, 0, 43)
+data.setCell(43, 1, 'activeRecurringPaymentSuccessPersistsInvoice')
+data.setCell(43, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(43, 3, 45);
+data.setCell(44, 0, 44)
+data.setCell(44, 1, 'webhookEventRecorded')
+data.setCell(44, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(44, 3, 45);
+data.setCell(45, 0, 45)
+data.setCell(45, 1, 'immediateChargeDeclineIsPersisted')
+data.setCell(45, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(45, 3, 44);
+data.setCell(46, 0, 46)
+data.setCell(46, 1, 'getUnknownSubscription')
+data.setCell(46, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(46, 3, 43);
+data.setCell(47, 0, 47)
+data.setCell(47, 1, 'pastDueToActive')
+data.setCell(47, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(47, 3, 43);
+data.setCell(48, 0, 48)
+data.setCell(48, 1, 'webhookMissingRequiredField')
+data.setCell(48, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(48, 3, 42);
+data.setCell(49, 0, 49)
+data.setCell(49, 1, 'immediateChargeSuccessIsIntegratedWithSubscriptionCreation')
+data.setCell(49, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(49, 3, 42);
+data.setCell(50, 0, 50)
+data.setCell(50, 1, 'unresolvedTimeoutWaitsForWebhookReconciliation')
+data.setCell(50, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(50, 3, 40);
+data.setCell(51, 0, 51)
+data.setCell(51, 1, 'failedWebhookResolvesTimeoutBeforeRetry')
+data.setCell(51, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(51, 3, 39);
+data.setCell(52, 0, 52)
+data.setCell(52, 1, 'trialingToActive')
+data.setCell(52, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(52, 3, 38);
+data.setCell(53, 0, 53)
+data.setCell(53, 1, 'createUnknownPlan')
+data.setCell(53, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(53, 3, 36);
+data.setCell(54, 0, 54)
+data.setCell(54, 1, 'cancelUnknownSubscription')
+data.setCell(54, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(54, 3, 36);
+data.setCell(55, 0, 55)
+data.setCell(55, 1, 'retryAfterDeclineCanSucceed')
+data.setCell(55, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(55, 3, 35);
+data.setCell(56, 0, 56)
+data.setCell(56, 1, 'immediateChargeTimeoutIsPersisted')
+data.setCell(56, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(56, 3, 35);
+data.setCell(57, 0, 57)
+data.setCell(57, 1, 'createUnknownCustomer')
+data.setCell(57, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(57, 3, 34);
+data.setCell(58, 0, 58)
+data.setCell(58, 1, 'subscriptionPlanAndCustomerPersisted')
+data.setCell(58, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(58, 3, 33);
+data.setCell(59, 0, 59)
+data.setCell(59, 1, 'proPlanHasCorrectPriceAndStartsTrialing')
+data.setCell(59, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(59, 3, 32);
+data.setCell(60, 0, 60)
+data.setCell(60, 1, 'basicPlanHasCorrectPriceAndStartsTrialing')
+data.setCell(60, 2, 'com.billing.specs.EndToEndFlowTest')
+data.setCell(60, 3, 32);
+data.setCell(61, 0, 61)
+data.setCell(61, 1, 'trialingToCanceled')
+data.setCell(61, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(61, 3, 30);
+data.setCell(62, 0, 62)
+data.setCell(62, 1, 'trialingToPastDue')
+data.setCell(62, 2, 'com.billing.specs.StateMachineTest')
+data.setCell(62, 3, 30);
+data.setCell(63, 0, 63)
+data.setCell(63, 1, 'webhookNonIntegerAmount')
+data.setCell(63, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(63, 3, 26);
+data.setCell(64, 0, 64)
+data.setCell(64, 1, 'subscriptionPersistedOnCreation')
+data.setCell(64, 2, 'com.billing.specs.DatabaseVerificationTest')
+data.setCell(64, 3, 24);
+data.setCell(65, 0, 65)
+data.setCell(65, 1, 'webhookMalformedPayload')
+data.setCell(65, 2, 'com.billing.specs.ApiContractTest')
+data.setCell(65, 3, 24);
+data.setCell(66, 0, 66)
+data.setCell(66, 1, 'providerNotCalledOnValidationFailure')
+data.setCell(66, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(66, 3, 20);
+data.setCell(67, 0, 67)
+data.setCell(67, 1, 'providerNotCalledForUnknownCustomer')
+data.setCell(67, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(67, 3, 18);
+data.setCell(68, 0, 68)
+data.setCell(68, 1, 'providerNotCalledForTrialingSubscription')
+data.setCell(68, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(68, 3, 15);
+data.setCell(69, 0, 69)
+data.setCell(69, 1, 'providerThrowsOnTimeout')
+data.setCell(69, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(69, 3, 3);
+data.setCell(70, 0, 70)
+data.setCell(70, 1, 'providerSucceedReturnsChargeId')
+data.setCell(70, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(70, 3, 2);
+data.setCell(71, 0, 71)
+data.setCell(71, 1, 'providerRecordsCorrectArguments')
+data.setCell(71, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(71, 3, 1);
+data.setCell(72, 0, 72)
+data.setCell(72, 1, 'providerDeclineReturnsFailedResult')
+data.setCell(72, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(72, 3, 1);
+data.setCell(73, 0, 73)
+data.setCell(73, 1, 'providerCallCountResetsOnReset')
+data.setCell(73, 2, 'com.billing.specs.MockProviderTest')
+data.setCell(73, 3, 0);
+window.suiteTableData['Surefire_suite']= { tableData: data, tableDiv: 'times-div-Surefire_suite'}
+return data;
+}
+              </script>
+              <span class="suite-total-time">Total running time: 9 seconds</span>
+              <div id="times-div-Surefire_suite">
+              </div> <!-- times-div-Surefire_suite -->
+            </div> <!-- times-div -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="reporter-Surefire_suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Reporter output for Surefire suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="ignored-methods-Surefire_suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">0 ignored methods</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="chronological-Surefire_suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Methods in chronological order</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.billing.specs.ApiContractTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">0 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">cancelSubscription</span>
+                <span class="method-start">1524 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">6758 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">cancelUnknownSubscription</span>
+                <span class="method-start">6759 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">6796 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">createBasicSubscription</span>
+                <span class="method-start">6796 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">6861 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">createMissingCustomerId</span>
+                <span class="method-start">6862 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">6917 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">createMissingPaymentMethod</span>
+                <span class="method-start">6918 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">createProSubscription</span>
+                <span class="method-start">6968 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">6968 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7043 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">createUnknownCustomer</span>
+                <span class="method-start">7046 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7081 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">createUnknownPlan</span>
+                <span class="method-start">7081 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7118 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">getExistingSubscription</span>
+                <span class="method-start">7119 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7231 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">getUnknownSubscription</span>
+                <span class="method-start">7232 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7276 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookInvalidAmount</span>
+                <span class="method-start">7276 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7329 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookInvalidSignature</span>
+                <span class="method-start">7330 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7394 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookMalformedPayload</span>
+                <span class="method-start">7395 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7421 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookMissingRequiredField</span>
+                <span class="method-start">7422 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7466 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookMissingSignature</span>
+                <span class="method-start">7467 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7536 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookNonIntegerAmount</span>
+                <span class="method-start">7537 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">webhookUnsupportedEventType</span>
+                <span class="method-start">7564 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7564 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7629 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookValidRequest</span>
+                <span class="method-start">7630 ms</span>
+              </div> <!-- test-method -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.billing.specs.DatabaseVerificationTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7724 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">activeSubscriptionAlwaysHasPaidInvoice</span>
+                <span class="method-start">7725 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7812 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">duplicateWebhookDoesNotDuplicateInvoice</span>
+                <span class="method-start">7813 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7896 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">duplicateWebhookStoredOnce</span>
+                <span class="method-start">7897 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">7985 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">failedInvoiceWrittenOnFailure</span>
+                <span class="method-start">7987 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8063 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">paidInvoiceWrittenOnSuccess</span>
+                <span class="method-start">8063 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8135 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">pastDueSubscriptionHasNoPaidInvoice</span>
+                <span class="method-start">8138 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8197 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">persistedStatusMatchesApiStatusAtEveryStage</span>
+                <span class="method-start">8197 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">subscriptionPersistedOnCreation</span>
+                <span class="method-start">8388 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8388 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8412 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">subscriptionPlanAndCustomerPersisted</span>
+                <span class="method-start">8412 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8446 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookEventRecorded</span>
+                <span class="method-start">8446 ms</span>
+              </div> <!-- test-method -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.billing.specs.EndToEndFlowTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8493 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">basicPlanHasCorrectPriceAndStartsTrialing</span>
+                <span class="method-start">8494 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">concurrentCancelAndSuccessKeepsSubscriptionCanceled</span>
+                <span class="method-start">8528 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8528 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8606 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">concurrentDuplicateWebhookIsProcessedOnce</span>
+                <span class="method-start">8607 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8737 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">concurrentSuccessAndFailureLeaveInvoicePaid</span>
+                <span class="method-start">8738 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">failedWebhookWithMismatchedAmountIsIgnored</span>
+                <span class="method-start">8806 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8806 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">8900 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">fullHappyPath</span>
+                <span class="method-start">8904 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9005 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invalidSignatureWebhookDoesNotChangeState</span>
+                <span class="method-start">9006 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9055 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">outOfOrderWebhookPreservesPaidInvoice</span>
+                <span class="method-start">9056 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">paymentFailureThenRetrySucceeds</span>
+                <span class="method-start">9132 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9132 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9213 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">proPlanHasCorrectPriceAndStartsTrialing</span>
+                <span class="method-start">9214 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9247 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">refundCannotChangeAnotherSubscriptionsInvoice</span>
+                <span class="method-start">9248 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">refundUpdatesInvoiceAndRecordsEvent</span>
+                <span class="method-start">9482 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9482 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">refundWebhookWithMismatchedAmountIsIgnored</span>
+                <span class="method-start">9559 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9559 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9650 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">successWebhookWithMismatchedAmountIsIgnored</span>
+                <span class="method-start">9652 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9704 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">triplicateWebhookIdempotency</span>
+                <span class="method-start">9704 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9792 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">webhookCannotReassignAnotherSubscriptionsInvoice</span>
+                <span class="method-start">9793 ms</span>
+              </div> <!-- test-method -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.billing.specs.MockProviderTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9888 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">failedWebhookResolvesTimeoutBeforeRetry</span>
+                <span class="method-start">9889 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9929 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">immediateChargeDeclineIsPersisted</span>
+                <span class="method-start">9929 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">9974 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">immediateChargeSuccessIsIntegratedWithSubscriptionCreation</span>
+                <span class="method-start">9974 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10018 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">immediateChargeTimeoutIsPersisted</span>
+                <span class="method-start">10019 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">providerCallCountResetsOnReset</span>
+                <span class="method-start">10055 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10055 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">providerDeclineReturnsFailedResult</span>
+                <span class="method-start">10056 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10056 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10058 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">providerNotCalledForTrialingSubscription</span>
+                <span class="method-start">10058 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">providerNotCalledForUnknownCustomer</span>
+                <span class="method-start">10074 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10074 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">providerNotCalledOnReplayedWebhook</span>
+                <span class="method-start">10093 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10093 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10157 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">providerNotCalledOnValidationFailure</span>
+                <span class="method-start">10158 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">providerRecordsCorrectArguments</span>
+                <span class="method-start">10180 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10180 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10182 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">providerSucceedReturnsChargeId</span>
+                <span class="method-start">10183 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10186 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">providerThrowsOnTimeout</span>
+                <span class="method-start">10187 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">retryAfterDeclineCanSucceed</span>
+                <span class="method-start">10224 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10224 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">retryExhaustionStopsFurtherCharges</span>
+                <span class="method-start">10260 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10260 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10321 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">unresolvedTimeoutWaitsForWebhookReconciliation</span>
+                <span class="method-start">10321 ms</span>
+              </div> <!-- test-method -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.billing.specs.StateMachineTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10363 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">activeRecurringPaymentSuccessPersistsInvoice</span>
+                <span class="method-start">10363 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">activeToCanceled</span>
+                <span class="method-start">10409 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10409 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10462 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">activeToPastDue</span>
+                <span class="method-start">10463 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10511 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">canceledDoesNotMoveToPastDueOnPaymentFailed</span>
+                <span class="method-start">10512 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10648 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">canceledDoesNotReactivateOnPaymentSucceeded</span>
+                <span class="method-start">10649 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">lateFailedWebhookDoesNotRemovePaidInvoice</span>
+                <span class="method-start">10742 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10742 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10803 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">lateFailureForSameInvoiceDoesNotRegressState</span>
+                <span class="method-start">10804 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10879 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">pastDueToActive</span>
+                <span class="method-start">10880 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10924 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">pastDueToCanceled</span>
+                <span class="method-start">10924 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">10978 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">retryExhaustionCancelsSubscription</span>
+                <span class="method-start">10979 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">11047 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">successfulRetryResetsFailureCount</span>
+                <span class="method-start">11047 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">11135 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">trialingToActive</span>
+                <span class="method-start">11136 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">trialingToCanceled</span>
+                <span class="method-start">11175 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">11175 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">11205 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">trialingToPastDue</span>
+                <span class="method-start">11206 ms</span>
+              </div> <!-- test-method -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+      </div> <!-- main-panel-root -->
+    </div> <!-- wrapper -->
+  </body>
+<script type="text/javascript" src="testng-reports2.js"></script>
+</html>
