@@ -7,13 +7,16 @@ const PORT = process.env.PORT ?? '4000';
 process.env.PORT = PORT; // test workers use this to find the matching database file
 export const APP_URL = `http://localhost:${PORT}`;
 
+// The Sauce Demo UI tests run against saucedemo.com and don't need the demo app.
+const runningOnlyUiTests = process.argv.includes('--project=ui');
+
 export default defineConfig({
   fullyParallel: true,
   retries: 0, // a flaky test should fail loudly, not be hidden by a retry
   reporter: [['list'], ['html', { open: 'never' }]],
 
   // Starts the demo billing app before the tests run, and stops it afterwards.
-  webServer: {
+  webServer: runningOnlyUiTests ? undefined : {
     command: `node --no-warnings demo-app/server.js`,
     env: { PORT: String(PORT) },
     url: `${APP_URL}/health`,
