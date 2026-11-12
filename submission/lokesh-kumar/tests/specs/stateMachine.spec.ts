@@ -46,4 +46,29 @@ describe("SubscriptionStateMachine", () => {
       expect(machine.transition("canceled", event).ok).toBe(false);
     }
   });
+
+  // Exhaustive check: every (state, event) pair that is NOT an arrow in the diagram is rejected,
+  // so a new, accidental transition added to the table would be caught here.
+  describe("exhaustive: only the 7 diagram arrows are accepted", () => {
+    const states: SubscriptionState[] = ["trialing", "active", "past_due", "canceled"];
+    const arrows = new Set([
+      "trialing:charge_succeeded",
+      "trialing:charge_failed",
+      "active:charge_failed",
+      "past_due:charge_succeeded",
+      "past_due:retries_exhausted",
+      "active:cancel",
+      "trialing:cancel",
+    ]);
+
+    it("accepts exactly the arrows listed and nothing else", () => {
+      const accepted: string[] = [];
+      for (const from of states) {
+        for (const event of ALL_EVENTS) {
+          if (machine.transition(from, event).ok) accepted.push(`${from}:${event}`);
+        }
+      }
+      expect(accepted.sort()).toEqual([...arrows].sort());
+    });
+  });
 });
