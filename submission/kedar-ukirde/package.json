@@ -1,0 +1,26 @@
+{
+  "name": "kulu-subscription-billing-sdet",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "tsc --noEmit",
+    "lint": "eslint .",
+    "validate-schema": "node scripts/validate-schema.mjs"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "@types/supertest": "^6.0.2",
+    "eslint": "^9.17.0",
+    "supertest": "^7.0.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vitest": "^5.1.0"
+  },
+  "dependencies": {
+    "express": "^5.0.1"
+  }
+}
