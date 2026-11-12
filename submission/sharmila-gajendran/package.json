@@ -1,0 +1,38 @@
+{
+  "name": "subscription-billing-sdet",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SDET assignment: a small Subscription & Billing service and its validation suite",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "tsc --noEmit",
+    "lint": "eslint .",
+    "validate-schema": "vitest run tests/schema",
+    "validate": "npm run lint && npm run build && npm test"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.15.0",
+    "@types/supertest": "^6.0.3",
+    "eslint": "^9.30.0",
+    "supertest": "^7.1.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.0",
+    "vitest": "^3.2.4"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true,
+    "esbuild@0.28.2": true
+  }
+}
