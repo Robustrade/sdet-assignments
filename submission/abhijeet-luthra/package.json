@@ -1,0 +1,40 @@
+{
+  "name": "kulu-subscription-billing-sdet",
+  "version": "1.0.0",
+  "description": "Subscription & Billing Service fixture and automated validation suite (Kulu SDET assignment)",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "jest",
+    "validate:schema": "npm run build --silent && node dist/db/validate-schema.js",
+    "validate": "npm run typecheck && npm run lint && npm run validate:schema && npm test"
+  },
+  "author": "Abhijeet Luthra",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "express": "^4.22.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^4.17.25",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.20.5",
+    "@types/supertest": "^6.0.3",
+    "eslint": "^9.39.5",
+    "jest": "^29.7.0",
+    "supertest": "^7.3.2",
+    "ts-jest": "^29.4.15",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.73.0"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
