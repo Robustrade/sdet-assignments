@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testsuite name="API: subscription creation" time="0.046285" disabled="0" errors="0" tests="4" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.008Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="pro plan starts in trialing, is NOT charged, and API matches DB" time="0.022512" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="basic plan is charged immediately: active, one paid invoice, provider called once with exact args" time="0.019193" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="basic plan + provider decline => 402 and NOTHING is persisted" time="0.002267" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="basic plan + provider timeout => 504 and NOTHING is persisted" time="0.001678" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+	</testsuite>
+	<testsuite name="API: validation failures persist nothing and never call the provider" time="0.022203" disabled="0" errors="0" tests="6" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.051Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="unknown plan" time="0.001762" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="missing customer_id" time="0.001327" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="missing plan" time="0.001294" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="missing payment_method_id" time="0.010142" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="malformed payment_method_id" time="0.005660" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="unknown customer" time="0.001518" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+	</testsuite>
+	<testsuite name="API: retrieval and cancellation" time="0.011312" disabled="0" errors="0" tests="2" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.073Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="GET returns the subscription; unknown id is 404" time="0.005184" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="cancel works once; canceling again is 409 and adds no audit row" time="0.005995" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+	</testsuite>
+	<testsuite name="API: webhook endpoint request handling" time="0.020055" disabled="0" errors="0" tests="7" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.083Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="valid signature => 200" time="0.003124" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="missing signature => 401" time="0.002147" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="forged signature => 401" time="0.002004" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="body tampered after signing => 401" time="0.003832" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="validly signed but malformed JSON => 400" time="0.001750" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="validly signed but missing required field / unsupported type => 400" time="0.005781" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+		<testcase name="event for an unknown subscription => 404 and nothing recorded" time="0.001175" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/api.spec.ts"/>
+	</testsuite>
+	<testsuite name="State machine (unit): the table is the only way to move" time="0.001232" disabled="0" errors="0" tests="3" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.111Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="every (status, trigger) pair outside the table is rejected" time="0.000582" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="canceled is terminal: no trigger leaves it" time="0.000073" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="table contains exactly the 7 documented transitions" time="0.000064" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+	</testsuite>
+	<testsuite name="Lifecycle (end to end): every documented transition" time="0.093770" disabled="0" errors="0" tests="9" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.019Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="trialing -> active: trial ends, first charge succeeds (scheduler path)" time="0.026804" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="trialing -> active: same transition driven by a payment.succeeded webhook" time="0.010310" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="trialing -> past_due: trial ends, first charge declined" time="0.007992" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="active -> past_due: recurring charge fails (payment.failed webhook)" time="0.015046" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="past_due -> active: retry charge succeeds (scheduler path)" time="0.006228" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="past_due -> active: retry success delivered by webhook" time="0.004746" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="past_due -> canceled: retries exhausted after 3 failed attempts" time="0.007124" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="active -> canceled: API cancel stops future billing" time="0.011146" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="trialing -> canceled: API cancel before the trial ends means no charge ever" time="0.003807" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+	</testsuite>
+	<testsuite name="Lifecycle (end to end): invalid transitions are impossible" time="0.017746" disabled="0" errors="0" tests="4" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.100Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="canceled + stray payment.succeeded webhook does NOT reactivate, and records no paid invoice" time="0.004477" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="canceled + payment.failed webhook is ignored too (no past_due)" time="0.003678" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="past_due cannot be canceled through the API (not in the lifecycle) => 409, state unchanged" time="0.004758" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="active cannot be &amp;quot;trial-ended&amp;quot; or retried" time="0.004679" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+	</testsuite>
+	<testsuite name="Plan rules are applied consistently" time="0.003356" disabled="0" errors="0" tests="1" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.117Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="basic (no trial, 2900) vs pro (7-day trial, 4900): price at creation == price charged" time="0.003298" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+	</testsuite>
+	<testsuite name="Provider timeouts leave state untouched" time="0.006127" disabled="0" errors="0" tests="2" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.120Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="timeout at trial end => 504, still trialing, no invoice, can be retried cleanly" time="0.003139" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+		<testcase name="timeout on retry => 504, still past_due, failed_attempts NOT incremented" time="0.002914" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/lifecycle.spec.ts"/>
+	</testsuite>
+	<testsuite name="Provider is called exactly once per real billing attempt, with the right arguments" time="0.042677" disabled="0" errors="0" tests="2" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.089Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="trial end: one call; amount, customer, payment method and idempotency key (= invoice id) are correct" time="0.021601" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/provider-interaction.spec.ts"/>
+		<testcase name="each retry is a NEW billing attempt with its own idempotency key" time="0.020484" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/provider-interaction.spec.ts"/>
+	</testsuite>
+	<testsuite name="Provider is NOT called when no charge is due" time="0.035455" disabled="0" errors="0" tests="3" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.096Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="rejected creation (validation errors)" time="0.010056" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/provider-interaction.spec.ts"/>
+		<testcase name="pro creation (trial), cancellation, and every webhook type (incl. replays)" time="0.019879" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/provider-interaction.spec.ts"/>
+		<testcase name="invalid webhooks (bad signature, malformed)" time="0.005266" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/provider-interaction.spec.ts"/>
+	</testsuite>
+	<testsuite name="Behaviour under each mocked provider outcome (trial-end charge)" time="0.014717" disabled="0" errors="0" tests="3" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.117Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="success" time="0.006123" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/provider-interaction.spec.ts"/>
+		<testcase name="decline" time="0.004104" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/provider-interaction.spec.ts"/>
+		<testcase name="timeout" time="0.004271" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/provider-interaction.spec.ts"/>
+	</testsuite>
+	<testsuite name="Webhook idempotency (mandatory)" time="0.075164" disabled="0" errors="0" tests="5" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.056Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="same event_id delivered twice: transition once, ONE invoice, duplicate recorded, no provider call" time="0.028899" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+		<testcase name="a redelivered payment.failed does not double-count attempts or cancel early" time="0.017038" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+		<testcase name="different event_ids for the SAME invoice do not create a second invoice row" time="0.015834" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+		<testcase name="a webhook for a charge the service already made synchronously is a no-op (no 2nd invoice, no 2nd charge)" time="0.007314" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+		<testcase name="BONUS: two identical webhooks fired concurrently still apply exactly once" time="0.005232" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+	</testsuite>
+	<testsuite name="Out-of-order delivery" time="0.018164" disabled="0" errors="0" tests="3" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.113Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="payment.failed arriving AFTER payment.succeeded (same invoice) does not regress active" time="0.004404" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+		<testcase name="payment.failed then payment.succeeded for the same invoice (a provider retry) recovers to active" time="0.004912" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+		<testcase name="payment.refunded before the payment ever existed is ignored" time="0.008361" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+	</testsuite>
+	<testsuite name="Refunds" time="0.009649" disabled="0" errors="0" tests="2" failures="0" skipped="0" timestamp="2026-11-22T07:27:42.122Z" hostname="Harshitha-MacBook-Air.local">
+		<testcase name="refund marks the paid invoice refunded and leaves the lifecycle state alone" time="0.003983" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+		<testcase name="a second refund event for an already-refunded invoice is ignored" time="0.005524" classname="test" file="/Users/mihir/sdet-assignments/submission/harshitha-gowda/tests/specs/webhooks.spec.ts"/>
+	</testsuite>
+	<!-- tests 56 -->
+	<!-- suites 15 -->
+	<!-- pass 56 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 302.6635 -->
+</testsuites>

@@ -8,6 +8,7 @@ A layered, object-oriented test framework for a Subscription & Billing Service, 
 npm install
 npm test          # 56 tests, ~2s
 npm run typecheck
+npm run test:report   # writes reports/test-report.html (pass/fail per test) and reports/junit.xml
 ```
 
 Requires Node >= 22.5 (uses the built-in `node:test` runner and `node:sqlite`; no Jest/Vitest, no native modules, so setup is `npm install` and go).
