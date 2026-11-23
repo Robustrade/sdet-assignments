@@ -4,7 +4,7 @@
 **Repo:** https://github.com/Robustrade/sdet-assignments/ (Kulu SDET Take-Home Assignment)
 **Assignment:** Subscription & Billing Service — SDET assignment (SDET_ASSIGNMENT.md)
 **Deadline:** Wed 25 Nov 2026 (2 working days from Sushma's mail of 23 Nov)
-**Status:** DRAFT for Mark's review — this doc goes into the dummy PR first (Sushma asked for approach before code), full solution follows in the same PR.
+**Status:** IMPLEMENTED — fixture + 45 tests drafted 23 Nov, all green (tsc, lint, vitest, clean-setup check). Awaiting Mark's review before push to PR #118.
 
 ## 1. Understanding
 
