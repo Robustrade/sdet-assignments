@@ -28,3 +28,8 @@ Thumbs.db
 # IDE settings
 .vscode/
 .idea/
+
+# Test reporting outputs
+allure-results/
+allure-report/
+reports/

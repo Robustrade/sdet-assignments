@@ -9,7 +9,10 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "build": "tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:report": "rimraf allure-results allure-report reports/junit && vitest run",
+    "report:allure": "allure generate allure-results --clean --output allure-report",
+    "report:open": "allure open allure-report"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +29,10 @@
     "@types/node": "^26.6.10",
     "@types/supertest": "^7.2.1",
     "@vitest/coverage-v8": "^5.1.1",
+    "allure": "^3.33.0",
+    "allure-vitest": "^3.15.0",
     "eslint": "^10.15.0",
+    "rimraf": "^6.1.4",
     "supertest": "^7.3.2",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",

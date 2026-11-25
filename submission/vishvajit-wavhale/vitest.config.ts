@@ -8,6 +8,22 @@ export default defineConfig({
     clearMocks: true,
     restoreMocks: true,
     testTimeout: 10000,
-    hookTimeout: 10000
+    hookTimeout: 10000,
+
+    reporters: [
+      'default',
+      [
+        'junit',
+        {
+          outputFile: 'reports/junit/results.xml'
+        }
+      ],
+      [
+        'allure-vitest/reporter',
+        {
+          resultsDir: 'allure-results'
+        }
+      ]
+    ]
   }
 });
