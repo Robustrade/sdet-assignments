@@ -1,0 +1,65 @@
+
+name: Kulu SDET CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: submission/vishvajit-wavhale
+
+jobs:
+  quality-checks:
+    name: Build, Lint, Test and Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: submission/vishvajit-wavhale/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript build
+        run: npm run build
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Run automated tests
+        run: npm test
+
+      - name: Generate coverage report
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: kulu-sdet-coverage-report
+          path: submission/vishvajit-wavhale/coverage/
+          if-no-files-found: warn
+          retention-days: 14

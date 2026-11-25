@@ -1,0 +1,1 @@
+console.log('Kulu SDET Framework Initialized');
