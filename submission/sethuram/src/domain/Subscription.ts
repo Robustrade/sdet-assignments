@@ -1,4 +1,3 @@
-
 import { SubscriptionStatus } from "./SubscriptionStateMachine";
 
 export interface Subscription {
@@ -6,6 +5,8 @@ export interface Subscription {
   customerId: string;
   planId: string;
   status: SubscriptionStatus;
+  failedPaymentAttempts?: number;
+  trialEndsAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }

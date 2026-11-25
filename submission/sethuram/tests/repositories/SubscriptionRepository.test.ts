@@ -48,6 +48,7 @@ describe("Subscription repository persistence", () => {
 
   test("returns all saved subscriptions", async () => {
     await repository.save(subscription);
+
     await repository.save({
       ...subscription,
       id: "sub_002"
@@ -72,5 +73,58 @@ describe("Subscription repository persistence", () => {
     const stored = await repository.findById("sub_001");
 
     expect(stored?.status).toBe("trialing");
+  });
+
+  test("protects trial expiry date from mutation after saving", async () => {
+    const trialEndsAt = new Date("2026-01-15T00:00:00Z");
+
+    await repository.save({
+      ...subscription,
+      trialEndsAt
+    });
+
+    trialEndsAt.setUTCDate(25);
+
+    const stored = await repository.findById("sub_001");
+
+    expect(stored?.trialEndsAt).toEqual(
+      new Date("2026-01-15T00:00:00Z")
+    );
+  });
+
+  test("protects trial expiry date returned by findById", async () => {
+    await repository.save({
+      ...subscription,
+      trialEndsAt: new Date("2026-01-15T00:00:00Z")
+    });
+
+    const saved = await repository.findById("sub_001");
+
+    saved?.trialEndsAt?.setUTCDate(25);
+
+    const stored = await repository.findById("sub_001");
+
+    expect(stored?.trialEndsAt).toEqual(
+      new Date("2026-01-15T00:00:00Z")
+    );
+  });
+
+  test("protects trial expiry dates returned by findAll", async () => {
+    await repository.save({
+      ...subscription,
+      trialEndsAt: new Date("2026-01-15T00:00:00Z")
+    });
+
+    const subscriptions = await repository.findAll();
+
+    expect(subscriptions).toHaveLength(1);
+
+    subscriptions[0].trialEndsAt?.setUTCDate(25);
+
+    const stored = await repository.findById("sub_001");
+
+    expect(stored?.trialEndsAt).toEqual(
+      new Date("2026-01-15T00:00:00Z")
+    );
   });
 });

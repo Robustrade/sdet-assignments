@@ -9,6 +9,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "isolatedModules": true,
     "types": ["node", "jest"]
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"]
