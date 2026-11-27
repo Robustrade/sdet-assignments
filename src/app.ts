@@ -1,6 +1,8 @@
+
 import { randomUUID, createHmac, timingSafeEqual } from 'crypto';
 import express from 'express';
 import { getPlanConfig } from './services/planConfig';
+import { SubscriptionRepository } from './repositories/subscriptionRepository';
 
 const app = express();
 
@@ -9,17 +11,7 @@ app.use(express.json());
 const webhookSecret = process.env.WEBHOOK_SECRET || 'test_webhook_secret';
 const MAX_PAYMENT_ATTEMPTS = 3;
 
-interface Subscription {
-  id: string;
-  customerId: string;
-  plan: string;
-  status: string;
-  priceCents: number;
-  trialDays: number;
-  retryCount: number;
-}
-
-const subscriptions = new Map<string, Subscription>();
+const subscriptionRepository = new SubscriptionRepository();
 const processedWebhookEvents = new Set<string>();
 
 // Create subscription
@@ -40,7 +32,7 @@ app.post('/subscriptions', (req, res) => {
     });
   }
 
-  const subscription: Subscription = {
+  const subscription = {
     id: randomUUID(),
     customerId,
     plan,
@@ -50,14 +42,14 @@ app.post('/subscriptions', (req, res) => {
     retryCount: 0,
   };
 
-  subscriptions.set(subscription.id, subscription);
+  subscriptionRepository.save(subscription);
 
   return res.status(201).json(subscription);
 });
 
 // Get subscription
 app.get('/subscriptions/:id', (req, res) => {
-  const subscription = subscriptions.get(req.params.id);
+  const subscription = subscriptionRepository.findById(req.params.id);
 
   if (!subscription) {
     return res.status(404).json({
@@ -70,7 +62,7 @@ app.get('/subscriptions/:id', (req, res) => {
 
 // Cancel subscription
 app.post('/subscriptions/:id/cancel', (req, res) => {
-  const subscription = subscriptions.get(req.params.id);
+  const subscription = subscriptionRepository.findById(req.params.id);
 
   if (!subscription) {
     return res.status(404).json({
@@ -85,7 +77,7 @@ app.post('/subscriptions/:id/cancel', (req, res) => {
   }
 
   subscription.status = 'canceled';
-  subscriptions.set(subscription.id, subscription);
+  subscriptionRepository.save(subscription);
 
   return res.status(200).json(subscription);
 });
@@ -137,7 +129,7 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
-  const subscription = subscriptions.get(subscription_id);
+  const subscription = subscriptionRepository.findById(subscription_id);
 
   if (!subscription) {
     return res.status(404).json({
@@ -186,7 +178,7 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
-  subscriptions.set(subscription.id, subscription);
+  subscriptionRepository.save(subscription);
   processedWebhookEvents.add(event_id);
 
   return res.status(200).json({
