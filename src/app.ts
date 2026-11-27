@@ -1,9 +1,11 @@
-import { randomUUID } from 'crypto';
+import { randomUUID, createHmac, timingSafeEqual } from 'crypto';
 import express from 'express';
 
 const app = express();
 
 app.use(express.json());
+
+const webhookSecret = process.env.WEBHOOK_SECRET || 'test_webhook_secret';
 
 interface Subscription {
   id: string;
@@ -13,8 +15,6 @@ interface Subscription {
 }
 
 const subscriptions = new Map<string, Subscription>();
-
-// Store webhook event IDs that have already been processed
 const processedWebhookEvents = new Set<string>();
 
 // Create subscription
@@ -82,6 +82,38 @@ app.post('/subscriptions/:id/cancel', (req, res) => {
 
 // Payment webhook
 app.post('/webhooks/payment-provider', (req, res) => {
+  const signature = req.headers['x-webhook-signature'];
+
+  if (!signature || typeof signature !== 'string') {
+    return res.status(401).json({
+      error: 'Missing webhook signature',
+    });
+  }
+
+  const expectedSignature = createHmac('sha256', webhookSecret)
+    .update(JSON.stringify(req.body))
+    .digest('hex');
+
+  // Reject malformed signatures
+  if (!/^[a-f0-9]{64}$/i.test(signature)) {
+    return res.status(401).json({
+      error: 'Invalid webhook signature',
+    });
+  }
+
+  const receivedBuffer = Buffer.from(signature, 'hex');
+  const expectedBuffer = Buffer.from(expectedSignature, 'hex');
+
+  // Secure signature comparison
+  if (
+    receivedBuffer.length !== expectedBuffer.length ||
+    !timingSafeEqual(receivedBuffer, expectedBuffer)
+  ) {
+    return res.status(401).json({
+      error: 'Invalid webhook signature',
+    });
+  }
+
   const { event_id, event_type, subscription_id } = req.body;
 
   if (!event_id || !event_type || !subscription_id) {
@@ -90,7 +122,7 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
-  // Check whether this event was already processed
+  // Ignore duplicate events
   if (processedWebhookEvents.has(event_id)) {
     return res.status(200).json({
       message: 'Webhook already processed',
@@ -121,7 +153,7 @@ app.post('/webhooks/payment-provider', (req, res) => {
       subscription.status = 'past_due';
     }
   } else if (event_type === 'payment.refunded') {
-    // Refund behavior will be added later.
+    // Refund behavior will be implemented later.
   } else {
     return res.status(400).json({
       error: 'Unsupported event type',
@@ -129,8 +161,6 @@ app.post('/webhooks/payment-provider', (req, res) => {
   }
 
   subscriptions.set(subscription.id, subscription);
-
-  // Mark the event as processed only after successful processing
   processedWebhookEvents.add(event_id);
 
   return res.status(200).json({
