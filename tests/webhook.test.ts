@@ -10,124 +10,121 @@ function createSignature(payload: object): string {
     .digest('hex');
 }
 
-describe('POST /webhooks/payment-provider', () => {
-  it('should activate subscription after successful payment', async () => {
-    const created = await request(app)
+describe('Payment webhook', () => {
+  let subscriptionId: string;
+
+  beforeEach(async () => {
+    const response = await request(app)
       .post('/subscriptions')
       .send({
-        customerId: 'customer_webhook_001',
+        customerId: 'webhook_customer',
         plan: 'basic',
       });
 
-    const event = {
-      event_id: 'event_test_001',
+    subscriptionId = response.body.id;
+  });
+
+  it('should activate subscription after payment success', async () => {
+    const payload = {
+      event_id: 'event_success_1',
       event_type: 'payment.succeeded',
-      subscription_id: created.body.id,
+      subscription_id: subscriptionId,
     };
 
     const response = await request(app)
       .post('/webhooks/payment-provider')
-      .set('x-webhook-signature', createSignature(event))
-      .send(event);
+      .set('x-webhook-signature', createSignature(payload))
+      .send(payload);
 
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('active');
   });
 
-  it('should mark subscription as past_due after failed payment', async () => {
-    const created = await request(app)
-      .post('/subscriptions')
-      .send({
-        customerId: 'customer_webhook_002',
-        plan: 'basic',
-      });
-
-    const event = {
-      event_id: 'event_test_002',
+  it('should mark subscription past_due after payment failure', async () => {
+    const payload = {
+      event_id: 'event_failure_1',
       event_type: 'payment.failed',
-      subscription_id: created.body.id,
+      subscription_id: subscriptionId,
     };
 
     const response = await request(app)
       .post('/webhooks/payment-provider')
-      .set('x-webhook-signature', createSignature(event))
-      .send(event);
+      .set('x-webhook-signature', createSignature(payload))
+      .send(payload);
 
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('past_due');
   });
 
   it('should not process the same webhook event twice', async () => {
-    const created = await request(app)
-      .post('/subscriptions')
-      .send({
-        customerId: 'customer_webhook_003',
-        plan: 'basic',
-      });
-
-    const event = {
-      event_id: 'event_duplicate_001',
+    const payload = {
+      event_id: 'event_duplicate_1',
       event_type: 'payment.succeeded',
-      subscription_id: created.body.id,
+      subscription_id: subscriptionId,
     };
 
-    const signature = createSignature(event);
-
-    const firstResponse = await request(app)
+    await request(app)
       .post('/webhooks/payment-provider')
-      .set('x-webhook-signature', signature)
-      .send(event);
+      .set('x-webhook-signature', createSignature(payload))
+      .send(payload);
 
-    const secondResponse = await request(app)
+    const duplicateResponse = await request(app)
       .post('/webhooks/payment-provider')
-      .set('x-webhook-signature', signature)
-      .send(event);
+      .set('x-webhook-signature', createSignature(payload))
+      .send(payload);
 
-    expect(firstResponse.status).toBe(200);
-    expect(secondResponse.status).toBe(200);
-    expect(secondResponse.body.message).toBe('Webhook already processed');
+    expect(duplicateResponse.status).toBe(200);
+    expect(duplicateResponse.body.message).toBe('Webhook already processed');
   });
 
-  it('should reject an invalid webhook signature', async () => {
-    const created = await request(app)
-      .post('/subscriptions')
-      .send({
-        customerId: 'customer_webhook_004',
-        plan: 'basic',
-      });
-
-    const event = {
+  it('should reject invalid webhook signature', async () => {
+    const payload = {
       event_id: 'event_invalid_signature',
       event_type: 'payment.succeeded',
-      subscription_id: created.body.id,
+      subscription_id: subscriptionId,
     };
 
     const response = await request(app)
       .post('/webhooks/payment-provider')
       .set('x-webhook-signature', 'invalid_signature')
-      .send(event);
+      .send(payload);
 
     expect(response.status).toBe(401);
   });
 
-  it('should reject a webhook without a signature', async () => {
-    const created = await request(app)
-      .post('/subscriptions')
-      .send({
-        customerId: 'customer_webhook_005',
-        plan: 'basic',
-      });
-
-    const event = {
+  it('should reject webhook without signature', async () => {
+    const payload = {
       event_id: 'event_missing_signature',
       event_type: 'payment.succeeded',
-      subscription_id: created.body.id,
+      subscription_id: subscriptionId,
     };
 
     const response = await request(app)
       .post('/webhooks/payment-provider')
-      .send(event);
+      .send(payload);
 
     expect(response.status).toBe(401);
+  });
+
+  it('should not reactivate a canceled subscription', async () => {
+    const cancelResponse = await request(app)
+      .post(`/subscriptions/${subscriptionId}/cancel`);
+
+    expect(cancelResponse.status).toBe(200);
+    expect(cancelResponse.body.status).toBe('canceled');
+
+    const payload = {
+      event_id: 'event_canceled_success',
+      event_type: 'payment.succeeded',
+      subscription_id: subscriptionId,
+    };
+
+    const webhookResponse = await request(app)
+      .post('/webhooks/payment-provider')
+      .set('x-webhook-signature', createSignature(payload))
+      .send(payload);
+
+    expect(webhookResponse.status).toBe(200);
+    expect(webhookResponse.body.status).toBe('canceled');
   });
 });
