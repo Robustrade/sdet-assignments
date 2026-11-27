@@ -1,0 +1,17 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": "./tsconfig.json" },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "env": { "node": true, "jest": true, "es2022": true },
+  "rules": {
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+  },
+  "overrides": [
+    { "files": ["*.js"], "parserOptions": { "project": null }, "rules": { "@typescript-eslint/no-var-requires": "off", "@typescript-eslint/no-floating-promises": "off" } }
+  ],
+  "ignorePatterns": ["node_modules", "coverage", "reports"]
+}
