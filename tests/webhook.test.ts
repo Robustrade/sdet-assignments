@@ -127,4 +127,56 @@ describe('Payment webhook', () => {
     expect(webhookResponse.status).toBe(200);
     expect(webhookResponse.body.status).toBe('canceled');
   });
+  it('should cancel subscription after 3 failed payment attempts', async () => {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const payload = {
+        event_id: `event_retry_failure_${attempt}`,
+        event_type: 'payment.failed',
+        subscription_id: subscriptionId,
+      };
+
+      await request(app)
+        .post('/webhooks/payment-provider')
+        .set('x-webhook-signature', createSignature(payload))
+        .send(payload);
+    }
+
+    const response = await request(app)
+      .get(`/subscriptions/${subscriptionId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe('canceled');
+    expect(response.body.retryCount).toBe(3);
+  });
+
+  it('should reset retry count after successful payment retry', async () => {
+    const failurePayload = {
+      event_id: 'event_retry_then_success_failure',
+      event_type: 'payment.failed',
+      subscription_id: subscriptionId,
+    };
+
+    await request(app)
+      .post('/webhooks/payment-provider')
+      .set('x-webhook-signature', createSignature(failurePayload))
+      .send(failurePayload);
+
+    const successPayload = {
+      event_id: 'event_retry_then_success_success',
+      event_type: 'payment.succeeded',
+      subscription_id: subscriptionId,
+    };
+
+    await request(app)
+      .post('/webhooks/payment-provider')
+      .set('x-webhook-signature', createSignature(successPayload))
+      .send(successPayload);
+
+    const response = await request(app)
+      .get(`/subscriptions/${subscriptionId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe('active');
+    expect(response.body.retryCount).toBe(0);
+  });
 });

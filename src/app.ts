@@ -1,17 +1,22 @@
 import { randomUUID, createHmac, timingSafeEqual } from 'crypto';
 import express from 'express';
+import { getPlanConfig } from './services/planConfig';
 
 const app = express();
 
 app.use(express.json());
 
 const webhookSecret = process.env.WEBHOOK_SECRET || 'test_webhook_secret';
+const MAX_PAYMENT_ATTEMPTS = 3;
 
 interface Subscription {
   id: string;
   customerId: string;
   plan: string;
   status: string;
+  priceCents: number;
+  trialDays: number;
+  retryCount: number;
 }
 
 const subscriptions = new Map<string, Subscription>();
@@ -27,7 +32,9 @@ app.post('/subscriptions', (req, res) => {
     });
   }
 
-  if (plan !== 'basic' && plan !== 'pro') {
+  const planConfig = getPlanConfig(plan);
+
+  if (!planConfig) {
     return res.status(400).json({
       error: 'Invalid plan',
     });
@@ -38,6 +45,9 @@ app.post('/subscriptions', (req, res) => {
     customerId,
     plan,
     status: 'trialing',
+    priceCents: planConfig.priceCents,
+    trialDays: planConfig.trialDays,
+    retryCount: 0,
   };
 
   subscriptions.set(subscription.id, subscription);
@@ -94,7 +104,6 @@ app.post('/webhooks/payment-provider', (req, res) => {
     .update(JSON.stringify(req.body))
     .digest('hex');
 
-  // Reject malformed signatures
   if (!/^[a-f0-9]{64}$/i.test(signature)) {
     return res.status(401).json({
       error: 'Invalid webhook signature',
@@ -104,7 +113,6 @@ app.post('/webhooks/payment-provider', (req, res) => {
   const receivedBuffer = Buffer.from(signature, 'hex');
   const expectedBuffer = Buffer.from(expectedSignature, 'hex');
 
-  // Secure signature comparison
   if (
     receivedBuffer.length !== expectedBuffer.length ||
     !timingSafeEqual(receivedBuffer, expectedBuffer)
@@ -122,7 +130,6 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
-  // Ignore duplicate events
   if (processedWebhookEvents.has(event_id)) {
     return res.status(200).json({
       message: 'Webhook already processed',
@@ -138,19 +145,38 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
+  // Canceled subscriptions cannot change state again.
+  if (subscription.status === 'canceled') {
+    processedWebhookEvents.add(event_id);
+
+    return res.status(200).json({
+      message: 'Subscription is already canceled',
+      event_id,
+      status: subscription.status,
+    });
+  }
+
   if (event_type === 'payment.succeeded') {
     if (
       subscription.status === 'trialing' ||
       subscription.status === 'past_due'
     ) {
       subscription.status = 'active';
+      subscription.retryCount = 0;
     }
   } else if (event_type === 'payment.failed') {
     if (
       subscription.status === 'trialing' ||
-      subscription.status === 'active'
+      subscription.status === 'active' ||
+      subscription.status === 'past_due'
     ) {
-      subscription.status = 'past_due';
+      subscription.retryCount += 1;
+
+      if (subscription.retryCount >= MAX_PAYMENT_ATTEMPTS) {
+        subscription.status = 'canceled';
+      } else {
+        subscription.status = 'past_due';
+      }
     }
   } else if (event_type === 'payment.refunded') {
     // Refund behavior will be implemented later.
@@ -167,6 +193,7 @@ app.post('/webhooks/payment-provider', (req, res) => {
     message: 'Webhook processed',
     event_id,
     status: subscription.status,
+    retryCount: subscription.retryCount,
   });
 });
 
