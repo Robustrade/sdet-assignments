@@ -1,14 +1,22 @@
 
-import { randomUUID, createHmac, timingSafeEqual } from 'crypto';
+import {
+  randomUUID,
+  createHmac,
+  timingSafeEqual,
+} from 'crypto';
+
 import express from 'express';
 import { getPlanConfig } from './services/planConfig';
 import { SubscriptionRepository } from './repositories/subscriptionRepository';
+import { SubscriptionStateMachine } from './services/subscriptionStateMachine';
 
 const app = express();
 
 app.use(express.json());
 
-const webhookSecret = process.env.WEBHOOK_SECRET || 'test_webhook_secret';
+const webhookSecret =
+  process.env.WEBHOOK_SECRET || 'test_webhook_secret';
+
 const MAX_PAYMENT_ATTEMPTS = 3;
 
 const subscriptionRepository = new SubscriptionRepository();
@@ -49,7 +57,9 @@ app.post('/subscriptions', (req, res) => {
 
 // Get subscription
 app.get('/subscriptions/:id', (req, res) => {
-  const subscription = subscriptionRepository.findById(req.params.id);
+  const subscription = subscriptionRepository.findById(
+    req.params.id
+  );
 
   if (!subscription) {
     return res.status(404).json({
@@ -62,7 +72,9 @@ app.get('/subscriptions/:id', (req, res) => {
 
 // Cancel subscription
 app.post('/subscriptions/:id/cancel', (req, res) => {
-  const subscription = subscriptionRepository.findById(req.params.id);
+  const subscription = subscriptionRepository.findById(
+    req.params.id
+  );
 
   if (!subscription) {
     return res.status(404).json({
@@ -76,7 +88,11 @@ app.post('/subscriptions/:id/cancel', (req, res) => {
     });
   }
 
-  subscription.status = 'canceled';
+  subscription.status = SubscriptionStateMachine.transition(
+    subscription.status as any,
+    'canceled'
+  );
+
   subscriptionRepository.save(subscription);
 
   return res.status(200).json(subscription);
@@ -92,7 +108,10 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
-  const expectedSignature = createHmac('sha256', webhookSecret)
+  const expectedSignature = createHmac(
+    'sha256',
+    webhookSecret
+  )
     .update(JSON.stringify(req.body))
     .digest('hex');
 
@@ -114,7 +133,11 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
-  const { event_id, event_type, subscription_id } = req.body;
+  const {
+    event_id,
+    event_type,
+    subscription_id,
+  } = req.body;
 
   if (!event_id || !event_type || !subscription_id) {
     return res.status(400).json({
@@ -129,7 +152,9 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
-  const subscription = subscriptionRepository.findById(subscription_id);
+  const subscription = subscriptionRepository.findById(
+    subscription_id
+  );
 
   if (!subscription) {
     return res.status(404).json({
@@ -137,7 +162,6 @@ app.post('/webhooks/payment-provider', (req, res) => {
     });
   }
 
-  // Canceled subscriptions cannot change state again.
   if (subscription.status === 'canceled') {
     processedWebhookEvents.add(event_id);
 
@@ -153,7 +177,11 @@ app.post('/webhooks/payment-provider', (req, res) => {
       subscription.status === 'trialing' ||
       subscription.status === 'past_due'
     ) {
-      subscription.status = 'active';
+      subscription.status = SubscriptionStateMachine.transition(
+        subscription.status as any,
+        'active'
+      );
+
       subscription.retryCount = 0;
     }
   } else if (event_type === 'payment.failed') {
@@ -165,9 +193,15 @@ app.post('/webhooks/payment-provider', (req, res) => {
       subscription.retryCount += 1;
 
       if (subscription.retryCount >= MAX_PAYMENT_ATTEMPTS) {
-        subscription.status = 'canceled';
+        subscription.status = SubscriptionStateMachine.transition(
+          subscription.status as any,
+          'canceled'
+        );
       } else {
-        subscription.status = 'past_due';
+        subscription.status = SubscriptionStateMachine.transition(
+          subscription.status as any,
+          'past_due'
+        );
       }
     }
   } else if (event_type === 'payment.refunded') {
